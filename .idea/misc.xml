@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/drawable/background.xml" value="0.2203125" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/drawable/background2.xml" value="0.17685185185185184" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/drawable/button_gradient.xml" value="0.2203125" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/activity_admin_panel.xml" value="0.22" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/activity_adminpanel.xml" value="0.264" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/activity_collection__grid_view.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/activity_collection_detail.xml" value="0.15942028985507245" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/activity_story_page.xml" value="0.10597826086956522" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/audio_pitch_speed_dialogbox.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/download.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/grid_layout.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/no_ads_dialog.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/AndroidStudioProjects/desiKahaniya/app/src/main/res/layout/progressbar_dialog.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/back_arrow.xml" value="0.245" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/background.xml" value="0.102" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/background2.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/button_gradient.xml" value="0.102" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/delete.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/folder.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/hoovercolor.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/hooverffext.xml" value="0.135" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/textview_gradient.xml" value="0.102" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/drawable/textview_gradientforrecyclerview.xml" value="0.102" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/activity_adminpanel.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/activity_audio_player.xml" value="0.22" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/activity_audio_player_offline.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/activity_collection__grid_view.xml" value="0.33" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/activity_collection_detail.xml" value="0.284375" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/activity_payment.xml" value="0.1890625" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/activity_story_page.xml" value="0.18" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/admin_panel_entry.xml" value="0.1875" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/custom_snackbar_view.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/delete.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/download_dialog.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/exit_dialog.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/fragment_ftab1.xml" value="0.22" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/grid_layout.xml" value="0.25" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/navheader.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/progressbar_dialog.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/layout/splash_screen.xml" value="0.1" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/menu/iconmenu.xml" value="0.23854166666666668" />
+        <entry key="..\:/Users/bhola/OneDrive/Desktop/Android Applications/desiKahaniya/app/src/main/res/mipmap-anydpi-v26/app_icon.xml" value="0.172" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

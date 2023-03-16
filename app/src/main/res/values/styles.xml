@@ -1,0 +1,49 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="appTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowDisablePreview">true</item>
+        <item name="colorPrimaryDark">@color/themeColor</item>
+        <item name="android:statusBarColor">@color/themeColor</item>
+        <!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <!--        <item name="android:fitsSystemWindows">true</item>-->
+        <item name="android:navigationBarColor">@color/themeColor</item>
+
+    </style>
+
+
+    <style name="NavigationDrawerStyle">
+
+        <item name="android:textSize">18dp</item><!-- text size in menu-->
+        <item name="android:fontFamily">@font/robotoslab_regular</item><!-- text size in menu-->
+
+        <!-- item size in menu-->
+        <item name="android:listPreferredItemHeightSmall">40dp</item>
+        <item name="listPreferredItemHeightSmall">40dp</item>
+
+        <!-- item padding left in menu-->
+        <item name="android:listPreferredItemPaddingLeft">8dp</item>
+        <item name="listPreferredItemPaddingLeft">8dp</item>
+
+        <!-- item padding right in menu-->
+        <item name="android:listPreferredItemPaddingRight">8dp</item>
+        <item name="listPreferredItemPaddingRight">8dp</item>
+    </style>
+
+    <style name="GridView_Title">
+        <item name="android:textSize">30dp</item>
+        <item name="android:fontFamily">@font/kalam_regular</item>
+        <item name="android:textColor">@color/textcolor</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+
+    <style name="tabText">
+
+        <item name="android:textSize">20dp</item><!-- text size in menu-->
+        <item name="android:fontFamily">@font/robotoslab_regular</item><!-- text size in menu-->
+        <item name="android:background">@drawable/hooverffext</item><!-- text size in menu-->
+
+    </style>
+
+</resources>

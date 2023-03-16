@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="20dp"
+    android:background="@drawable/background2"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:orientation="vertical">
+
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exit_button2"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/background2"
+        android:visibility="gone"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/BannerAd" />
+
+    <LinearLayout
+        android:id="@+id/banner_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone" />
+
+
+    <TextView
+        android:id="@+id/exitMSG"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:textColor="#E91E1E"
+        android:visibility="gone"
+        android:fontFamily="@font/robotoslab_regular"
+        android:text="If you Like the app. Please give us a Good Rating" />
+
+
+    <LinearLayout
+        android:id="@+id/paymentSupport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exit_textview2"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:gravity="left"
+        android:orientation="horizontal">
+
+
+        <soup.neumorphism.NeumorphButton
+            android:id="@+id/exit_button1"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textStyle="bold"
+
+            android:background="@drawable/hooverffext"
+            android:fontFamily="@font/robotoslab_regular"
+
+            android:text="CANCEL" />
+
+        <soup.neumorphism.NeumorphButton
+            android:id="@+id/exit_button2"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/robotoslab_regular"
+            android:background="@drawable/hooverffext"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textStyle="bold"
+
+            android:text="EXIT" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
+

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/background2">
+
+
+    <TextView
+        android:id="@+id/textView_splashscreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="100dp"
+        android:fontFamily="@font/kalam_regular"
+        android:text=" देसी हिंदी कहानियां  "
+        android:textColor="@color/themeColor"
+        android:textSize="35dp"
+        android:textStyle="bold" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie"
+        android:layout_width="600dp"
+        android:layout_height="600dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:elevation="5dp"
+        app:lottie_autoPlay="true"
+        app:lottie_speed="1"
+        app:lottie_rawRes="@raw/splashscreen_booksanim" />
+
+    <LinearLayout
+        android:id="@+id/progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+
+        <ProgressBar
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:indeterminateTint="@color/themeColor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robotoslab_regular"
+            android:text="Loading stories..."
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

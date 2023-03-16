@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background2">
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:paddingBottom="15dp"
+        android:columnCount="2">
+
+
+        <soup.neumorphism.NeumorphCardView
+
+            android:id="@+id/collection1"
+            android:layout_height="280dp"
+            android:layout_columnWeight="1">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/love1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=" Collection-1"
+                    android:textColor="@color/textcolor" />
+
+                <TextView
+                    android:id="@+id/Textview1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/rajdhani_regular"
+                    android:paddingLeft="10dp"
+                    android:text="प्रेम कहानी-1"
+                    android:textColor="@color/textcolor"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
+        <soup.neumorphism.NeumorphCardView
+
+            android:id="@+id/collection2"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:layout_columnWeight="1">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/love7" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=" Collection-2"
+                    android:textColor="@color/textcolor" />
+
+                <TextView
+                    android:id="@+id/Textview2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/rajdhani_regular"
+                    android:paddingLeft="10dp"
+                    android:text="प्रेम कहानी-2"
+                    android:textColor="@color/textcolor"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
+        <soup.neumorphism.NeumorphCardView
+
+            android:id="@+id/collection3"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:layout_columnWeight="1"
+
+            >
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/love3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=" Collection-3"
+                    android:textColor="@color/textcolor" />
+
+                <TextView
+                    android:id="@+id/Textview3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/rajdhani_regular"
+                    android:paddingLeft="10dp"
+                    android:text="हीर रांझा"
+                    android:textColor="@color/textcolor"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
+        <soup.neumorphism.NeumorphCardView
+
+            android:id="@+id/collection4"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:layout_columnWeight="1"
+
+            >
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/love4" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=" Collection-4"
+                    android:textColor="@color/textcolor" />
+
+                <TextView
+                    android:id="@+id/Textview4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/rajdhani_regular"
+                    android:paddingLeft="10dp"
+                    android:text="देसी कहानी-1"
+                    android:textColor="@color/textcolor"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
+
+        <soup.neumorphism.NeumorphCardView
+
+            android:id="@+id/collection5"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="7dp"
+
+            >
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/love5" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=" Collection-5"
+                    android:textColor="@color/textcolor" />
+
+                <TextView
+                    android:id="@+id/Textview5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/rajdhani_regular"
+                    android:paddingLeft="10dp"
+                    android:text="देसी कहानी-2"
+                    android:textColor="@color/textcolor"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
+        <soup.neumorphism.NeumorphCardView
+
+            android:id="@+id/collection6"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="7dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/love6" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=" Collection-6"
+                    android:textColor="@color/textcolor" />
+
+                <TextView
+                    android:id="@+id/Textview6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/rajdhani_regular"
+                    android:paddingLeft="10dp"
+                    android:text="प्रेम कहानी-1"
+                    android:textColor="@color/textcolor"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
+
+        </soup.neumorphism.NeumorphCardView>
+
+
+    </GridLayout>
+
+
+</ScrollView>

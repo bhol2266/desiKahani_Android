@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "87881322646",
+    "firebase_url": "https://hot-hindi-story-default-rtdb.firebaseio.com",
+    "project_id": "hot-hindi-story",
+    "storage_bucket": "hot-hindi-story.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87881322646:android:9ce64d8eef68347a8272b7",
+        "android_client_info": {
+          "package_name": "com.bhola.HindidesiKahaniya2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87881322646-8ihgc3uuhvmjkdicncl2qp11lj3dl7va.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD64kZy1OeZHM6ReMywkHAeAohefdM-K8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87881322646-8ihgc3uuhvmjkdicncl2qp11lj3dl7va.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87881322646:android:ddc6b82880806dd68272b7",
+        "android_client_info": {
+          "package_name": "com.bhola.desiKahaniya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87881322646-8ihgc3uuhvmjkdicncl2qp11lj3dl7va.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD64kZy1OeZHM6ReMywkHAeAohefdM-K8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87881322646-8ihgc3uuhvmjkdicncl2qp11lj3dl7va.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

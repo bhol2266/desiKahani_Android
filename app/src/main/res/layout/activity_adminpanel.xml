@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background2"
+
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/dateofstory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:ems="10"
+
+        android:hint="Date"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/title_story"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint="Title Of The Story"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/image_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint="Image Url"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/pragraphofstory"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint="Paragraph"
+        android:inputType="textMultiLine"
+        android:maxLines="8" />
+
+    <soup.neumorphism.NeumorphButton
+        android:id="@+id/selectStory"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/hooverffext"
+        android:gravity="center"
+        android:text="Load Story"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.105" />
+
+
+    <soup.neumorphism.NeumorphButton
+        android:id="@+id/insert"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_margin="2dp"
+        android:background="@drawable/hooverffext"
+        android:gravity="center"
+        android:text="Insert notification Story and Send Notification"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.105" />
+
+
+    <EditText
+        android:id="@+id/Refer_App_url2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint="Refer_App_url2"
+        android:inputType="textPersonName"
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/Refer_App_url_BTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:background="@drawable/hooverffext"
+            android:text="ADD ReferApp URL"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.105" />
+
+        <Button
+            android:id="@+id/XXXSTory_Switch_Active"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:background="@drawable/hooverffext"
+            android:text="STory_Switch_Active"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.105" />
+
+
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/switch_Exit_Nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="left"
+        android:layout_margin="10dp"
+        android:checked="false"
+        android:gravity="center"
+        android:text="Exit_Dialog_Nav"
+        android:textColor="#090909"
+        android:textOff="Off"
+        android:textOn="On"
+        android:textSize="25sp"
+
+        android:textStyle="bold" />
+
+    <Switch
+        android:id="@+id/Activate_Ads"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="left"
+        android:layout_margin="10dp"
+        android:checked="false"
+        android:gravity="center"
+        android:text="Ads"
+        android:textColor="#090909"
+        android:textOff="Off"
+        android:textOn="On"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <Switch
+        android:id="@+id/Sex_Story"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="left"
+        android:layout_margin="10dp"
+        android:checked="false"
+        android:gravity="center"
+        android:text="MCB Story"
+        android:textColor="#090909"
+        android:textOff="Off"
+        android:textOn="On"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/deleteNotificationStories"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            android:layout_weight="2"
+            android:background="@drawable/hooverffext"
+            android:gravity="center"
+            android:text="DELETE Notification Stories"
+            android:textSize="15dp"
+
+            />
+
+        <Button
+            android:id="@+id/Ad_Network"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/hooverffext"
+            android:gravity="center"
+            android:text="Ad_Network"
+            android:textSize="15dp"
+
+            />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
