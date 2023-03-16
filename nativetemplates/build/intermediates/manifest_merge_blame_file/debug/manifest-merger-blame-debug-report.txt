@@ -4,13 +4,13 @@
 4
 5    <uses-sdk
 6        android:minSdkVersion="16"
-6-->C:\Users\bhola\OneDrive\Desktop\Android Applications\DesiKahani\nativetemplates\src\main\AndroidManifest.xml
+6-->C:\Users\bhola\OneDrive\Desktop\Android Applications\desiKahaniya\nativetemplates\src\main\AndroidManifest.xml
 7        android:targetSdkVersion="30" />
-7-->C:\Users\bhola\OneDrive\Desktop\Android Applications\DesiKahani\nativetemplates\src\main\AndroidManifest.xml
+7-->C:\Users\bhola\OneDrive\Desktop\Android Applications\desiKahaniya\nativetemplates\src\main\AndroidManifest.xml
 8
 9    <application android:supportsRtl="true" >
-9-->C:\Users\bhola\OneDrive\Desktop\Android Applications\DesiKahani\nativetemplates\src\main\AndroidManifest.xml:3:3-5:17
-9-->C:\Users\bhola\OneDrive\Desktop\Android Applications\DesiKahani\nativetemplates\src\main\AndroidManifest.xml:3:16-42
+9-->C:\Users\bhola\OneDrive\Desktop\Android Applications\desiKahaniya\nativetemplates\src\main\AndroidManifest.xml:4:5-6:19
+9-->C:\Users\bhola\OneDrive\Desktop\Android Applications\desiKahaniya\nativetemplates\src\main\AndroidManifest.xml:4:18-44
 10    </application>
 11
 12</manifest>

@@ -60,6 +60,7 @@ public class SplashScreen extends AppCompatActivity {
     DatabaseReference url_mref;
     public static int Login_Times = 0;
     public static int Native_Ad_Interval = 5;
+    public static boolean homepageAdShown = false;
 
 
     public static int DB_VERSION = 5;

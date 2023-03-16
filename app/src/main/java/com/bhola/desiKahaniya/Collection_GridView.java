@@ -110,14 +110,20 @@ Collection_GridView extends AppCompatActivity {
 
             mAdView = findViewById(R.id.adView);
             ADS_ADMOB.BannerAd(this, mAdView);
-            ADS_ADMOB rewarded_ads = new ADS_ADMOB(mRewardedInterstitial, this, getString(R.string.RewardedInterstitial));
-            rewarded_ads.RewardedInterstitialAds();
+            if (!SplashScreen.homepageAdShown) {
+                ADS_ADMOB rewarded_ads = new ADS_ADMOB(mRewardedInterstitial, this, getString(R.string.RewardedInterstitial));
+                rewarded_ads.RewardedInterstitialAds();
+                SplashScreen.homepageAdShown = true;
+            }
 
         } else {
             LinearLayout facebook_bannerAd_layput;
             facebook_bannerAd_layput = findViewById(R.id.banner_container);
-            ADS_FACEBOOK.bannerAds(this, facebook_adView, facebook_bannerAd_layput, getString(R.string.Facebook_BannerAdUnit));
-            ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
+            if (!SplashScreen.homepageAdShown) {
+                ADS_FACEBOOK.bannerAds(this, facebook_adView, facebook_bannerAd_layput, getString(R.string.Facebook_BannerAdUnit));
+                ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
+                SplashScreen.homepageAdShown = true;
+            }
         }
     }
 
