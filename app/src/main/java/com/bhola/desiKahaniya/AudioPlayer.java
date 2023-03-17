@@ -349,37 +349,33 @@ public class AudioPlayer extends AppCompatActivity {
                 if (mediaPlayer.isPlaying()) {
                     playBtn.performClick();
                 }
-                if (checkPermissions()) {
-                    ContextWrapper cw = new ContextWrapper(getApplicationContext());
-                    File directory = cw.getDir("Download", Context.MODE_PRIVATE);
-                    File file = new File(directory, storyName.replaceAll(" ", "_") + ".mp3");
+                ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                File directory = cw.getDir("Download", Context.MODE_PRIVATE);
+                File file = new File(directory, storyName.replaceAll(" ", "_") + ".mp3");
 
-                    if (!file.exists()) {
-                        downloadTask = new DownloadFileFromURL();
-                        downloadTask.execute(storyURL);
-                    } else {
-
-                        final Snackbar snackbar = Snackbar.make(v, "", Snackbar.LENGTH_LONG);
-                        View customSnackView = getLayoutInflater().inflate(R.layout.custom_snackbar_view, null);
-                        // now change the layout of the snackbar
-                        Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
-
-                        TextView gotoDownloads = customSnackView.findViewById(R.id.gotoDownloads);
-                        gotoDownloads.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                startActivity(new Intent(AudioPlayer.this, OfflineAudioStory.class));
-                            }
-                        });
-
-                        // add the custom snack bar layout to snackbar layout
-                        snackbarLayout.addView(customSnackView, 0);
-                        snackbar.show();
-                    }
-
+                if (!file.exists()) {
+                    downloadTask = new DownloadFileFromURL();
+                    downloadTask.execute(storyURL);
                 } else {
-                    requestPermissions();
+
+                    final Snackbar snackbar = Snackbar.make(v, "", Snackbar.LENGTH_LONG);
+                    View customSnackView = getLayoutInflater().inflate(R.layout.custom_snackbar_view, null);
+                    // now change the layout of the snackbar
+                    Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+
+                    TextView gotoDownloads = customSnackView.findViewById(R.id.gotoDownloads);
+                    gotoDownloads.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(AudioPlayer.this, OfflineAudioStory.class));
+                        }
+                    });
+
+                    // add the custom snack bar layout to snackbar layout
+                    snackbarLayout.addView(customSnackView, 0);
+                    snackbar.show();
                 }
+
             }
         });
     }
