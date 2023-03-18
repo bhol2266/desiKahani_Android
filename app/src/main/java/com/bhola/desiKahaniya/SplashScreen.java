@@ -65,7 +65,6 @@ public class SplashScreen extends AppCompatActivity {
 
     public static int DB_VERSION = 5;
     public static int DB_VERSION_INSIDE_TABLE = 7;
-    Handler handlerr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

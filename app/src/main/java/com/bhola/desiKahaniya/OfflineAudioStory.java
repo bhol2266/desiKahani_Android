@@ -210,8 +210,8 @@ class OfflineAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        com.bhola.desiKahaniya.AudioOfflineModel model = (com.bhola.desiKahaniya.AudioOfflineModel) collectionData.get(holder.getBindingAdapterPosition());
-        Log.d("onBindViewHolder", "onBindViewHolder: " + model);
+        AudioOfflineModel model = (AudioOfflineModel) collectionData.get(holder.getAdapterPosition());
+        Log.d("onBindViewHolder", "onBindViewHolder: "+model);
         ((Story_ROW_viewHolder) holder).title.setText(model.getName().replaceAll("_", " ").replace(".mp3", ""));
         ((Story_ROW_viewHolder) holder).title.setTextSize(18);
         ((Story_ROW_viewHolder) holder).delete.setVisibility(View.VISIBLE);
@@ -232,7 +232,7 @@ class OfflineAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         });
         ((Story_ROW_viewHolder) holder).imageview.setImageResource(R.drawable.folder);
-        ((Story_ROW_viewHolder) holder).imageview.setPadding(0, 5, 0, 5);
+        ((Story_ROW_viewHolder) holder).imageview.setPadding(0,5,0,5);
         ((Story_ROW_viewHolder) holder).date.setText("Downloaded");
 
         ((Story_ROW_viewHolder) holder).recyclerview.setOnClickListener(new View.OnClickListener() {
@@ -247,82 +247,8 @@ class OfflineAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         });
 
-        if (SplashScreen.Ads_State.equals("active")) {
-            loadNativeAds(((Story_ROW_viewHolder) holder).template, ((Story_ROW_viewHolder) holder).facebook_BannerAd_layout, holder.getAbsoluteAdapterPosition());
-        }
-
     }
 
-    private void loadNativeAds(TemplateView template, LinearLayout facebook_BannerAd_layout, int absoluteAdapterPosition) {
-
-        if (SplashScreen.Ad_Network_Name.equals("admob") && absoluteAdapterPosition % SplashScreen.Native_Ad_Interval == 0) {
-
-            template.setVisibility(View.VISIBLE);
-            MobileAds.initialize(context);
-            ExecutorService service = Executors.newSingleThreadExecutor();
-            service.execute(new Runnable() {
-                @Override
-                public void run() {
-                    AdLoader adLoader = new AdLoader.Builder(context, context.getString(R.string.NativeAd))
-                            .forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
-                                @Override
-                                public void onNativeAdLoaded(NativeAd nativeAd) {
-
-                                    ((Activity) context).runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            NativeTemplateStyle styles = new
-                                                    NativeTemplateStyle.Builder().build();
-                                            template.setStyles(styles);
-                                            template.setNativeAd(nativeAd);
-                                        }
-                                    });
-
-                                }
-                            })
-                            .build();
-                    adLoader.loadAd(new AdRequest.Builder().build());
-
-                }
-            });
-
-
-        } else {
-            template.setVisibility(View.GONE);
-        }
-        if (SplashScreen.Ad_Network_Name.equals("facebook") && absoluteAdapterPosition % SplashScreen.Native_Ad_Interval == 0) {
-            facebook_BannerAd_layout.setVisibility(View.VISIBLE);
-            AudienceNetworkAds.initialize(context);
-
-            ExecutorService service = Executors.newSingleThreadExecutor();
-            service.execute(new Runnable() {
-                @Override
-                public void run() {
-                    com.facebook.ads.AdView facebook_adView = new com.facebook.ads.AdView(context, context.getString(R.string.Facebook_NativeAd_MediumRect), AdSize.BANNER_HEIGHT_50);
-                    facebook_adView.loadAd();
-
-                    ((Activity) context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            facebook_BannerAd_layout.addView(facebook_adView);
-                        }
-                    });
-                }
-            });
-
-
-            facebook_BannerAd_layout.setVisibility(View.VISIBLE);
-            AudienceNetworkAds.initialize(context);
-            com.facebook.ads.AdView adView = new com.facebook.ads.AdView(context, context.getString(R.string.Facebook_NativeAd_MediumRect), AdSize.BANNER_HEIGHT_50);
-            facebook_BannerAd_layout.addView(adView);
-            adView.loadAd();
-
-        } else {
-            facebook_BannerAd_layout.setVisibility(View.GONE);
-
-        }
-
-    }
 
     @Override
     public int getItemCount() {
@@ -336,8 +262,7 @@ class OfflineAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         ImageView imageview, delete;
         LinearLayout recyclerview;
-        TemplateView template;
-        LinearLayout facebook_BannerAd_layout;
+
 
         public Story_ROW_viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -347,8 +272,7 @@ class OfflineAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             delete = itemView.findViewById(R.id.delete);
             title = itemView.findViewById(R.id.titlee);
             date = itemView.findViewById(R.id.date_recyclerview);
-            template = itemView.findViewById(R.id.my_template);
-            facebook_BannerAd_layout = itemView.findViewById(R.id.banner_container);
+
         }
     }
 }

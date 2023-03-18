@@ -123,10 +123,8 @@ public class Download_Detail extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Collection_GridView.class);
-                intent.putExtra("Ads_Status", Ads_State);
-                startActivity(intent);
-                finish();
+                onBackPressed();
+
             }
         });
 
