@@ -45,17 +45,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         v.vibrate(pattern, -1);
 
 
-        int resourceImage = getResources().getIdentifier(remoteMessage.getNotification().getIcon(), "drawable", getPackageName());
-
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "CHANNEL_ID");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            builder.setSmallIcon(R.drawable.icontrans);
-            builder.setSmallIcon(resourceImage);
-        } else {
-//            builder.setSmallIcon(R.drawable.icon_kritikar);
-            builder.setSmallIcon(resourceImage);
-        }
+        builder.setSmallIcon(R.drawable.app_icon);
 
         try {
             URL url = new URL(SplashScreen.Notification_ImageURL);

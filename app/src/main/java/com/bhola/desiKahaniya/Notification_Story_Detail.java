@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Notification_Story_Detail extends AppCompatActivity {
@@ -54,6 +55,7 @@ public class Notification_Story_Detail extends AppCompatActivity {
                     FirebaseData firebaseData = ds.getValue(FirebaseData.class);
                     collectonData.add(firebaseData);
                 }
+                Collections.reverse(collectonData);
 
                 if (!SplashScreen.Sex_Story.equals("active") && !SplashScreen.Sex_Story_Switch_Open.equals("active")) {
                     collectonData.clear();

@@ -211,7 +211,6 @@ class OfflineAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         AudioOfflineModel model = (AudioOfflineModel) collectionData.get(holder.getAdapterPosition());
-        Log.d("onBindViewHolder", "onBindViewHolder: "+model);
         ((Story_ROW_viewHolder) holder).title.setText(model.getName().replaceAll("_", " ").replace(".mp3", ""));
         ((Story_ROW_viewHolder) holder).title.setTextSize(18);
         ((Story_ROW_viewHolder) holder).delete.setVisibility(View.VISIBLE);
@@ -224,8 +223,8 @@ class OfflineAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 File file = new File(directory, model.getName());
                 if (file.exists()) {
                     file.delete();
-                    collectionData.remove(holder.getAdapterPosition());
-                    notifyItemRemoved(holder.getAdapterPosition());
+                    collectionData.remove(holder.getBindingAdapterPosition());
+                    notifyItemRemoved(holder.getBindingAdapterPosition());
                     Toast.makeText(cw, "Story Deleted", Toast.LENGTH_SHORT).show();
                 }
 

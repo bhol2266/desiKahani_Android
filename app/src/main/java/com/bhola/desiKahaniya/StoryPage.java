@@ -318,8 +318,8 @@ public class StoryPage extends AppCompatActivity {
         super.onBackPressed();
         if (SplashScreen.Ads_State.equals("active")) {
             if (SplashScreen.Ad_Network_Name.equals("admob")) {
-                ADS_ADMOB rewarded_ads = new ADS_ADMOB(mRewardedInterstitial, this, getString(R.string.RewardedInterstitial));
-                rewarded_ads.RewardedInterstitialAds();
+                ADS_ADMOB.Interstitial_Ad(this);
+
             } else {
                 ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
 
@@ -391,8 +391,8 @@ public class StoryPage extends AppCompatActivity {
             mAdView = findViewById(R.id.adView);
             ADS_ADMOB.BannerAd(this, mAdView);
 
-            ADS_ADMOB rewarded_ads = new ADS_ADMOB(mRewardedInterstitial, this, getString(R.string.RewardedInterstitial));
-            rewarded_ads.RewardedInterstitialAds();
+            ADS_ADMOB.Interstitial_Ad(this);
+
         } else {
             LinearLayout facebook_bannerAd_layput;
             facebook_bannerAd_layput = findViewById(R.id.banner_container);

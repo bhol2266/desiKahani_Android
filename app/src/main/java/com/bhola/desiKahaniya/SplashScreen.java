@@ -77,7 +77,11 @@ public class SplashScreen extends AppCompatActivity {
         lottie = findViewById(R.id.lottie);
 
         copyDatabase();
-        allUrl();
+        try {
+            allUrl();
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
         sharedPrefrences();//update login times
 
 
@@ -165,7 +169,7 @@ public class SplashScreen extends AppCompatActivity {
                         public void run() {
                             handler_forIntent();
                         }
-                    }, 2500);
+                    }, 1000);
                 }
 
                 @Override

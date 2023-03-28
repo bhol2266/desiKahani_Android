@@ -1,10 +1,15 @@
 package com.bhola.desiKahaniya;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,11 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -52,6 +60,7 @@ Collection_GridView extends AppCompatActivity {
     private ReviewManager reviewManager;
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
     RewardedInterstitialAd mRewardedInterstitial;
+    final int PERMISSION_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +73,7 @@ Collection_GridView extends AppCompatActivity {
 
         navigationDrawer();
         tabview();
+        askForNotificationPermission(); //Android 13 and higher
 
 
     }
@@ -111,8 +121,8 @@ Collection_GridView extends AppCompatActivity {
             mAdView = findViewById(R.id.adView);
             ADS_ADMOB.BannerAd(this, mAdView);
             if (!SplashScreen.homepageAdShown) {
-                ADS_ADMOB rewarded_ads = new ADS_ADMOB(mRewardedInterstitial, this, getString(R.string.RewardedInterstitial));
-                rewarded_ads.RewardedInterstitialAds();
+                ADS_ADMOB.Interstitial_Ad(this);
+
                 SplashScreen.homepageAdShown = true;
             }
 
@@ -397,5 +407,60 @@ Collection_GridView extends AppCompatActivity {
                 });
             }
         });
+    }
+
+
+    private void askForNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(Collection_GridView.this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(Collection_GridView.this, "Allow Notification for Daily new Stories ", Toast.LENGTH_LONG).show();
+                    }
+                }, 1000);
+            }
+        }
+    }
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // Permission is granted. Continue the action or workflow in your
+                    // app.
+                } else {
+                    // Explain to the user that the feature is unavailable because the
+                    // feature requires a permission that the user has denied. At the
+                    // same time, respect the user's decision. Don't link to system
+                    // settings in an effort to convince the user to change their
+                    // decision.
+                }
+            });
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the feature requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                return;
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
     }
 }
