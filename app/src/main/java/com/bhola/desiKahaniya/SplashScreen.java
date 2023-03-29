@@ -163,8 +163,7 @@ public class SplashScreen extends AppCompatActivity {
                     Notification_ImageURL = (String) snapshot.child("Notification_ImageURL").getValue();
 
 
-                    Handler handler2 = new Handler();
-                    handler2.postDelayed(new Runnable() {
+                    new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             handler_forIntent();
@@ -176,7 +175,6 @@ public class SplashScreen extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
 
                 }
-
 
             });
 
