@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -29,10 +30,20 @@ public class ftab1 extends Fragment {
         collectionGridItems(view);
         if (SplashScreen.Login_Times > 3 && SplashScreen.Sex_Story.equals("active")) {
             changeTitle_Textview(view);
+            cahngeImageView(view);
         }
 
-
         return view;
+    }
+
+    private void cahngeImageView(View view) {
+        ImageView image1 = view.findViewById(R.id.image1);
+        image1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void collectionGridItems(View view) {
@@ -102,6 +113,13 @@ public class ftab1 extends Fragment {
                 startActivity(intent);
             }
         });
+
+        if (!SplashScreen.Sex_Story.equals("active") && !SplashScreen.Sex_Story_Switch_Open.equals("active")) {
+            collection3.setVisibility(View.GONE);
+            collection4.setVisibility(View.GONE);
+            collection5.setVisibility(View.GONE);
+            collection6.setVisibility(View.GONE);
+        }
     }
 
     private void changeTitle_Textview(View view) {

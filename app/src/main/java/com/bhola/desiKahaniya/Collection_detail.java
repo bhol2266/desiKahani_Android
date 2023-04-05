@@ -136,6 +136,7 @@ public class Collection_detail extends AppCompatActivity {
             collectonData.clear();
             getDataFromDatabaselovestory();
 
+
         }
 
         adapter2 = new StoryDetails_Adapter(collectonData, this);
@@ -175,11 +176,14 @@ public class Collection_detail extends AppCompatActivity {
     private void getDataFromDatabaselovestory() {
 
 
-        Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "Collection8").readalldata();
+        Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "Collection7").readalldata();
         try {
             while (cursor.moveToNext()) {
-                FirebaseData firebaseData = new FirebaseData(cursor.getInt(0), cursor.getString(1), "cursor.getString(2)", cursor.getString(2), cursor.getInt(3), "Collection8");
-                collectonData.add(firebaseData);
+                if (collectonData.size() < 3) { //Add only 3 storys
+
+                    FirebaseData firebaseData = new FirebaseData(cursor.getInt(0), cursor.getString(1), "cursor.getString(2)", cursor.getString(2), cursor.getInt(3), "Collection7");
+                    collectonData.add(firebaseData);
+                }
             }
             Collections.shuffle(collectonData);
         } finally {

@@ -130,13 +130,13 @@ public class ftab2 extends Fragment {
         if (!SplashScreen.Sex_Story.equals("active") && !SplashScreen.Sex_Story_Switch_Open.equals("active")) {
             collectionData.clear();
 
-            Cursor cursor2 = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "Audio_Story_Fake").readalldataStory();
-            while (cursor2.moveToNext()) {
-                if (cursor2.getPosition() < 10) {
-                    AudioModel model = new AudioModel(cursor2.getString(1), cursor2.getString(2));
-                    collectionData.add(model);
-                }
-            }
+//            Cursor cursor2 = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "Audio_Story_Fake").readalldataStory();
+//            while (cursor2.moveToNext()) {
+//                if (cursor2.getPosition() < 10) {
+//                    AudioModel model = new AudioModel(cursor2.getString(1), cursor2.getString(2));
+//                    collectionData.add(model);
+//                }
+//            }
         }
 
         adapter2 = new AudioStory_Details_Adapter(collectionData, getActivity());

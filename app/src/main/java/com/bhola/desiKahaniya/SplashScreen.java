@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -37,6 +38,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -53,6 +56,7 @@ public class SplashScreen extends AppCompatActivity {
     public static String Refer_App_url2 = "https://play.google.com/store/apps/developer?id=UK+DEVELOPERS";
     public static String Ads_State = "inactive";
     public static String DB_NAME = "MCB_Story";
+    public static String DB_NAME2 = "MCB_Story2";
     public static String Android_ID;
     public static String exit_Refer_appNavigation = "inactive";
     public static String Sex_Story_Switch_Open = "inactive";
@@ -132,6 +136,43 @@ public class SplashScreen extends AppCompatActivity {
 
         }
 
+
+////      Check For Database is Available in Device or not
+//        SqliteDBHelper sqliteDBHelper = new SqliteDBHelper(this, DB_NAME2, DB_VERSION, "UserInformation");
+//        try {
+//            sqliteDBHelper.CheckDatabases();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
+//        for (int i = 7; i <= 10; i++) {
+//            String table = "Collection" + String.valueOf(i);
+//            transferData(table);
+//        }
+
+    }
+
+    private void transferData(String table) {
+        Log.d(TAG, "transferData: "+table);
+        List<Object> collectonDataTemp = new ArrayList<>();
+        List<Object> collectonData = new ArrayList<>();
+
+        Cursor cursor = new SqliteDBHelper(this, SplashScreen.DB_NAME2, SplashScreen.DB_VERSION, table).reeead();
+        while (cursor.moveToNext()) {
+
+            FirebaseData firebaseData = new FirebaseData(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3),cursor.getInt(4), table);
+            collectonDataTemp.add(firebaseData);
+        }
+        Collections.shuffle(collectonDataTemp);
+        cursor.close();
+
+
+        for (int i = 0; i < collectonDataTemp.size(); i++) {
+            FirebaseData firebaseData = (FirebaseData) collectonDataTemp.get(i);
+            Log.d(TAG, "transferData: "+firebaseData.getHeading());
+            String res = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, table).addstories(firebaseData.getDate(), encryption(firebaseData.getHeading()), firebaseData.getTitle());
+            Log.d(TAG, "transferData: " + res);
+        }
 
     }
 

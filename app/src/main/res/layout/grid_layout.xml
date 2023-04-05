@@ -44,12 +44,11 @@
                         android:id="@+id/titlee"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/rajdhani_regular"
                         android:maxLines="1"
                         android:text="Ek Purani Kahani"
                         android:textColor="@color/semi_black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textSize="22sp"
+                       />
 
 
                     <TextView

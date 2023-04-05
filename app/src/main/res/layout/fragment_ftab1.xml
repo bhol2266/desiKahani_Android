@@ -30,6 +30,7 @@
                 >
 
                 <ImageView
+                    android:id="@+id/image1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -76,6 +77,8 @@
                 >
 
                 <ImageView
+                    android:id="@+id/image2"
+
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -124,6 +127,8 @@
                 >
 
                 <ImageView
+                    android:id="@+id/image3"
+
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -172,6 +177,7 @@
                 >
 
                 <ImageView
+                    android:id="@+id/image4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -222,6 +228,7 @@
                 >
 
                 <ImageView
+                    android:id="@+id/image5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -269,6 +276,7 @@
                 >
 
                 <ImageView
+                    android:id="@+id/image6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"

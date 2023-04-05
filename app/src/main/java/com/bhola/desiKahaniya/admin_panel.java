@@ -242,15 +242,16 @@ public class admin_panel extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    if (SplashScreen.Sex_Story_Switch_Open.equals("active")) {
-                        mref.child("Sex_Story").setValue("active");
-                    }
+                    mref.child("Sex_Story").setValue("active");
+                    mref.child("Send_Notification").setValue("active");
+
                 } else {
                     mref.child("Sex_Story").setValue("inactive");
+                    mref.child("Send_Notification").setValue("inactive");
+
                 }
             }
         });
-
 
         STory_Switch_Active_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,7 +303,6 @@ public class admin_panel extends AppCompatActivity {
                     STory_Switch_Active_BTN.setBackgroundColor(Color.parseColor("#10FF00"));
                 } else {
                     STory_Switch_Active_BTN.setText("Disabled");
-                    switch_Sex_Story.setChecked(false);
                     STory_Switch_Active_BTN.setBackgroundColor(Color.parseColor("#FF0000"));
                 }
 

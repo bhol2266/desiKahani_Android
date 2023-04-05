@@ -130,6 +130,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor reeead() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(Database_tableName, null, null, null, null, null, null, null);
+        return cursor;
+
+    }
+
     public Cursor readalldataStory() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(Database_tableName, null, null, null, null, null, null, null);
