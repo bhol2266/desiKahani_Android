@@ -17,16 +17,11 @@ android {
         applicationId "com.bhola.desiKahaniya"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 29
-        versionName "29.0"
+        versionCode 30
+        versionName "30.0"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-    lintOptions {
-
-        checkReleaseBuilds false
-
     }
     buildTypes {
         release {
@@ -38,6 +33,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    lint {
+        checkReleaseBuilds false
+    }
+    namespace 'com.bhola.desiKahaniya'
 }
 
 dependencies {

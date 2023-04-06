@@ -93,14 +93,14 @@ public class ftab2 extends Fragment {
         if (SplashScreen.Login_Times < 4) {
             Cursor cursor2 = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "Audio_Story_Fake").readalldataStory();
             while (cursor2.moveToNext()) {
-                if (cursor2.getPosition() < 70) {
+                if (cursor2.getPosition() < 15) {
                     storyName.add(cursor2.getString(1));
                     storyURL.add(cursor2.getString(2));
                 }
             }
             Cursor cursor3 = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "Audio_Story").readalldataStory();
             while (cursor3.moveToNext()) {
-                if (cursor3.getPosition() < 20) {
+                if (cursor3.getPosition() < 5) {
                     storyName.add(cursor3.getString(1));
                     storyURL.add(cursor3.getString(2));
                 }
@@ -127,7 +127,7 @@ public class ftab2 extends Fragment {
         }
 
         Collections.shuffle(collectionData);
-        if (!SplashScreen.Sex_Story.equals("active") && !SplashScreen.Sex_Story_Switch_Open.equals("active")) {
+        if (!SplashScreen.Sex_Story.equals("active") || !SplashScreen.Sex_Story_Switch_Open.equals("active")) {
             collectionData.clear();
 
 //            Cursor cursor2 = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "Audio_Story_Fake").readalldataStory();

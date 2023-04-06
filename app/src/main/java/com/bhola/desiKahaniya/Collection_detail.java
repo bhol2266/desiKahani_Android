@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,14 @@ public class Collection_detail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection_detail);
 
-        initviews_Check_Internet_Connectivity_Actionbar();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initviews_Check_Internet_Connectivity_Actionbar();
+            }
+        },50);
+
 
     }
 
@@ -132,7 +140,7 @@ public class Collection_detail extends AppCompatActivity {
         recyclerView.setVisibility(View.VISIBLE);
         progressBar2.setVisibility(View.GONE);
 
-        if (!SplashScreen.Sex_Story.equals("active") && !SplashScreen.Sex_Story_Switch_Open.equals("active")) {
+        if (!SplashScreen.Sex_Story.equals("active") || !SplashScreen.Sex_Story_Switch_Open.equals("active")) {
             collectonData.clear();
             getDataFromDatabaselovestory();
 
@@ -158,7 +166,7 @@ public class Collection_detail extends AppCompatActivity {
             }
 
             if (SplashScreen.Login_Times < 6) {
-                for (int i = 0; i < 20; i++) {
+                for (int i = 0; i < 10; i++) {
                     collectonData.add(collectonDataTemp.get(i));
                 }
             } else {

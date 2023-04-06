@@ -114,7 +114,7 @@ public class ftab1 extends Fragment {
             }
         });
 
-        if (!SplashScreen.Sex_Story.equals("active") && !SplashScreen.Sex_Story_Switch_Open.equals("active")) {
+        if (!SplashScreen.Sex_Story.equals("active") || !SplashScreen.Sex_Story_Switch_Open.equals("active")) {
             collection3.setVisibility(View.GONE);
             collection4.setVisibility(View.GONE);
             collection5.setVisibility(View.GONE);

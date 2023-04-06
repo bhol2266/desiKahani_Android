@@ -18,10 +18,8 @@ android {
             consumerProguardFiles 'proguard-rules.pgcfg'
         }
     }
+    namespace 'com.google.android.ads.nativetemplates'
 
-    lintOptions {
-        resourcePrefix 'gnt_'
-    }
 }
 
 
