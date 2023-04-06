@@ -56,15 +56,15 @@ public class Collection_detail extends AppCompatActivity {
             public void run() {
                 initviews_Check_Internet_Connectivity_Actionbar();
             }
-        },50);
+        },10);
 
+        actionBar();
 
     }
 
 
     private void initviews_Check_Internet_Connectivity_Actionbar() {
 
-        actionBar();
 
         recyclerView = findViewById(R.id.recyclerView);
 

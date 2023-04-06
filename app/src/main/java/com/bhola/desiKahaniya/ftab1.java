@@ -30,21 +30,12 @@ public class ftab1 extends Fragment {
         collectionGridItems(view);
         if (SplashScreen.Login_Times > 3 && SplashScreen.Sex_Story.equals("active")) {
             changeTitle_Textview(view);
-            cahngeImageView(view);
         }
 
         return view;
     }
 
-    private void cahngeImageView(View view) {
-        ImageView image1 = view.findViewById(R.id.image1);
-        image1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
-    }
 
     private void collectionGridItems(View view) {
         collection1 = view.findViewById(R.id.collection1);

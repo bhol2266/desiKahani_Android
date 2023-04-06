@@ -65,7 +65,7 @@
                 android:layout_margin="5dp"
                 android:layout_marginTop="20dp"
                 android:gravity="left"
-                android:text="Note: The Content in the App is Copyright Free Content Which Is Available in the Public Domain and available for reuse. I Give Credit to all the Owner of the content which is there in my app."
+                android:text="Note: The Content in the App is Copyright Free Content Which Is Available in the Public Domain and available for reuse. I Give Credit to all the Owner of the content which user-generated in my app."
                 android:textColor="#000000"
                 android:textSize="20dp"
                 android:textStyle="bold"
