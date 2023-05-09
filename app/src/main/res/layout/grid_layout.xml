@@ -8,6 +8,8 @@
     <soup.neumorphism.NeumorphCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:neumorph_shadowColorLight="@color/neuro_shadowcolor"
+        app:neumorph_shadowColorDark="#FFF8FB"
         app:cardCornerRadius="10dp">
 
 

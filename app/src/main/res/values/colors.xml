@@ -5,6 +5,7 @@
     <color name="background_start">#FFFFFF</color>
     <color name="background_end">#FFFFFF</color>
     <color name="themeColor">#B52D5F</color>
+    <color name="themeColorlight">#F487B0</color>
     <color name="textcolor2">#BF171717</color>
     <color name="neuro_shadowcolor">#FFF1F5</color>
 

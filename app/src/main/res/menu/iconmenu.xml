@@ -7,7 +7,7 @@
       />
 
   <item android:id="@+id/menu_downloads"
-      android:icon="@drawable/menu_favourite"
+      android:icon="@drawable/mark"
       android:title=" Saved Offline Stories"
       />
 

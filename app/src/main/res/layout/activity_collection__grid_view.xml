@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background2"
-                app:title="देसी हिंदी कहानियां "
+                app:title="Hindi Desi kahani"
                 app:titleTextAppearance="@style/GridView_Title" />
 
         </RelativeLayout>

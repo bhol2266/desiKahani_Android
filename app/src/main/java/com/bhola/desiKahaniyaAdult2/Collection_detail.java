@@ -297,9 +297,7 @@ public class Collection_detail extends AppCompatActivity {
         share_ap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                share_ap.setImageResource(R.drawable.favourite_active);
                 Intent intent = new Intent(getApplicationContext(), Download_Detail.class);
-                intent.putExtra("Ads_Status", Ads_State);
                 startActivity(intent);
             }
         });
