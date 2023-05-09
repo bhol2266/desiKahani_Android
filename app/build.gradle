@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
-        applicationId "com.bhola.desiKahaniyaAdult"
+        applicationId "com.bhola.desiKahaniyaAdult2"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 5
@@ -40,7 +40,7 @@ android {
     lint {
         checkReleaseBuilds false
     }
-    namespace 'com.bhola.desiKahaniyaAdult'
+    namespace 'com.bhola.desiKahaniyaAdult2'
 }
 
 dependencies {

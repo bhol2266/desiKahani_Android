@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "438889328070",
-    "firebase_url": "https://desikahani-c7af3-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "desikahani-c7af3",
-    "storage_bucket": "desikahani-c7af3.appspot.com"
+    "project_number": "592504089214",
+    "firebase_url": "https://desikahaniyaadult2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "desikahaniyaadult2",
+    "storage_bucket": "desikahaniyaadult2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:438889328070:android:b551f844092068e566d6c7",
+        "mobilesdk_app_id": "1:592504089214:android:8cc95d3377cdfdf346462f",
         "android_client_info": {
-          "package_name": "com.bhola.desiKahaniyaAdult"
+          "package_name": "com.bhola.desiKahaniyaAdult2"
         }
       },
       "oauth_client": [
         {
-          "client_id": "438889328070-j96eon7uo3n11eu79upinnb5gs6mfg82.apps.googleusercontent.com",
+          "client_id": "592504089214-ma5fgnr5oejarnvheghusqcobob37tmc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDhu8mrpzMK1I6TrH45KzZH7GgrgaJv94w"
+          "current_key": "AIzaSyBpLld15SkbBeV0t903CCMEn4HJssQSq-w"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "438889328070-j96eon7uo3n11eu79upinnb5gs6mfg82.apps.googleusercontent.com",
+              "client_id": "592504089214-ma5fgnr5oejarnvheghusqcobob37tmc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
