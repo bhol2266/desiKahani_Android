@@ -22,7 +22,7 @@
             android:layout_marginBottom="10dp"
             android:clickable="true"
             android:focusable="true"
-            app:tint="#9A3412"
+            app:tint="@color/themeColor"
             app:srcCompat="@drawable/back_arrow" />
 
         <TextView

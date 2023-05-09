@@ -34,7 +34,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="backBtn"
-                app:tint="#9A3412"
+                app:tint="@color/themeColor"
                 app:srcCompat="@drawable/back_arrow" />
 
             <TextView

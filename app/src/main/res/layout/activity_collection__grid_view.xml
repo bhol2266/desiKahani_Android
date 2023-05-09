@@ -60,10 +60,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="10dp"
-            app:tabIndicatorColor="#9A3412"
+            app:tabIndicatorColor="@color/themeColor"
             app:tabBackground="@drawable/hooverffext"
             app:tabRippleColor="@null"
-            app:tabSelectedTextColor="#9A3412"
+            app:tabSelectedTextColor="@color/themeColor"
             app:tabTextAppearance="@style/tabText"
             app:tabTextColor="@color/semi_black"
             app:tabUnboundedRipple="false">

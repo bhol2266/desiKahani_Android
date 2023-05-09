@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorAccent">#03DAC5</color>
-    <color name="textcolor">#AD5312</color>
-    <color name="background_start">#FFF7ED</color>
-    <color name="background_end">#FFF7ED</color>
-    <color name="themeColor">#DA8833</color>
+    <color name="textcolor">#2B2326</color>
+    <color name="background_start">#FFFFFF</color>
+    <color name="background_end">#FFFFFF</color>
+    <color name="themeColor">#B52D5F</color>
     <color name="textcolor2">#BF171717</color>
-    <color name="neuro_shadowcolor">#FDE4C7</color>
+    <color name="neuro_shadowcolor">#FFF1F5</color>
 
 
     <color name="semi_black">#BF171717</color>
