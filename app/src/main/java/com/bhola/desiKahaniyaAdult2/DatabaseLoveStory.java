@@ -27,7 +27,7 @@ public class DatabaseLoveStory extends SQLiteOpenHelper {
         this.context = mcontext;
         this.DbName = DB_NAME;
         this.Database_tableNo = Table_Number;
-        DbPath = "/data/data/" + "com.bhola.desiKahaniyaAdult" + "/databases/";
+        DbPath = "/data/data/" + "com.bhola.desiKahaniyaAdult2" + "/databases/";
     }
 
 

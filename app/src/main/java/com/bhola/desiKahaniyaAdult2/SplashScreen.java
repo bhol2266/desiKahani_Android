@@ -64,7 +64,7 @@ public class SplashScreen extends AppCompatActivity {
     LottieAnimationView lottie;
     public static String TAG = "TAGA";
     public static String Notification_Intent_Firebase = "inactive";
-    public static String Main_App_url1 = "https://play.google.com/store/apps/details?id=com.bhola.desiKahaniyaAdult";
+    public static String Main_App_url1 = "https://play.google.com/store/apps/details?id=com.bhola.desiKahaniyaAdult2";
     public static String Refer_App_url2 = "https://play.google.com/store/apps/developer?id=Marveltech+Apps";
     public static String Ads_State = "inactive";
     public static String Ad_Network_Name = "admob";
