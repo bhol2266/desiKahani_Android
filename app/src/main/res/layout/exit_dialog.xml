@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="20dp"
-    android:background="@drawable/background2"
-    android:orientation="vertical"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp">
+    app:cardCornerRadius="20dp"
+ >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:orientation="vertical">
+
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView2"
@@ -36,7 +42,9 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="10dp"
-        android:fontFamily="@font/robotoslab_regular"
+        android:fontFamily="@font/inter"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:gravity="center"
         android:text="If you Like the app. Please give us a Good Rating"
         android:textColor="@color/textcolor"
@@ -54,38 +62,42 @@
         android:orientation="horizontal">
 
 
-        <soup.neumorphism.NeumorphButton
+        <Button
             android:id="@+id/exit_button1"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:background="@drawable/hooverffext"
+            android:background="@drawable/btn_hoovereffect"
             android:fontFamily="@font/robotoslab_regular"
             android:gravity="center"
             android:text="CANCEL"
             android:textStyle="bold"
+            android:textColor="@color/white"
 
             app:neumorph_shadowColorDark="@color/neuro_shadowcolor" />
 
-        <soup.neumorphism.NeumorphButton
+        <Button
             android:id="@+id/exit_button2"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@drawable/hooverffext"
-            android:fontFamily="@font/robotoslab_regular"
+            android:background="@drawable/btn_hoovereffect"
+            android:fontFamily="@font/inter"
             android:gravity="center"
             android:text="EXIT"
-
+android:textColor="@color/white"
             android:textStyle="bold" />
 
     </LinearLayout>
 
+    </LinearLayout>
 
-</LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
 

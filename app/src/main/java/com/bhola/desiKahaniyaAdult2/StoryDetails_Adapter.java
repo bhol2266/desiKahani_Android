@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,54 +92,23 @@ public class StoryDetails_Adapter extends RecyclerView.Adapter<RecyclerView.View
             }
         });
 
-        storyRowViewHolder.recyclerview.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
 
-                if (context.getClass().getSimpleName().equals("Download_Detail")) {
-                    final Vibrator vibe = (Vibrator) v.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    vibe.vibrate(80);//80 represents the milliseconds (the duration of the vibration)
+        if (context.getClass().getSimpleName().equals("Download_Detail")) {
+            storyRowViewHolder.delete.setVisibility(View.VISIBLE);
+            storyRowViewHolder.delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final MediaPlayer mp = MediaPlayer.create(v.getContext(), R.raw.sound);
+                    mp.start();
 
-
-                    final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
-                    LayoutInflater inflater = LayoutInflater.from(v.getContext());
-                    View promptView = inflater.inflate(R.layout.delete, null);
-                    builder.setView(promptView);
-                    builder.setCancelable(false);
-                    Button delete = promptView.findViewById(R.id.DELETE);
-                    delete.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final MediaPlayer mp = MediaPlayer.create(v.getContext(), R.raw.sound);
-                            mp.start();
-
-                            String str = (new DatabaseHelper(v.getContext(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems")).updaterecord(SplashScreen.decryption(storyItemModel.getTitle()), 0);
-                            Toast.makeText(v.getContext(), "Removed from Offline Stories" + str, Toast.LENGTH_SHORT).show();
-                            collectonData.remove(position);
-                            Download_Detail.adapter.notifyDataSetChanged();
-                            dialog.dismiss();
-                        }
-                    });
-                    Button cancel = promptView.findViewById(R.id.CANCEL);
-
-
-                    dialog = builder.create();
-                    dialog.show();
-
-                    cancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-
-                        }
-                    });
-
+                    String str = (new DatabaseHelper(v.getContext(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems")).updaterecord(SplashScreen.decryption(storyItemModel.getTitle()), 0);
+                    Toast.makeText(v.getContext(), "Removed from Offline Stories" + str, Toast.LENGTH_SHORT).show();
+                    collectonData.remove(position);
+                    Download_Detail.adapter.notifyDataSetChanged();
                 }
-                return false;
+            });
+        }
 
-
-            }
-        });
 
         if (SplashScreen.Ads_State.equals("active")) {
             loadNativeAds(((Story_ROW_viewHolder) holder).template, ((Story_ROW_viewHolder) holder).facebook_BannerAd_layout, holder.getAbsoluteAdapterPosition());
@@ -218,7 +188,6 @@ public class StoryDetails_Adapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
 
-
     @Override
     public int getItemCount() {
         return collectonData.size();
@@ -231,6 +200,7 @@ public class StoryDetails_Adapter extends RecyclerView.Adapter<RecyclerView.View
         LinearLayout recyclerview;
         TemplateView template;
         LinearLayout facebook_BannerAd_layout;
+        ImageView delete;
 
         public Story_ROW_viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -241,6 +211,7 @@ public class StoryDetails_Adapter extends RecyclerView.Adapter<RecyclerView.View
             views = itemView.findViewById(R.id.views);
             template = itemView.findViewById(R.id.my_template);
             facebook_BannerAd_layout = itemView.findViewById(R.id.banner_container);
+            delete = itemView.findViewById(R.id.delete);
 
 
         }

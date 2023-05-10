@@ -36,23 +36,22 @@
         android:textColor="@color/textcolor"
         android:textSize="30dp" />
 
-    <soup.neumorphism.NeumorphButton
+    <Button
         android:id="@+id/your_dialog_button"
         android:layout_width="100dp"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/your_dialog_seekbar"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        app:neumorph_shadowColorDark="@color/neuro_shadowcolor"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/hooverffext"
-        android:fontFamily="@font/robotoslab_regular"
+        android:background="@drawable/btn_hoovereffect"
+        android:fontFamily="@font/inter"
         android:gravity="center"
         android:text="OK"
-        android:textColor="#000000"
+        android:textColor="@color/white"
         android:textSize="16dp" />
 
 

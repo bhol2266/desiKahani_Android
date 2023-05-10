@@ -80,15 +80,15 @@ public class SplashScreen extends AppCompatActivity {
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
 
     public static int DB_VERSION = 1;
+    public static int currentApp_Version = 1;
+    public static int Firebase_Version_Code = 0;
     public static int DB_VERSION_INSIDE_TABLE = 1;
     Handler handlerr;
 
-    public static int Firebase_Version_Code = 0;
     public static String apk_Downloadlink = "";
     public static String countryLocation = "";
     public static String countryCode = "";
     public static boolean update_Mandatory = false;
-    public static int currentApp_Version = 3;
     public static String DB_TABLE_NAME = "";  //This is a table name "StoryItems or FakeStory"
     public static String API_URL =  "https://clownfish-app-jn7w9.ondigitalocean.app/";
     private FirebaseAnalytics mFirebaseAnalytics;

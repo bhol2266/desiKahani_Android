@@ -188,7 +188,7 @@ public class Collection_detail extends AppCompatActivity {
             collectonData.add(storyItemModel);
         }
         if(SplashScreen.App_updating.equals("active")){
-            collectonData.subList(1,collectonData.size()-1).clear();
+            collectonData.subList(0,collectonData.size()-4).clear();
         }
 
         cursor.close();

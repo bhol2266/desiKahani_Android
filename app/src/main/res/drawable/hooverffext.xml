@@ -5,7 +5,7 @@
         android:state_selected="false"
         android:state_pressed="false"
         android:drawable="@drawable/textview_gradientforrecyclerview"
-        ></item>
+      />
 
   <item
       android:state_pressed="true"
@@ -15,7 +15,7 @@
           android:state_pressed="false"
           android:drawable="@drawable/hoovercolor"
 
-          ></item>
+       />
 
 
   </item>
