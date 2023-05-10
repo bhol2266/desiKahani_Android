@@ -79,10 +79,10 @@ public class SplashScreen extends AppCompatActivity {
 
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
 
-    public static int DB_VERSION = 1;
-    public static int currentApp_Version = 1;
-    public static int Firebase_Version_Code = 0;
-    public static int DB_VERSION_INSIDE_TABLE = 1;
+    public static int DB_VERSION = 1;//manual set
+    public static int currentApp_Version = 1;//manual set
+    public static int Firebase_Version_Code = 1;//manual set
+    public static int DB_VERSION_INSIDE_TABLE = 1; //manual set
     Handler handlerr;
 
     public static String apk_Downloadlink = "";
