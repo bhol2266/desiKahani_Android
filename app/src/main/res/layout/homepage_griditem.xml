@@ -3,32 +3,43 @@
 
 <soup.neumorphism.NeumorphCardView
 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
     android:layout_columnWeight="1"
     android:layout_gravity="center"
-    app:neumorph_shadowColorLight="@color/neuro_shadowcolor"
     app:neumorph_shadowColorDark="#FFF8FB"
+    app:neumorph_shadowColorLight="@color/neuro_shadowcolor">
 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
-
-    <TextView
-        android:id="@+id/Textview1"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:padding="10dp"
-        android:gravity="center"
-        android:background="@drawable/hooverffext"
-        android:breakStrategy="high_quality"
-        android:textAlignment="center"
-        android:text="Latest Story"
-        android:textColor="@color/textcolor2"
-        android:textSize="15dp" />
+    >
+
+        <ImageView
+            android:id="@+id/auntyImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/aunty7" />
+
+
+        <TextView
+            android:id="@+id/Textview1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:background="@color/themeColor"
+            android:breakStrategy="high_quality"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Latest Story"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+    </FrameLayout>
 
 </soup.neumorphism.NeumorphCardView>
