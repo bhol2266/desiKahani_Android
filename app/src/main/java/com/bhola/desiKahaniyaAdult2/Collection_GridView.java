@@ -112,7 +112,7 @@ Collection_GridView extends AppCompatActivity {
                 if (SplashScreen.isInternetAvailable(Collection_GridView.this)) {
                     if (!SplashScreen.App_updating.equals("active")) {
                         startActivity(new Intent(Collection_GridView.this, VipMembership.class));
-                    }else{
+                    } else {
                         Toast.makeText(Collection_GridView.this, "coming soon!", Toast.LENGTH_SHORT).show();
 
                     }
@@ -121,8 +121,6 @@ Collection_GridView extends AppCompatActivity {
                 }
             }
         });
-
-
 
 
     }
@@ -485,7 +483,16 @@ Collection_GridView extends AppCompatActivity {
                         break;
 
                     case R.id.menu_VIP:
-                        startActivity(new Intent(getApplicationContext(), VipMembership.class));
+                        if (SplashScreen.isInternetAvailable(Collection_GridView.this)) {
+                            if (!SplashScreen.App_updating.equals("active")) {
+                                startActivity(new Intent(Collection_GridView.this, VipMembership.class));
+                            } else {
+                                Toast.makeText(Collection_GridView.this, "coming soon!", Toast.LENGTH_SHORT).show();
+
+                            }
+                        } else {
+                            Toast.makeText(Collection_GridView.this, "Check Internet Connection!", Toast.LENGTH_SHORT).show();
+                        }
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
