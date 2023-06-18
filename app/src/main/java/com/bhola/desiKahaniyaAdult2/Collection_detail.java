@@ -187,8 +187,12 @@ public class Collection_detail extends AppCompatActivity {
             StoryItemModel storyItemModel = new StoryItemModel(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getInt(9), cursor.getString(10), cursor.getInt(11), cursor.getInt(12), cursor.getString(13), cursor.getInt(14));
             collectonData.add(storyItemModel);
         }
-        if(SplashScreen.App_updating.equals("active")){
-            collectonData.subList(0,collectonData.size()-4).clear();
+        if (SplashScreen.App_updating.equals("active")) {
+            try {
+                collectonData.subList(1, collectonData.size() - 1).clear();
+            } catch (Exception e) {
+                collectonData.clear();
+            }
         }
 
         cursor.close();
@@ -293,12 +297,19 @@ public class Collection_detail extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        share_ap = findViewById(R.id.share_app);
-        share_ap.setOnClickListener(new View.OnClickListener() {
+        ImageView VipMembership = findViewById(R.id.VipLottie);
+        VipMembership.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Download_Detail.class);
-                startActivity(intent);
+            public void onClick(View view) {
+                if (SplashScreen.isInternetAvailable(Collection_detail.this)) {
+                    if (!SplashScreen.App_updating.equals("active")) {
+                        startActivity(new Intent(Collection_detail.this, VipMembership.class));
+                    } else {
+                        Toast.makeText(Collection_detail.this, "coming soon!", Toast.LENGTH_SHORT).show();
+
+                    }                } else {
+                    Toast.makeText(Collection_detail.this, "Check Internet Connection!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

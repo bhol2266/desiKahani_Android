@@ -8,6 +8,8 @@
     <color name="themeColorlight">#F487B0</color>
     <color name="textcolor2">#BF171717</color>
     <color name="neuro_shadowcolor">#FFF1F5</color>
+    <color name="themeColorextralight">#FFE8D1</color>
+    <color name="black">#FF000000</color>
 
 
     <color name="semi_black">#BF171717</color>

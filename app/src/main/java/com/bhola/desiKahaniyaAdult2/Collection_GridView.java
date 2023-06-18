@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -101,8 +102,28 @@ Collection_GridView extends AppCompatActivity {
 //        insertDataIN_Database();
 //        checkForAppUpdate();
         if (SplashScreen.Login_Times < 3) {
-            getUserLocaitonUsingIP();
+//            getUserLocaitonUsingIP();
         }
+
+        ImageView VipMembership = findViewById(R.id.VipLottie);
+        VipMembership.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SplashScreen.isInternetAvailable(Collection_GridView.this)) {
+                    if (!SplashScreen.App_updating.equals("active")) {
+                        startActivity(new Intent(Collection_GridView.this, VipMembership.class));
+                    }else{
+                        Toast.makeText(Collection_GridView.this, "coming soon!", Toast.LENGTH_SHORT).show();
+
+                    }
+                } else {
+                    Toast.makeText(Collection_GridView.this, "Check Internet Connection!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
 
     }
 
@@ -460,6 +481,11 @@ Collection_GridView extends AppCompatActivity {
 
                     case R.id.menu_audio:
                         startActivity(new Intent(getApplicationContext(), OfflineAudioStory.class));
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+
+                    case R.id.menu_VIP:
+                        startActivity(new Intent(getApplicationContext(), VipMembership.class));
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 

@@ -54,22 +54,18 @@
                 android:textSize="27sp" />
 
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottie"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+            <ImageView
+                android:id="@+id/VipLottie"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/crown"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                android:elevation="5dp"
-                android:visibility="gone"
-                app:lottie_autoPlay="false"
-                app:lottie_rawRes="@raw/storypage"
-                app:lottie_speed="2.3" />
+                />
 
         </RelativeLayout>
 
@@ -138,6 +134,19 @@
                         android:text="                                                                                                                                                                                                                                                              Loading........"
                         android:textColor="#434F5A"
                         android:textSize="20dp" />
+
+
+                    <Button
+                        android:id="@+id/speakWithWriter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/vip_membership_textbg"
+                        android:fontFamily="@font/inter"
+                        android:textSize="20dp"
+                        android:text="लेखक के साथ बात करे"
+                        android:textColor="@color/white"/>
 
                     <LinearLayout
                         android:id="@+id/storiesInsideparagraph"

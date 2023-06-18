@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -32,6 +33,9 @@
             android:exported="false" />
         <activity
             android:name=".OfflineAudioStory"
+            android:exported="false" />
+        <activity
+            android:name=".VipMembership"
             android:exported="false" />
         <activity
             android:name=".Download_StoryPage"
@@ -84,6 +88,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".TimerService"
+            android:enabled="true"
+            android:exported="false" />
 
 
     </application>

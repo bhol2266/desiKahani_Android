@@ -406,6 +406,45 @@ public class StoryPage extends AppCompatActivity {
             }
         });
 
+        Button speakWithWriter = findViewById(R.id.speakWithWriter);
+        speakWithWriter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SplashScreen.Vip_Member) {
+                    Toast.makeText(StoryPage.this, "Contact on E-mail", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    if (SplashScreen.isInternetAvailable(StoryPage.this)) {
+                        if (!SplashScreen.App_updating.equals("active")) {
+                            startActivity(new Intent(StoryPage.this, VipMembership.class));
+                        } else {
+                            Toast.makeText(StoryPage.this, "coming soon!", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else {
+                        Toast.makeText(StoryPage.this, "Check Internet Connection!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        ImageView VipMembership = findViewById(R.id.VipLottie);
+        VipMembership.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SplashScreen.isInternetAvailable(StoryPage.this)) {
+                    if (!SplashScreen.App_updating.equals("active")) {
+                        startActivity(new Intent(StoryPage.this, VipMembership.class));
+                    } else {
+                        Toast.makeText(StoryPage.this, "coming soon!", Toast.LENGTH_SHORT).show();
+
+                    }
+                } else {
+                    Toast.makeText(StoryPage.this, "Check Internet Connection!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -424,7 +463,10 @@ public class StoryPage extends AppCompatActivity {
     }
 
     private void updateStoryread() {
-        new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).updateStoryRead(title, 1);
+        try {
+            new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).updateStoryRead(title, 1);
+        } catch (Exception e) {
+        }
     }
 
     private void text2Speech() {

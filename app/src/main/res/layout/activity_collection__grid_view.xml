@@ -34,6 +34,19 @@
                 app:title="Hindi Desi kahani"
                 app:titleTextAppearance="@style/GridView_Title" />
 
+
+            <ImageView
+                android:id="@+id/VipLottie"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/crown"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                />
         </RelativeLayout>
 
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"

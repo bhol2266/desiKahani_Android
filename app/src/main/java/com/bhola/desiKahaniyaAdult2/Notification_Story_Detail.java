@@ -102,10 +102,20 @@ public class Notification_Story_Detail extends AppCompatActivity {
 
         back = findViewById(R.id.back_arrow);
         back.setOnClickListener(v -> onBackPressed());
-        share_ap = findViewById(R.id.share_app);
-        share_ap.setOnClickListener(v -> {
-            share_ap.setImageResource(R.drawable.favourite_active);
-            startActivity(new Intent(getApplicationContext(), Download_Detail.class));
+        ImageView VipMembership = findViewById(R.id.VipLottie);
+        VipMembership.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SplashScreen.isInternetAvailable(Notification_Story_Detail.this)) {
+                    if (!SplashScreen.App_updating.equals("active")) {
+                        startActivity(new Intent(Notification_Story_Detail.this, VipMembership.class));
+                    } else {
+                        Toast.makeText(Notification_Story_Detail.this, "coming soon!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(Notification_Story_Detail.this, "Check Internet Connection!", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
 

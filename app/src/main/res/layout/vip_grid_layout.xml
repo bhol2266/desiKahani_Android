@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<soup.neumorphism.NeumorphCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/launchBilling"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/hooverffext"
+    app:cardCornerRadius="10dp"
+    app:neumorph_shadowColorDark="@color/themeColorextralight">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/hooverffext"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingTop="7dp">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="15dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/vip_lottie"
+            app:lottie_speed="0.8" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="not set"
+                    android:textColor="#9A3412"
+                    android:textFontWeight="500"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/membershipType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/vip_membership_textbg"
+                    android:maxLines="1"
+                    android:paddingLeft="4dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="4dp"
+                    android:paddingBottom="2dp"
+                    android:text="popular"
+                    android:textColor="#ffffff"
+                    android:textFontWeight="500"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/mrp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:text="not set"
+                android:textAlignment="center"
+                android:textColor="@color/gnt_gray"
+                android:visibility="gone"
+                android:textSize="19dp"
+
+                />
+
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:text="not set"
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:textAlignment="center"
+                android:textColor="#9A3412"
+                android:textSize="22dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</soup.neumorphism.NeumorphCardView>
+
+
+
+

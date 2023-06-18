@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.ParseException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,8 +53,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -92,6 +97,7 @@ public class SplashScreen extends AppCompatActivity {
     public static String DB_TABLE_NAME = "";  //This is a table name "StoryItems or FakeStory"
     public static String API_URL =  "https://clownfish-app-jn7w9.ondigitalocean.app/";
     private FirebaseAnalytics mFirebaseAnalytics;
+    public static boolean Vip_Member = false;
 
 
     @Override
@@ -219,6 +225,11 @@ public class SplashScreen extends AppCompatActivity {
             handler2.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    if (Login_Times > 5) {
+                        App_updating = "inactive";
+                        Ads_State = "active";
+                        Ad_Network_Name = "admob";
+                    }
                     handler_forIntent();
                 }
             }, 2000);
@@ -265,6 +276,11 @@ public class SplashScreen extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                if (Login_Times > 5) {
+                    App_updating = "inactive";
+                    Ads_State = "active";
+                    Ad_Network_Name = "admob";
+                }
                 Log.d(TAG, "onCancelled: " + error.getMessage());
             }
 
@@ -294,6 +310,11 @@ public class SplashScreen extends AppCompatActivity {
 
     private void handler_forIntent() {
         lottie.cancelAnimation();
+
+        if (SplashScreen.Vip_Member) {
+            vipMemberPrivileges();
+        }
+
         if (Notification_Intent_Firebase.equals("active")) {
             Intent intent = new Intent(getApplicationContext(), Notification_Story_Detail.class);
             startActivity(intent);
@@ -314,7 +335,7 @@ public class SplashScreen extends AppCompatActivity {
         }
     }
 
-    boolean isInternetAvailable(Context context) {
+   static boolean isInternetAvailable(Context context) {
         if (context == null) return false;
 
 
@@ -365,6 +386,67 @@ public class SplashScreen extends AppCompatActivity {
         myEdit.putInt("loginTimes", a + 1);
         myEdit.commit();
 
+        //Reading purchase Token
+        SharedPreferences sharedPreferences1 = SplashScreen.this.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        String purchaseToken = sharedPreferences1.getString("purchaseToken", "not set");
+        int validity_period = sharedPreferences1.getInt("validity_period", 0);
+        String purchase_date = sharedPreferences1.getString("purchase_date", "not set");
+
+        if (purchaseToken.equals("not set") || validity_period == 0) {
+            return;
+        }
+
+
+        // Convert String back to Date
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+            // Parse the original date
+            Date originalDate = dateFormat.parse(purchase_date);
+
+            // Create a Calendar instance and set it to the original date
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(originalDate);
+
+            // Add 30 days to the original date
+            calendar.add(Calendar.DAY_OF_MONTH, validity_period);
+
+            // Get the resulting date
+            Date newDate = calendar.getTime();
+
+            // Format the new date as a string
+            String expirationDateString = dateFormat.format(newDate);
+
+            Log.d(TAG, "Membership Expiry Date: " + expirationDateString);
+            // Get the current date
+            Date currentDate = new Date();
+            String currentDateString = dateFormat.format(currentDate);
+
+
+            // Compare the new date with the current date
+            if (expirationDateString.equals(currentDateString)) {
+                Vip_Member = false;
+                Toast.makeText(this, "Your Membership has expried", Toast.LENGTH_SHORT).show();
+            } else if (newDate.after(currentDate)) {
+                Vip_Member = true;
+
+            } else if (newDate.before(currentDate)) {
+                Toast.makeText(this, "Your Membership has expried", Toast.LENGTH_SHORT).show();
+                Vip_Member = false;
+
+            }
+
+
+        } catch (ParseException | java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void vipMemberPrivileges() {
+        App_updating = "inactive";
+        Ads_State = "inactive";
+        Login_Times=10;
     }
 
     private void updateStoriesInDB() {

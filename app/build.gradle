@@ -21,8 +21,8 @@ android {
         applicationId "com.bhola.desiKahaniyaAdult2"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 3
-        versionName "3.0"
+        versionCode 5
+        versionName "5.0"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -87,6 +87,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
     //noinspection LifecycleAnnotationProcessorWithJava8
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.5.1"
+
+    implementation "com.android.billingclient:billing:6.0.0"
+
 
 
 
