@@ -4,19 +4,19 @@
 
 
     ADMOB Real Ads ID :
-        <string name="BannerAd">ca-app-pub-8226562131234590/9011588538</string>
-        <string name="RewardedInterstitial">ca-app-pub-8226562131234590/6116497115</string>
-        <string name="AppOpen">ca-app-pub-8226562131234590/7491511350</string>
-        <string name="NativeAd">ca-app-pub-8226562131234590/7451132840</string>
-        <string name="Interstitial">ca-app-pub-8226562131234590/2282566642</string>
+    <string name="BannerAd">ca-app-pub-8226562131234590/9011588538</string>
+    <string name="RewardedInterstitial">ca-app-pub-8226562131234590/6116497115</string>
+    <string name="AppOpen">ca-app-pub-8226562131234590/7491511350</string>
+    <string name="NativeAd">ca-app-pub-8226562131234590/7451132840</string>
+    <string name="Interstitial">ca-app-pub-8226562131234590/2282566642</string>
 
 
     ADMOB Test Ads ID:
 
-<!--    <string name="BannerAd">ca-app-pub-3940256099942544/6300978111</string>-->
-<!--    <string name="NativeAd">ca-app-pub-3940256099942544/2247696110</string>-->
-<!--    <string name="AppOpen">.ca-app-pub-3940256099942544/3419835294</string>-->
-<!--    <string name="Interstitial">.ca-app-pub-3940256099942544/1033173712</string>-->
+    <!--    <string name="BannerAd">ca-app-pub-3940256099942544/6300978111</string>-->
+    <!--    <string name="NativeAd">ca-app-pub-3940256099942544/2247696110</string>-->
+    <!--    <string name="AppOpen">.ca-app-pub-3940256099942544/3419835294</string>-->
+    <!--    <string name="Interstitial">.ca-app-pub-3940256099942544/1033173712</string>-->
 
     Facebook Ads ID:
     <string name="Facebook_BannerAdUnit">971783093850449_971784240517001</string>
