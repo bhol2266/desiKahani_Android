@@ -423,12 +423,36 @@ public class VipMembership extends AppCompatActivity {
 
         ProductDetails productDetails = mlist_offer.get(0);
         LinearLayout clickForPayment = promptView.findViewById(R.id.clickForPayment);
+        TextView buyNowTimer = promptView.findViewById(R.id.buyNowTimer);
         TextView price = promptView.findViewById(R.id.price);
         TextView productName = promptView.findViewById(R.id.productName);
 
         productName.setText(productDetails.getTitle());
         price.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice().replace(".00", ""));
+        buyNowTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // An activity reference from which the billing flow will be launched.
+                Activity activity = VipMembership.this;
 
+                ImmutableList productDetailsParamsList =
+                        ImmutableList.of(
+                                BillingFlowParams.ProductDetailsParams.newBuilder()
+                                        // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
+                                        .setProductDetails(productDetails)
+                                        // to get an offer token, call ProductDetails.getSubscriptionOfferDetails()
+                                        // for a list of offers that are available to the user
+                                        .build()
+                        );
+
+                BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
+                        .setProductDetailsParamsList(productDetailsParamsList)
+                        .build();
+
+// Launch the billing flow
+                billingClient.launchBillingFlow(activity, billingFlowParams);
+                progressBar.setVisibility(View.VISIBLE);            }
+        });
 
         clickForPayment.setOnClickListener(new View.OnClickListener() {
             @Override
