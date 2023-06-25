@@ -250,7 +250,6 @@ public class AudioPlayer extends AppCompatActivity {
                 playBtn.setBackgroundResource(R.drawable.pause);
             }
         } catch (Exception e) {
-            Toast.makeText(this, "LINK BROKEN", Toast.LENGTH_SHORT).show();
         }
     }
 

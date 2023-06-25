@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,7 +34,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -231,8 +232,8 @@ public class StoryPage extends AppCompatActivity {
             return;
         }
 
-        Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readsingleRow(title);
         try {
+            Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readsingleRow(title);
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
                 String story = cursor.getString(10);
@@ -242,8 +243,9 @@ public class StoryPage extends AppCompatActivity {
                 }
                 storyText.setText(story.toString().trim().replaceAll("\\/", ""));
             }
-        } finally {
             cursor.close();
+
+        } catch (Exception e) {
         }
 
 
@@ -445,6 +447,7 @@ public class StoryPage extends AppCompatActivity {
             }
         });
 
+
     }
 
     @Override
@@ -592,7 +595,7 @@ public class StoryPage extends AppCompatActivity {
         for (int i = 0; i < storiesInsideParagraphList.size(); i++) {
             String tagKey = storiesInsideParagraphList.get(i).trim();
 
-            if (tagKey.contains(".com") || tagKey.length() == 0){
+            if (tagKey.contains(".com") || tagKey.length() == 0) {
                 return;
             }
 
@@ -630,11 +633,11 @@ public class StoryPage extends AppCompatActivity {
 
             String tagKey = myList.get(i).trim();
 
-            if (tagKey.contains(".com") || tagKey.length() == 0){
+            if (tagKey.contains(".com") || tagKey.length() == 0) {
                 return;
             }
 
-                View view = getLayoutInflater().inflate(R.layout.tag, null);
+            View view = getLayoutInflater().inflate(R.layout.tag, null);
             TextView relatedStoryText = view.findViewById(R.id.tag);
             relatedStoryText.setText(i + 1 + ". " + tagKey + "   ->");
 

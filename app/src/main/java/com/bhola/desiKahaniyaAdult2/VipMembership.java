@@ -451,7 +451,8 @@ public class VipMembership extends AppCompatActivity {
 
 // Launch the billing flow
                 billingClient.launchBillingFlow(activity, billingFlowParams);
-                progressBar.setVisibility(View.VISIBLE);            }
+                progressBar.setVisibility(View.VISIBLE);
+            }
         });
 
         clickForPayment.setOnClickListener(new View.OnClickListener() {
@@ -480,7 +481,6 @@ public class VipMembership extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
             }
         });
-
 
 
     }
@@ -547,13 +547,12 @@ public class VipMembership extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (backpressCount == 0) {
+        if (backpressCount == 0 && mlist_offer.size() != 0) {
             exit_dialog();
             backpressCount++;
         } else {
             super.onBackPressed();
         }
-
     }
 
     @Override
