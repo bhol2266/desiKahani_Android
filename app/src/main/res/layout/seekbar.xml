@@ -6,20 +6,55 @@
     android:background="@drawable/background2">
 
 
+
+    <TextView
+        android:id="@+id/changehandwritting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="15dp"
+        android:text="Change Font(Handwriting)"
+        android:textColor="@color/textcolor"
+        android:textSize="16dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/fontSpinnerll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/changehandwritting"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:background="@color/themeColor"
+        android:orientation="vertical"
+        app:cardCornerRadius="10dp">
+
+
+        <Spinner
+            android:id="@+id/fontSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/font_names"
+            android:spinnerMode="dropdown" />
+
+    </androidx.cardview.widget.CardView>
+
+
     <SeekBar
         android:id="@+id/your_dialog_seekbar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/fontSpinnerll"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:progressBackgroundTint="@color/themeColor"
-        android:progressTint="@color/themeColor"
-        android:thumbTint="@color/themeColor"
         android:max="50"
         android:min="20"
-        android:progress="18" />
+        android:progress="18"
+        android:progressBackgroundTint="@color/themeColor"
+        android:progressTint="@color/themeColor"
+        android:thumbTint="@color/themeColor" />
 
     <TextView
         android:id="@+id/textSize"

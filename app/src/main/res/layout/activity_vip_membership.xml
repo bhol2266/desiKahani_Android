@@ -140,10 +140,19 @@
 
         </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/progressbarItemloading"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="80dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/themeColor"/>
+
         <ListView
             android:id="@+id/pricelist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp" />
 

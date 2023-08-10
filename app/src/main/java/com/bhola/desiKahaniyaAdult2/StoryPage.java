@@ -4,9 +4,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,15 +17,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,6 +38,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -62,7 +67,8 @@ public class StoryPage extends AppCompatActivity {
     Button button;
     String activityComingFrom;
     private AdView mAdView;
-    RewardedInterstitialAd mRewardedInterstitial;
+    ArrayList<String> fontNamesList;
+
 
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
     com.facebook.ads.AdView facebook_adView;
@@ -86,8 +92,10 @@ public class StoryPage extends AppCompatActivity {
             }
         }, 100);
 
-        checkfavourite();
-
+        try {
+            checkfavourite();
+        } catch (Exception e) {
+        }
 
         share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,13 +235,32 @@ public class StoryPage extends AppCompatActivity {
 
     private void fetchStory() {
 
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        String selectedFont = sharedPreferences.getString("selectedFont", "");
+        if (selectedFont.length() > 1) {
+            int fontResourceId = getResources().getIdentifier(selectedFont, "font", getPackageName());
+            Typeface font = ResourcesCompat.getFont(StoryPage.this, fontResourceId);
+            storyText.setTypeface(font);
+        }
+
+        String[] fontNames = getResources().getStringArray(R.array.font_names);
+        fontNamesList = new ArrayList<>(Arrays.asList(fontNames));
+        int index = fontNamesList.indexOf(selectedFont);
+        if (index != 0 && index != -1) {
+            String elementToMove = fontNamesList.remove(index); // Remove the element at indexToMove
+            fontNamesList.add(0, elementToMove); // Add the removed element at newIndex
+        }
+
+
+
         if (activityComingFrom.equals("Notification_Story_Detail")) {
             storyText.setText(getIntent().getStringExtra("story").toString().trim().replaceAll("\\/", ""));
             return;
         }
 
+        Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readsingleRow(title);
         try {
-            Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readsingleRow(title);
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
                 String story = cursor.getString(10);
@@ -243,9 +270,8 @@ public class StoryPage extends AppCompatActivity {
                 }
                 storyText.setText(story.toString().trim().replaceAll("\\/", ""));
             }
+        } finally {
             cursor.close();
-
-        } catch (Exception e) {
         }
 
 
@@ -447,7 +473,6 @@ public class StoryPage extends AppCompatActivity {
             }
         });
 
-
     }
 
     @Override
@@ -490,43 +515,6 @@ public class StoryPage extends AppCompatActivity {
 
     }
 
-    private void speak(SeekBar seek_bar_pitch, SeekBar seek_bar_speed) {
-
-        String text = heading;
-
-        float pitch = (float) seek_bar_pitch.getProgress() / 50;
-        if (pitch < 0.1) pitch = 0.1f;
-        float speed = (float) seek_bar_speed.getProgress() / 50;
-        if (speed < 0.1) speed = 0.1f;
-        mTTS.setPitch(pitch);
-        mTTS.setSpeechRate(speed);
-
-
-        int dividerLimit = 3900;
-        if (text.length() >= dividerLimit) {
-            int textLength = text.length();
-            ArrayList<String> texts = new ArrayList<String>();
-            int count = textLength / dividerLimit + ((textLength % dividerLimit == 0) ? 0 : 1);
-            int start = 0;
-            int end = text.indexOf(" ", dividerLimit);
-            for (int i = 1; i <= count; i++) {
-                texts.add(text.substring(start, end));
-                start = end;
-                if ((start + dividerLimit) < textLength) {
-                    end = text.indexOf(" ", start + dividerLimit);
-                } else {
-                    end = textLength;
-                }
-            }
-            for (int i = 0; i < texts.size(); i++) {
-                mTTS.speak(texts.get(i), TextToSpeech.QUEUE_ADD, null);
-            }
-        } else {
-            mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-        }
-//        mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-
-    }
 
 
     void loadAlertdialog() {
@@ -541,7 +529,43 @@ public class StoryPage extends AppCompatActivity {
         dialog = builder.create();
         dialog.show();
         seekBar = promptView.findViewById(R.id.your_dialog_seekbar);
+
+
+        Spinner fontSpinner = promptView.findViewById(R.id.fontSpinner);
         button = promptView.findViewById(R.id.your_dialog_button);
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, fontNamesList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        CustomSpinnerAdapter customAdapter = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, fontNamesList);
+        fontSpinner.setAdapter(customAdapter);
+
+        fontSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected font name
+                String selectedFontName = fontNamesList.get(position);
+
+                int fontResourceId = getResources().getIdentifier(selectedFontName, "font", getPackageName());
+                Typeface font = ResourcesCompat.getFont(StoryPage.this, fontResourceId);
+
+                storyText.setTypeface(font);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+                SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                myEdit.putString("selectedFont", selectedFontName);
+                myEdit.apply();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle case where nothing is selected
+            }
+        });
+
     }
 
     private String decryption(String encryptedText) {
@@ -595,7 +619,7 @@ public class StoryPage extends AppCompatActivity {
         for (int i = 0; i < storiesInsideParagraphList.size(); i++) {
             String tagKey = storiesInsideParagraphList.get(i).trim();
 
-            if (tagKey.contains(".com") || tagKey.length() == 0) {
+            if (tagKey.contains(".com") || tagKey.length() == 0){
                 return;
             }
 
@@ -633,11 +657,11 @@ public class StoryPage extends AppCompatActivity {
 
             String tagKey = myList.get(i).trim();
 
-            if (tagKey.contains(".com") || tagKey.length() == 0) {
+            if (tagKey.contains(".com") || tagKey.length() == 0){
                 return;
             }
 
-            View view = getLayoutInflater().inflate(R.layout.tag, null);
+                View view = getLayoutInflater().inflate(R.layout.tag, null);
             TextView relatedStoryText = view.findViewById(R.id.tag);
             relatedStoryText.setText(i + 1 + ". " + tagKey + "   ->");
 
@@ -670,6 +694,7 @@ public class StoryPage extends AppCompatActivity {
             relatedStoriesLayout.setVisibility(View.GONE);
         }
     }
+
 
     private StoryItemModel getDataFROM_DB(String Title) {
         Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readsingleRow(Title);

@@ -414,7 +414,7 @@ Collection_GridView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (SplashScreen.exit_Refer_appNavigation.equals("active") && SplashScreen.Login_Times < 2 && SplashScreen.Refer_App_url2.length() > 10) {
+                if (SplashScreen.exit_Refer_appNavigation.equals("active") && SplashScreen.Login_Times < 3 && SplashScreen.Refer_App_url2.length() > 10) {
 
                     Intent j = new Intent(Intent.ACTION_VIEW);
                     j.setData(Uri.parse(SplashScreen.Refer_App_url2));

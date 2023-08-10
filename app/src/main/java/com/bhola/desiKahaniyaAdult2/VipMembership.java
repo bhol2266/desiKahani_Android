@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -191,6 +192,11 @@ public class VipMembership extends AppCompatActivity {
                 ((Activity) VipMembership.this).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
+                        ProgressBar progressbarItemloading=findViewById(R.id.progressbarItemloading);
+                        ListView pricelist=findViewById(R.id.pricelist);
+                        progressbarItemloading.setVisibility(View.GONE);
+                        pricelist.setVisibility(View.VISIBLE);
                         createListView(productDetailsList, offer);
 
                     }
@@ -364,6 +370,10 @@ public class VipMembership extends AppCompatActivity {
 
 
     private void exit_dialog() {
+
+        if (mlist_offer == null || mlist_offer.size() == 0) {
+            return;
+        }
 
         getProductDetails("with offer");
         AlertDialog dialog;

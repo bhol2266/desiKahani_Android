@@ -269,9 +269,9 @@ class AudioStory_Details_Adapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         });
 
-        if (SplashScreen.Ads_State.equals("active")) {
-            loadNativeAds(((Story_ROW_viewHolder) holder).template, ((Story_ROW_viewHolder) holder).facebook_BannerAd_layout, holder.getAbsoluteAdapterPosition());
-        }
+//        if (SplashScreen.Ads_State.equals("active")) {
+//            loadNativeAds(((Story_ROW_viewHolder) holder).template, ((Story_ROW_viewHolder) holder).facebook_BannerAd_layout, holder.getAbsoluteAdapterPosition());
+//        }
 
 
     }
@@ -372,7 +372,6 @@ class AudioStory_Details_Adapter extends RecyclerView.Adapter<RecyclerView.ViewH
             title = itemView.findViewById(R.id.titlee);
             date = itemView.findViewById(R.id.date_recyclerview);
             views = itemView.findViewById(R.id.views);
-            template = itemView.findViewById(R.id.my_template);
             facebook_BannerAd_layout = itemView.findViewById(R.id.banner_container);
 
         }

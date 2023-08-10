@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="font_names">
+        <item>jaldi</item>
+        <item>kalam_regular</item>
+        <item>rajdhani_regular</item>
+        <item>robotoslab_regular</item>
+        <!--        <item>chanakya</item>-->
+        <!--        <item>kruti_dev</item>-->
+        <!--        <item>mangal</item>-->
+        <!--        <item>surendra</item>-->
+
+    </string-array>
+</resources>
