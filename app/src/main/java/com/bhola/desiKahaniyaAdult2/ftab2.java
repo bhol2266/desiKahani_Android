@@ -50,7 +50,7 @@ public class ftab2 extends Fragment {
 
     List<String> storyURL;
     List<String> storyName;
-    AudioStory_Details_Adapter adapter2;
+   public static AudioStory_Details_Adapter adapter2;
     StorageReference mStorageReference;
     ProgressBar progressBar2;
     RecyclerView recyclerView;

@@ -181,21 +181,21 @@ public class AudioPlayer extends AppCompatActivity {
         });
 
 
-//        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(MediaPlayer mp) {
-//                playBtn.setBackgroundResource(R.drawable.play);
-//                if (!URL_notWorking) {
-//                    Toast.makeText(AudioPlayer.this, "Finished", Toast.LENGTH_SHORT).show();
-//                    try {
-//                        onBackPressed();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//            }
-//        });
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                playBtn.setBackgroundResource(R.drawable.play);
+                if (!URL_notWorking) {
+                    Toast.makeText(AudioPlayer.this, "Finished", Toast.LENGTH_SHORT).show();
+                    try {
+                        onBackPressed();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
 
         updateStoryread();
     }
@@ -220,7 +220,7 @@ public class AudioPlayer extends AppCompatActivity {
 
                             try {
                                 mp.reset(); // Reset the MediaPlayer before loading new data
-                                mediaPlayer.setDataSource(SplashScreen.databaseURL + "Sexstory_Audiofiles/" + audioHref+".mp3");
+                                mediaPlayer.setDataSource(SplashScreen.databaseURL + "Sexstory_Audiofiles/" + audioHref + ".mp3");
                                 mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                     @Override
                                     public void onPrepared(MediaPlayer mp) {
@@ -385,17 +385,25 @@ public class AudioPlayer extends AppCompatActivity {
         try {
             loadAds();
             handler.removeCallbacks(runnable); // Seekbar handler
-            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                Toast.makeText(AudioPlayer.this, "Stopped", Toast.LENGTH_SHORT).show();
-            }
-            if (mediaPlayer != null) {
-                mediaPlayer.stop();
-                mediaPlayer = null;
-            }
+
+
         } catch (Exception e) {
             Log.d("TAGA", "onBackPressed: " + e.getMessage());
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                Log.d("TAGA", "onStop: " + mediaPlayer.isPlaying());
+            }
+            mediaPlayer.release();
+            mediaPlayer = null;
+
+        }
     }
 
 
@@ -477,6 +485,10 @@ public class AudioPlayer extends AppCompatActivity {
     }
 
     private void updateStoryread() {
+
+        int position = getIntent().getIntExtra("position", 0); // defaultValue is the value to be used if the key doesn't exist
+
+        ftab2.adapter2.notifyItemChanged(position);
         new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems").updateStoryRead(title, 1);
     }
 
