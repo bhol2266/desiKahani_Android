@@ -30,7 +30,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
-
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,6 +37,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -50,7 +50,7 @@ public class AudioPlayer extends AppCompatActivity {
     TextView loadingMessage;
     MediaPlayer mediaPlayer;
     int pausePosition = -1;
-    String storyURL, storyName,title;
+    String storyURL, storyName, title, audioHref;
     SeekBar seekbar;
     Runnable runnable;
     Handler handler;
@@ -98,6 +98,7 @@ public class AudioPlayer extends AppCompatActivity {
         lottie = findViewById(R.id.lottie);
 
         storyURL = SplashScreen.decryption(getIntent().getStringExtra("storyURL"));
+        audioHref = SplashScreen.decryption(getIntent().getStringExtra("audioHref"));
         title = SplashScreen.decryption(getIntent().getStringExtra("title"));
         storyName = getIntent().getStringExtra("storyName");
         storyTitle.setText(storyName.replace("-", " ").trim());
@@ -179,41 +180,22 @@ public class AudioPlayer extends AppCompatActivity {
             }
         });
 
-        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                URL_notWorking = true;
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadingMessage.setText("Audio link not working, Please try another story");
-                        loadingMessage.setTextSize(20);
-                        progressbarUnit.setVisibility(View.GONE);
-                    }
-                },1000);
 
-                mp.stop();
-
-                return false;
-            }
-        });
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                playBtn.setBackgroundResource(R.drawable.play);
-                if (!URL_notWorking) {
-                    Toast.makeText(AudioPlayer.this, "Finished", Toast.LENGTH_SHORT).show();
-                    try {
-                        onBackPressed();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        });
+//        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                playBtn.setBackgroundResource(R.drawable.play);
+//                if (!URL_notWorking) {
+//                    Toast.makeText(AudioPlayer.this, "Finished", Toast.LENGTH_SHORT).show();
+//                    try {
+//                        onBackPressed();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//            }
+//        });
 
         updateStoryread();
     }
@@ -229,6 +211,44 @@ public class AudioPlayer extends AppCompatActivity {
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(storyURL);
                 mediaPlayer.prepareAsync();
+
+                mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                    @SuppressLint("ResourceAsColor")
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        if (mediaPlayer != null) {
+
+                            try {
+                                mp.reset(); // Reset the MediaPlayer before loading new data
+                                mediaPlayer.setDataSource(SplashScreen.databaseURL + "Sexstory_Audiofiles/" + audioHref+".mp3");
+                                mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                    @Override
+                                    public void onPrepared(MediaPlayer mp) {
+                                        try {
+                                            seekbar.setMax(mediaPlayer.getDuration());
+                                            updateSeekbar();
+                                            setCurrentTime();
+                                            Toast.makeText(AudioPlayer.this, "Playing", Toast.LENGTH_SHORT).show();
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                mp.prepareAsync();
+                            } catch (IOException e) {
+                                // Handle exceptions related to new audio source
+                                e.printStackTrace();
+                                URL_notWorking = true;
+                                loadingMessage.setText("Audio link not working, trying another URL...");
+                                loadingMessage.setTextSize(20);
+                                progressbarUnit.setVisibility(View.GONE);
+                            }
+                        }
+                        return false;
+                    }
+                });
+
                 mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
@@ -250,6 +270,7 @@ public class AudioPlayer extends AppCompatActivity {
                 playBtn.setBackgroundResource(R.drawable.pause);
             }
         } catch (Exception e) {
+            Toast.makeText(this, "LINK BROKEN", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -56,7 +56,7 @@ public class ftab2 extends Fragment {
     RecyclerView recyclerView;
     FirebaseAuth mAuth;
     String TAG = "TAGA";
-    int currentPositonTime;
+    boolean storyLocked = false;
 
     public ftab2() {
         // Required empty public constructor
@@ -88,6 +88,7 @@ public class ftab2 extends Fragment {
 
     private void loadAudioDatabase(View view) {
 
+
         ArrayList<Object> collectionData = new ArrayList<Object>();
         Cursor cursor;
         if (SplashScreen.App_updating.equals("active")) {
@@ -98,15 +99,12 @@ public class ftab2 extends Fragment {
 
             if (SplashScreen.Login_Times < 4) {
                 //Mixed content
-                cursor = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readAudioStories("mix");
+                cursor = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "FakeStory").readAudioStories("mix");
 
-            } else if (SplashScreen.Login_Times < 6) {
-                // censored Content
-                cursor = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readAudioStories("Audio_Story");
-
-            } else {
+            }  else {
                 // full Content
-                cursor = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readAudioStories("AdultContent");
+                cursor = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems").readAudioStories("AdultContent");
+                storyLocked = true;
 
             }
         }
@@ -117,12 +115,13 @@ public class ftab2 extends Fragment {
         }
 
         cursor.close();
-
-        Collections.shuffle(collectionData);
+        if (SplashScreen.Login_Times < 4) {
+            Collections.shuffle(collectionData);
+        }
         if (SplashScreen.App_updating.equals("active")) {
             collectionData.clear();
         }
-        adapter2 = new AudioStory_Details_Adapter(collectionData, getActivity());
+        adapter2 = new AudioStory_Details_Adapter(collectionData, getActivity(), storyLocked);
         recyclerView.setAdapter(adapter2);
         progressBar2.setVisibility(View.GONE);
         adapter2.notifyDataSetChanged();
@@ -173,14 +172,17 @@ public class ftab2 extends Fragment {
 class AudioStory_Details_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
+    boolean storyLocked;
     RewardedInterstitialAd mRewardedVideoAd;
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
     ArrayList<Object> collectionData = new ArrayList<Object>();
 
 
-    public AudioStory_Details_Adapter(ArrayList<Object> data, FragmentActivity activity) {
+    public AudioStory_Details_Adapter(ArrayList<Object> data, FragmentActivity activity, boolean storyLocked) {
         this.context = activity;
         this.collectionData = data;
+        this.storyLocked = storyLocked;
+
     }
 
     @NonNull
@@ -212,22 +214,37 @@ class AudioStory_Details_Adapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((Story_ROW_viewHolder) holder).title.setTextColor(Color.parseColor("#374151"));
         }
 
+        if (!SplashScreen.Vip_Member && storyLocked) {
+            if (holder.getAbsoluteAdapterPosition() > 1) {
+                ((Story_ROW_viewHolder) holder).lock.setVisibility(View.VISIBLE);
+            } else {
+                ((Story_ROW_viewHolder) holder).lock.setVisibility(View.GONE);
+
+            }
+        }
+
 
         ((Story_ROW_viewHolder) holder).recyclerview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                if (isInternetAvailable()) {
-                    Intent intent = new Intent(context, AudioPlayer.class);
-                    intent.putExtra("storyURL", storyItemModel.getAudiolink());
-                    intent.putExtra("storyName", filename);
-                    intent.putExtra("title", storyItemModel.getTitle());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    v.getContext().startActivity(intent);
+                if (((Story_ROW_viewHolder) holder).lock.getVisibility() == View.VISIBLE) {
+                    Toast.makeText(context, "Become DesiKahani Member to listen this story", Toast.LENGTH_SHORT).show();
+                    context.startActivity(new Intent(context, VipMembership.class));
                 } else {
-                    Toast.makeText(context, "Check Internet Connection!" + System.lineSeparator() +
-                            "इंटरनेट कनेक्शन चेक करे", Toast.LENGTH_SHORT).show();
+
+                    if (isInternetAvailable()) {
+                        Intent intent = new Intent(context, AudioPlayer.class);
+                        intent.putExtra("storyURL", storyItemModel.getAudiolink());
+                        intent.putExtra("storyName", filename);
+                        intent.putExtra("audioHref", storyItemModel.getHref());
+                        intent.putExtra("title", storyItemModel.getTitle());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        v.getContext().startActivity(intent);
+                    } else {
+                        Toast.makeText(context, "Check Internet Connection!" + System.lineSeparator() +
+                                "इंटरनेट कनेक्शन चेक करे", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
@@ -358,6 +375,7 @@ class AudioStory_Details_Adapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView title;
         TextView date;
         TextView views;
+        ImageView lock;
 
         ImageView imageview;
         LinearLayout recyclerview;
@@ -371,6 +389,7 @@ class AudioStory_Details_Adapter extends RecyclerView.Adapter<RecyclerView.ViewH
             imageview = itemView.findViewById(R.id.imageview);
             title = itemView.findViewById(R.id.titlee);
             date = itemView.findViewById(R.id.date_recyclerview);
+            lock = itemView.findViewById(R.id.lock);
             views = itemView.findViewById(R.id.views);
             facebook_BannerAd_layout = itemView.findViewById(R.id.banner_container);
 

@@ -1,5 +1,6 @@
 package com.bhola.desiKahaniyaAdult2;
 
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Space;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +48,7 @@ public class admin_panel extends AppCompatActivity {
     public static int counter = 0;
 
     DatabaseReference mref, notificationMref;  TextView Users_Counters;
-    Button   Refer_App_url_BTN, STory_Switch_Active_BTN;
+    Button   Refer_App_url_BTN, databaseBtn;
     Switch switch_Exit_Nav, switch_Activate_Ads, switch_App_Updating;
     Button Ad_Network;
     static String uncensored_title = "";
@@ -77,6 +79,7 @@ public class admin_panel extends AppCompatActivity {
         switch_App_Updating = findViewById(R.id.App_updating_Switch);
         switch_Exit_Nav = findViewById(R.id.switch_Exit_Nav);
         Refer_App_url_BTN = findViewById(R.id.Refer_App_url_BTN);
+        databaseBtn = findViewById(R.id.databaseBtn);
 
 
         firestore = FirebaseFirestore.getInstance();
@@ -121,7 +124,7 @@ public class admin_panel extends AppCompatActivity {
                 }
             }
         });
- }
+    }
 
     private void Ad_Network_Selection() {
 
@@ -201,6 +204,22 @@ public class admin_panel extends AppCompatActivity {
             }
 
         });
+
+
+        EditText  databaseEdittext = findViewById(R.id.databaseEdittext);
+        databaseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (databaseEdittext.length() > 2) {
+                    mref.child("databaseURL").setValue(databaseEdittext.getText().toString());
+                    Toast.makeText(admin_panel.this, "Databaseurl ADDED", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(admin_panel.this, "Field is Empty", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
         switch_Exit_Nav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -310,51 +329,5 @@ public class admin_panel extends AppCompatActivity {
         return decryptedText;
     }
 
-    private void fetchStoryAPI(String href) {
-
-        RequestQueue requestQueue = Volley.newRequestQueue(admin_panel.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SplashScreen.API_URL +"storiesDetails", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jSONArray = jsonObject.getJSONObject("data").getJSONArray("description");
-                    ArrayList<String> arrayList = new ArrayList();
-                    for (int i = 0; i <jSONArray.length() ; i++) {
-                        arrayList.add((String) jSONArray.get(i));
-                    }
-
-                    String str = String.join("\n\n", arrayList);
-//                    pragraphofstory.setText(str.toString().trim().replaceAll("\\/", ""));
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(SplashScreen.TAG, "onErrorResponse: " + error.getMessage());
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("href", href);
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-
-        requestQueue.add(stringRequest);
-    }
 
 }

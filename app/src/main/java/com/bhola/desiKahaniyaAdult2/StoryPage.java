@@ -88,7 +88,11 @@ public class StoryPage extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                try {
+
                 fetchStory();
+                } catch (Exception e) {
+                }
             }
         }, 100);
 

@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -35,8 +34,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,10 +42,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-
-
-
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -76,6 +71,8 @@ public class SplashScreen extends AppCompatActivity {
     public static String DB_NAME = "desikahaniya";
     public static String exit_Refer_appNavigation = "inactive";
     public static String App_updating = "active";
+    public static String databaseURL = "https://bucket2266.s3.ap-south-1.amazonaws.com/"; //default
+
     public static String Notification_ImageURL = "https://hotdesipics.co/wp-content/uploads/2022/06/Hot-Bangla-Boudi-Ki-Big-Boobs-Nangi-Selfies-_002.jpg";
     DatabaseReference url_mref;
     public static int Login_Times = 0;
@@ -87,7 +84,7 @@ public class SplashScreen extends AppCompatActivity {
     public static int DB_VERSION = 1;//manual set
     public static int currentApp_Version = 1;//manual set
     public static int Firebase_Version_Code = 1;//manual set
-    public static int DB_VERSION_INSIDE_TABLE = 1; //manual set
+    public static int DB_VERSION_INSIDE_TABLE = 2; //manual set
     Handler handlerr;
 
     public static String apk_Downloadlink = "";
@@ -95,7 +92,7 @@ public class SplashScreen extends AppCompatActivity {
     public static String countryCode = "";
     public static boolean update_Mandatory = false;
     public static String DB_TABLE_NAME = "";  //This is a table name "StoryItems or FakeStory"
-    public static String API_URL =  "https://clownfish-app-jn7w9.ondigitalocean.app/";
+    public static String API_URL = "https://clownfish-app-jn7w9.ondigitalocean.app/";
     private FirebaseAnalytics mFirebaseAnalytics;
     public static boolean Vip_Member = false;
 
@@ -117,7 +114,6 @@ public class SplashScreen extends AppCompatActivity {
         copyDatabase();
         allUrl();
         sharedPrefrences();
-
         if (SplashScreen.Login_Times > 5) {
             updateStoriesInDB();
         }
@@ -126,10 +122,10 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 LinearLayout progressbar = findViewById(R.id.progressbar);
                 progressbar.setVisibility(View.VISIBLE);
+//                readStoryFromJson();
+
             }
-        },1500);
-
-
+        }, 1500);
 
 
         textView.setAnimation(bottomAnim);
@@ -175,47 +171,54 @@ public class SplashScreen extends AppCompatActivity {
 
     }
 
+    private void readStoryFromJson() {
 
-    private void trasferData() {
+        try {
 
-        String[] Category_List = {"Audio_Story_Fake", "Audio_Story"};
+            String json = loadJSONFromAsset("audiostories_c.json");
+            JSONArray jsonArray = new JSONArray(json);
 
-        for (int i = 0; i < Category_List.length; i++) {
-            ArrayList<Map<String, String>> tempData = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-            Cursor cursor = new DatabaseLoveStory(SplashScreen.this, "MCB_Story", 5, Category_List[i]).readalldata();
-            while (cursor.moveToNext()) {
-                Map<String,String> mapObj=new HashMap<>();
-                mapObj.put("Title",cursor.getString(1));
-                mapObj.put("story","");
-                mapObj.put("href", cursor.getString(1));
-                mapObj.put("date", "04-02-2023");
-                mapObj.put("views", "6541");
-                mapObj.put("description","");
-                mapObj.put("audiolink", decryption(cursor.getString(2)));
-                mapObj.put("category", Category_List[i]);
-                mapObj.put("tags","");
-                mapObj.put("completeDate", "20230204");
-                mapObj.put("storiesInsideParagraph", "");
-                mapObj.put("relatedStories", "");
+                String title = decryption(jsonObject.getString("Title"));
+                String audiolink = decryption(jsonObject.getString("audiolink"));
+                String href = decryption(jsonObject.getString("href")).replace(".mp3","");
 
-                tempData.add(mapObj);
-
+                trasferData(title, href, audiolink);
             }
-            cursor.close();
 
-            for (int j = 0; j <= 19; j++) {
-                Map<String,String> mapOb =  tempData.get(j);
 
-                String res = new DatabaseHelper(SplashScreen.this, DB_NAME, DB_VERSION, "FakeStory").addstories((HashMap<String, String>) mapOb);
-                Log.d(TAG, "onSuccess: " + res);
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d(TAG, "readStoryFromJson: " + e.getMessage());
         }
+
 
     }
 
 
+    private void trasferData(String title, String href, String audiolink) {
 
+        Map<String, String> mapObj = new HashMap<>();
+        mapObj.put("Title", title);
+        mapObj.put("story", "");
+        mapObj.put("href", href);
+        mapObj.put("date", "04-02-2023");
+        mapObj.put("views", "6541");
+        mapObj.put("description", "");
+        mapObj.put("audiolink",audiolink);
+        mapObj.put("category", "Audio_Story");
+        mapObj.put("tags", "");
+        mapObj.put("completeDate", "20230204");
+        mapObj.put("storiesInsideParagraph", "");
+        mapObj.put("relatedStories", "");
+
+
+        String res = new DatabaseHelper(SplashScreen.this, DB_NAME, DB_VERSION, "FakeStory").addstories((HashMap<String, String>) mapObj);
+        Log.d(TAG, "onSuccess: " + res);
+
+    }
 
 
     private void allUrl() {
@@ -262,6 +265,7 @@ public class SplashScreen extends AppCompatActivity {
                 Firebase_Version_Code = snapshot.child("version_code").getValue(Integer.class);
                 apk_Downloadlink = (String) snapshot.child("apk_Downloadlink").getValue();
                 update_Mandatory = (boolean) snapshot.child("update_Mandatory").getValue();
+                databaseURL = (String) snapshot.child("databaseURL").getValue();
 
 
                 Handler handler2 = new Handler();
@@ -335,7 +339,7 @@ public class SplashScreen extends AppCompatActivity {
         }
     }
 
-   static boolean isInternetAvailable(Context context) {
+    static boolean isInternetAvailable(Context context) {
         if (context == null) return false;
 
 
@@ -446,7 +450,7 @@ public class SplashScreen extends AppCompatActivity {
     private void vipMemberPrivileges() {
         App_updating = "inactive";
         Ads_State = "inactive";
-        Login_Times=10;
+        Login_Times = 10;
     }
 
     private void updateStoriesInDB() {
@@ -454,7 +458,7 @@ public class SplashScreen extends AppCompatActivity {
         int completeDate = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems").readLatestStoryDate();
 
         RequestQueue requestQueue = Volley.newRequestQueue(SplashScreen.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SplashScreen.API_URL +"updateStories_inDB", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, SplashScreen.API_URL + "updateStories_inDB", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -631,7 +635,7 @@ public class SplashScreen extends AppCompatActivity {
     public String loadJSONFromAsset(String filename) {
         String json = null;
         try {
-            InputStream is = getApplicationContext().getAssets().open(filename + ".json");
+            InputStream is = getApplicationContext().getAssets().open(filename);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

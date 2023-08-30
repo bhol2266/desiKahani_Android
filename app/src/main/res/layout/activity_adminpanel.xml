@@ -69,13 +69,6 @@
         </LinearLayout>
 
 
-
-
-
-
-
-
-
         <EditText
             android:id="@+id/Refer_App_url2"
             android:layout_width="match_parent"
@@ -86,6 +79,18 @@
             android:inputType="textPersonName"
 
             />
+
+        <EditText
+            android:id="@+id/databaseEdittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:ems="10"
+            android:hint="Add database url"
+            android:inputType="textPersonName"
+
+            />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,8 +103,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:background="@drawable/hooverffext"
+                android:background="@color/themeColor"
                 android:text="ADD ReferApp URL"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.105" />
+
+            <Button
+                android:id="@+id/databaseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:background="@color/themeColor"
+                android:text="ADD Database URL"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
