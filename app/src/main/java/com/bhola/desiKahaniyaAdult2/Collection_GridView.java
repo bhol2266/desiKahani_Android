@@ -140,17 +140,6 @@ Collection_GridView extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        if (SplashScreen.Ads_State.equals("active")) {
-            if (SplashScreen.Ad_Network_Name.equals("admob")) {
-                ADS_ADMOB.Interstitial_Ad(this);
-            } else {
-                ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
-
-            }
-        }
-
-
         exit_dialog();
     }
 
