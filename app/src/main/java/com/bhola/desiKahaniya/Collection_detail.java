@@ -24,12 +24,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.ads.InterstitialAd;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Collection_detail extends AppCompatActivity {
 
@@ -44,6 +46,27 @@ public class Collection_detail extends AppCompatActivity {
     ImageView back, share_ap;
     RecyclerView recyclerView;
 
+    InterstitialAd facebook_IntertitialAds;
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Random random = new Random();
+        boolean showAd = random.nextBoolean();
+
+        if (SplashScreen.Ads_State.equals("active") && showAd) {
+            if (SplashScreen.Ad_Network_Name.equals("admob")) {
+                ADS_ADMOB.Interstitial_Ad(this);
+            } else {
+                ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
+
+            }
+        }
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
