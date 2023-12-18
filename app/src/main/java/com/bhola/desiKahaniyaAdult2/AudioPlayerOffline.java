@@ -238,7 +238,6 @@ public class AudioPlayerOffline extends AppCompatActivity {
 
 
         try {
-            loadAds();
             handler.removeCallbacks(runnable);
             if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 Toast.makeText(AudioPlayerOffline.this, "Stopped", Toast.LENGTH_SHORT).show();
