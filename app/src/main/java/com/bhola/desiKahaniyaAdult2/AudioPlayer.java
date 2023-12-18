@@ -383,7 +383,19 @@ public class AudioPlayer extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         try {
-            loadAds();
+
+            if (SplashScreen.Ads_State.equals("active")) {
+                if (SplashScreen.Ad_Network_Name.equals("admob")) {
+                    ADS_ADMOB.Interstitial_Ad(this);
+
+                } else {
+                    ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
+
+                }
+            }
+
+
+
             handler.removeCallbacks(runnable); // Seekbar handler
 
 
@@ -438,12 +450,9 @@ public class AudioPlayer extends AppCompatActivity {
             mAdView = findViewById(R.id.adView);
             ADS_ADMOB.BannerAd(this, mAdView);
 
-            ADS_ADMOB.Interstitial_Ad(this);
-
         } else {
             LinearLayout facebook_bannerAd_layput;
             facebook_bannerAd_layput = findViewById(R.id.banner_container);
-            ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
             ADS_FACEBOOK.bannerAds(this, facebook_adView, facebook_bannerAd_layput, getString(R.string.Facebook_BannerAdUnit));
         }
 

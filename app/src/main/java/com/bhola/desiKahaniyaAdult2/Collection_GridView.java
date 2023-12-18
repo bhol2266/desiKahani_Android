@@ -40,7 +40,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,14 +47,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.play.core.review.ReviewInfo;
-import com.google.android.play.core.review.ReviewManager;
-import com.google.android.play.core.review.ReviewManagerFactory;
-import com.google.android.play.core.tasks.Task;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,9 +79,9 @@ Collection_GridView extends AppCompatActivity {
     TabLayout tabLayout;
     TabItem tabItem1, tabItem2;
     PageAdapter pageAdapter;
-    private ReviewManager reviewManager;
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
     final int PERMISSION_REQUEST_CODE = 112;
+    private InAppUpdate inAppUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +91,8 @@ Collection_GridView extends AppCompatActivity {
         if (SplashScreen.Ads_State.equals("active")) {
             showAds();
         }
+        checkForupdate();
+
         navigationDrawer();
         tabview();
         askForNotificationPermission(); //Android 13 and higher
@@ -127,28 +124,35 @@ Collection_GridView extends AppCompatActivity {
 
     private void showAds() {
 
-
         if (SplashScreen.Ad_Network_Name.equals("admob")) {
-
             mAdView = findViewById(R.id.adView);
             ADS_ADMOB.BannerAd(this, mAdView);
-            if (!SplashScreen.homepageAdShown) {
-                ADS_ADMOB.Interstitial_Ad(this);
-
-                SplashScreen.homepageAdShown = true;
-            }
 
         } else {
             LinearLayout facebook_bannerAd_layput;
             facebook_bannerAd_layput = findViewById(R.id.banner_container);
             if (!SplashScreen.homepageAdShown) {
                 ADS_FACEBOOK.bannerAds(this, facebook_adView, facebook_bannerAd_layput, getString(R.string.Facebook_BannerAdUnit));
-                ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
-                SplashScreen.homepageAdShown = true;
             }
         }
     }
 
+
+    @Override
+    public void onBackPressed() {
+
+        if (SplashScreen.Ads_State.equals("active")) {
+            if (SplashScreen.Ad_Network_Name.equals("admob")) {
+                ADS_ADMOB.Interstitial_Ad(this);
+            } else {
+                ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
+
+            }
+        }
+
+
+        exit_dialog();
+    }
 
     private void askForNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -348,11 +352,6 @@ Collection_GridView extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    @Override
-    public void onBackPressed() {
-
-        exit_dialog();
-    }
 
     @Override
     protected void onPause() {
@@ -389,7 +388,6 @@ Collection_GridView extends AppCompatActivity {
             TextView exitMSG;
             exitMSG = promptView.findViewById(R.id.exitMSG);
             exitMSG.setVisibility(View.VISIBLE);
-            init(); // Show PLay store Review option
         }
 
         if ((SplashScreen.Ads_State.equals("active") && SplashScreen.Ad_Network_Name.equals("admob"))) {
@@ -609,30 +607,13 @@ Collection_GridView extends AppCompatActivity {
     }
 
 
-    private void init() {
-        reviewManager = ReviewManagerFactory.create(this);
-        // Referencing the button
-        showRateApp();
-    }
 
 
-    // Shows the app rate dialog box using In-App review API
-    // The app rate dialog box might or might not shown depending
-    // on the Quotas and limitations
-    public void showRateApp() {
-        com.google.android.play.core.tasks.Task<ReviewInfo> request = reviewManager.requestReviewFlow();
-        request.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // Getting the ReviewInfo object
-                ReviewInfo reviewInfo = task.getResult();
 
-                Task<Void> flow = reviewManager.launchReviewFlow(this, reviewInfo);
-                flow.addOnCompleteListener(task1 -> {
-                    // The flow has finished. The API does not indicate whether the user
-                    // reviewed or not, or even whether the review dialog was shown.
-                });
-            }
-        });
+    private void checkForupdate() {
+        inAppUpdate = new InAppUpdate(Collection_GridView.this);
+        inAppUpdate.checkForAppUpdate();
+
     }
 
 
