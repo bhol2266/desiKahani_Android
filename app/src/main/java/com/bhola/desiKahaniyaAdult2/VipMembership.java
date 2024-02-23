@@ -149,6 +149,8 @@ public class VipMembership extends AppCompatActivity {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 registerReceiver(timerUpdateReceiverCheck, filter, Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(timerUpdateReceiverCheck, filter);
             }
 
         }
@@ -512,9 +514,12 @@ public class VipMembership extends AppCompatActivity {
         filter.addAction("timer-update");
         filter.addAction("timer-finish");
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             registerReceiver(timerUpdateReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(timerUpdateReceiver, filter);
         }
+
 
         Intent intent = new Intent(this, TimerService.class);
         startService(intent);

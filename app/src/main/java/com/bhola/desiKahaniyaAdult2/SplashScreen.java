@@ -34,12 +34,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
@@ -457,116 +464,38 @@ public class SplashScreen extends AppCompatActivity {
 
         int completeDate = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems").readLatestStoryDate();
 
-        RequestQueue requestQueue = Volley.newRequestQueue(SplashScreen.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SplashScreen.API_URL + "updateStories_inDB", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray m_jArry = jsonObject.getJSONArray("data");
 
-                    ArrayList<HashMap<String, String>> Category_List = new ArrayList<HashMap<String, String>>();
-                    HashMap<String, String> m_li;
-                    for (int i = 0; i < m_jArry.length(); i++) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference storiesRef = db.collection("storymodels");
 
-                        JSONObject json_obj = m_jArry.getJSONObject(i);
-                        String Title = json_obj.getString("Title");
-                        String href = json_obj.getString("href");
-                        String date = json_obj.getString("date");
-                        String views = json_obj.getString("views");
-                        int completeDate = json_obj.getInt("completeDate");
-                        String audiolink = json_obj.getString("audiolink");
+        storiesRef.whereGreaterThan("completeDate", completeDate)
+                .orderBy("completeDate", Query.Direction.DESCENDING)
+                .limit(30)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Access your document data here
+
+                                Map<String, Object> data = document.getData();
+                                HashMap<String, String> m_li = Utils.FirebaseObject_TO_HashMap(data);
 
 
-                        JSONObject categoryObject = json_obj.getJSONObject("category");
-                        String category = categoryObject.getString("title");
-                        if (category.equals("Gay Sex Stories In Hindi")) {
-                            category = "Gay Sex Stories";
+                                DatabaseHelper insertRecord = new DatabaseHelper(getApplicationContext(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems");
+                                String res = insertRecord.addstories(m_li);
+                                Log.d(TAG, "INSERT DATA: " + res);
+
+
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-
-                        JSONArray storyArray = json_obj.getJSONArray("description");
-                        ArrayList<String> storyArrayList = new ArrayList();
-                        for (int j = 0; j < storyArray.length(); j++) {
-                            storyArrayList.add(storyArray.getString(j));
-                        }
-                        String description = String.join("\n\n", storyArrayList);
-
-
-                        JSONArray tagsArray = json_obj.getJSONArray("tagsArray");
-                        ArrayList<String> tagsList = new ArrayList();
-                        for (int j = 0; j < tagsArray.length(); j++) {
-                            tagsList.add(tagsArray.getString(j));
-                        }
-                        String tags = String.join(", ", tagsList);
-
-
-                        JSONArray relatedStoriesLinks_Array = json_obj.getJSONArray("relatedStoriesLinks");
-                        ArrayList<String> relatedStoriesList = new ArrayList();
-                        for (int j = 0; j < relatedStoriesLinks_Array.length(); j++) {
-                            JSONObject relatedStoriesLinksObject = (JSONObject) relatedStoriesLinks_Array.get(j);
-                            relatedStoriesList.add(relatedStoriesLinksObject.getString("title"));
-                        }
-                        String relatedStories = String.join(", ", relatedStoriesList);
-
-                        JSONArray storiesInsideParagraph_Array = json_obj.getJSONArray("storiesLink_insideParagrapgh");
-                        ArrayList<String> storiesInsideParagraphList = new ArrayList();
-                        for (int j = 0; j < storiesInsideParagraph_Array.length(); j++) {
-                            JSONObject obj = (JSONObject) storiesInsideParagraph_Array.get(j);
-                            storiesInsideParagraphList.add(obj.getString("title"));
-                        }
-                        String storiesInsideParagraph = String.join(", ", storiesInsideParagraphList);
-
-
-                        //Add your values in your `ArrayList` as below:
-                        m_li = new HashMap<String, String>();
-                        m_li.put("Title", Title);
-                        m_li.put("href", href);
-                        m_li.put("date", date);
-                        m_li.put("views", views);
-                        m_li.put("description", description.substring(0, 100));
-                        m_li.put("story", description);
-                        m_li.put("audiolink", audiolink);
-                        m_li.put("category", category);
-                        m_li.put("tags", tags);
-                        m_li.put("relatedStories", relatedStories);
-                        m_li.put("completeDate", String.valueOf(completeDate));
-                        m_li.put("storiesInsideParagraph", storiesInsideParagraph);
-                        Category_List.add(m_li);
-
-
-                        DatabaseHelper insertRecord = new DatabaseHelper(getApplicationContext(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems");
-                        String res = insertRecord.addstories(m_li);
-                        Log.d(TAG, "INSERT DATA: " + res);
                     }
+                });
 
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "onErrorResponse: " + error.getMessage());
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("completeDate", String.valueOf(completeDate));
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-
-        requestQueue.add(stringRequest);
     }
 
 

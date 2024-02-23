@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -38,10 +39,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -67,9 +72,8 @@ public class StoryPage extends AppCompatActivity {
     Button button;
     String activityComingFrom;
     private AdView mAdView;
+    RewardedInterstitialAd mRewardedInterstitial;
     ArrayList<String> fontNamesList;
-
-
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
     com.facebook.ads.AdView facebook_adView;
     String TAG = "TAGA";
@@ -78,6 +82,7 @@ public class StoryPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_page);
+
 
         if (SplashScreen.Ads_State.equals("active")) {
             showAds();
@@ -88,22 +93,24 @@ public class StoryPage extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                try {
-
                 fetchStory();
-                } catch (Exception e) {
-                }
             }
         }, 100);
 
         try {
             checkfavourite();
         } catch (Exception e) {
+            startActivity(new Intent(StoryPage.this, Collection_GridView.class));
+            return;
         }
+
 
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (share.getVisibility() == View.INVISIBLE) {
+                    return;
+                }
                 final Vibrator vibe = (Vibrator) v.getContext().getSystemService(Context.VIBRATOR_SERVICE);
                 vibe.vibrate(80);//80 represents the milliseconds (the duration of the vibration)
                 Intent intent = new Intent();
@@ -118,8 +125,9 @@ public class StoryPage extends AppCompatActivity {
         favourite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                if (favourite_button.getVisibility() == View.INVISIBLE) {
+                    return;
+                }
                 final MediaPlayer mp = MediaPlayer.create(v.getContext(), R.raw.sound);
                 mp.start();
                 if (activityComingFrom.equals("Download_Detail")) {
@@ -164,6 +172,9 @@ public class StoryPage extends AppCompatActivity {
         copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (copy.getVisibility() == View.INVISIBLE) {
+                    return;
+                }
                 final Vibrator vibe = (Vibrator) v.getContext().getSystemService(Context.VIBRATOR_SERVICE);
                 vibe.vibrate(80);//80 represents the milliseconds (the duration of the vibration)
                 ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(CLIPBOARD_SERVICE);
@@ -176,7 +187,9 @@ public class StoryPage extends AppCompatActivity {
         textsixe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (textsixe.getVisibility() == View.INVISIBLE) {
+                    return;
+                }
 
                 loadAlertdialog();
 
@@ -225,9 +238,12 @@ public class StoryPage extends AppCompatActivity {
             mAdView = findViewById(R.id.adView);
             ADS_ADMOB.BannerAd(this, mAdView);
 
+            ADS_ADMOB.Interstitial_Ad(this);
+
         } else {
             LinearLayout facebook_bannerAd_layput;
             facebook_bannerAd_layput = findViewById(R.id.banner_container);
+            ADS_FACEBOOK.interstitialAd(this, facebook_IntertitialAds, getString(R.string.Facebook_InterstitialAdUnit));
             ADS_FACEBOOK.bannerAds(this, facebook_adView, facebook_bannerAd_layput, getString(R.string.Facebook_BannerAdUnit));
         }
 
@@ -235,7 +251,6 @@ public class StoryPage extends AppCompatActivity {
     }
 
     private void fetchStory() {
-
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
         String selectedFont = sharedPreferences.getString("selectedFont", "");
@@ -254,14 +269,14 @@ public class StoryPage extends AppCompatActivity {
         }
 
 
-
         if (activityComingFrom.equals("Notification_Story_Detail")) {
             storyText.setText(getIntent().getStringExtra("story").toString().trim().replaceAll("\\/", ""));
             return;
         }
 
-        Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readsingleRow(title);
+
         try {
+            Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readsingleRow(title);
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
                 String story = cursor.getString(10);
@@ -270,63 +285,54 @@ public class StoryPage extends AppCompatActivity {
                     return;
                 }
                 storyText.setText(story.toString().trim().replaceAll("\\/", ""));
+                if (SplashScreen.App_updating.equals("active")) {
+                    storyText.setText(getString(R.string.FakeStory));
+                }
             }
-        } finally {
             cursor.close();
+
+        } catch (
+                Exception e) {
+            storyText.setText(e.getMessage());
+
         }
 
 
         updateStoryread();
+
     }
 
     private void fetchStoryAPI() {
-        RequestQueue requestQueue = Volley.newRequestQueue(StoryPage.this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, SplashScreen.API_URL + "storiesDetails", new Response.Listener<String>() {
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("storymodels").document(title);
+
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jSONArray = jsonObject.getJSONObject("data").getJSONArray("description");
-                    ArrayList<String> arrayList = new ArrayList();
-                    for (int i = 0; i < jSONArray.length(); i++) {
-                        arrayList.add((String) jSONArray.get(i));
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // DocumentSnapshot data
+
+                        Map<String, Object> data = document.getData();
+                        List<String> storyArrayList = (List<String>) data.get("description");
+                        String description = String.join("\n\n", storyArrayList);
+                        Log.d(TAG, "DocumentSnapshot data: " + description);
+                        storyText.setText(description.toString().trim().replaceAll("\\/", ""));
+
+                    } else {
+                        storyText.setText("story not available");
+                        Log.d(TAG, "No such document");
                     }
-
-                    String str = String.join("\n\n", arrayList);
-                    storyText.setText(str.toString().trim().replaceAll("\\/", ""));
-
-//                   storiesInsideparagraphLayout.setVisibility(View);
-//               relatedStoriesLayout.setVisibility(0);
-
-                    new DatabaseHelper(StoryPage.this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).updateStoryParagraph(title, str);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } else {
+                    storyText.setText("server busy...");
+                    Log.d(TAG, "get failed with ", task.getException());
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "onErrorResponse: " + error.getMessage());
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("href", href);
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-
-        requestQueue.add(stringRequest);
+        });
     }
 
 
@@ -517,7 +523,6 @@ public class StoryPage extends AppCompatActivity {
     }
 
 
-
     void loadAlertdialog() {
 
         final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
@@ -530,7 +535,6 @@ public class StoryPage extends AppCompatActivity {
         dialog = builder.create();
         dialog.show();
         seekBar = promptView.findViewById(R.id.your_dialog_seekbar);
-
 
         Spinner fontSpinner = promptView.findViewById(R.id.fontSpinner);
         button = promptView.findViewById(R.id.your_dialog_button);
@@ -566,6 +570,7 @@ public class StoryPage extends AppCompatActivity {
                 // Handle case where nothing is selected
             }
         });
+
 
     }
 
@@ -620,7 +625,7 @@ public class StoryPage extends AppCompatActivity {
         for (int i = 0; i < storiesInsideParagraphList.size(); i++) {
             String tagKey = storiesInsideParagraphList.get(i).trim();
 
-            if (tagKey.contains(".com") || tagKey.length() == 0){
+            if (tagKey.contains(".com") || tagKey.length() == 0) {
                 return;
             }
 
@@ -658,11 +663,11 @@ public class StoryPage extends AppCompatActivity {
 
             String tagKey = myList.get(i).trim();
 
-            if (tagKey.contains(".com") || tagKey.length() == 0){
+            if (tagKey.contains(".com") || tagKey.length() == 0) {
                 return;
             }
 
-                View view = getLayoutInflater().inflate(R.layout.tag, null);
+            View view = getLayoutInflater().inflate(R.layout.tag, null);
             TextView relatedStoryText = view.findViewById(R.id.tag);
             relatedStoryText.setText(i + 1 + ". " + tagKey + "   ->");
 
@@ -696,12 +701,11 @@ public class StoryPage extends AppCompatActivity {
         }
     }
 
-
     private StoryItemModel getDataFROM_DB(String Title) {
         Cursor cursor = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readsingleRow(Title);
 
         if (cursor.getCount() == 0) {
-            fetchStoryDetailsAPI(Title);
+            checkStory_in_Firestore(Title);
             return null;
         }
         try {
@@ -715,7 +719,59 @@ public class StoryPage extends AppCompatActivity {
 
     }
 
-    private void fetchStoryDetailsAPI(String Title) {
+
+    private void checkStory_in_Firestore(String Title) {
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("storymodels").document(Title);
+
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // DocumentSnapshot data
+                        Map<String, Object> data = document.getData();
+                        HashMap<String, String> m_li = Utils.FirebaseObject_TO_HashMap(data);
+
+                        DatabaseHelper insertRecord = new DatabaseHelper(getApplicationContext(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems");
+                        String res = insertRecord.addstories(m_li);
+                        Log.d(TAG, "INSERT DATA: " + res);
+
+
+                        StoryItemModel storyItemModel = getDataFROM_DB(Title);
+
+                        Intent intent = new Intent(StoryPage.this, StoryPage.class);
+                        intent.putExtra("category", title_category);
+                        intent.putExtra("title", SplashScreen.decryption(storyItemModel.getTitle()));
+                        intent.putExtra("date", storyItemModel.getDate());
+                        intent.putExtra("href", SplashScreen.decryption(storyItemModel.getHref()));
+                        intent.putExtra("relatedStories", storyItemModel.getRelatedStories());
+                        intent.putExtra("storiesInsideParagraph", storyItemModel.getStoriesInsideParagraph());
+                        intent.putExtra("activityComingFrom", StoryPage.this.getClass().getSimpleName());
+
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        StoryPage.this.startActivity(intent);
+
+
+                    } else {
+                        Log.d(TAG, "No such document in Firestore, so now check in mongodb data base by calling api");
+                        callApi(Title);
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+    }
+
+    private void callApi(String Title) {
+
         RequestQueue requestQueue = Volley.newRequestQueue(StoryPage.this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, SplashScreen.API_URL + "storiesDetailsByTitle", new Response.Listener<String>() {
             @Override
@@ -814,7 +870,7 @@ public class StoryPage extends AppCompatActivity {
                     }
 
                 } catch (Exception e) {
-                    Log.d(TAG, "onResponse: " + e.getMessage());
+                    Toast.makeText(StoryPage.this, "something went wrong", Toast.LENGTH_SHORT).show();
 
                     e.printStackTrace();
                 }
