@@ -15,8 +15,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-    >
+        android:layout_height="match_parent">
+
 
         <ImageView
             android:id="@+id/auntyImageView"
@@ -39,6 +39,23 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="16dp" />
+
+        <LinearLayout
+            android:id="@+id/lockLayout"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#70000000"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/lock" />
+        </LinearLayout>
+
 
     </FrameLayout>
 

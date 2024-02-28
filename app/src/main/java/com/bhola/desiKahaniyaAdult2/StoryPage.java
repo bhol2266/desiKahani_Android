@@ -722,10 +722,8 @@ public class StoryPage extends AppCompatActivity {
 
     private void checkStory_in_Firestore(String Title) {
 
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("storymodels").document(Title);
-
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -766,8 +764,6 @@ public class StoryPage extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     private void callApi(String Title) {

@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -45,26 +47,26 @@ public class ftab1 extends Fragment {
         if (SplashScreen.App_updating.equals("active")) {
             //fake content while upadting app
             String[] Category_List = {"प्रेम कहानी 1", "प्रेम कहानी 2", "प्रेम कहानी 3", "प्रेम कहानी 4", "प्रेम कहानी 5", "प्रेम कहानी 6"};
-            createGridItems(Category_List, view);
+            createGridItems(Category_List, view, "fake content while upadting app");
             SplashScreen.DB_TABLE_NAME = "FakeStory";
         } else {
 
             if (SplashScreen.Login_Times < 4) {
                 //Mixed content
                 String[] Category_List = {"प्रेम कहानी 1", "प्रेम कहानी 2", "प्रेम कहानी 3", "देसी कहानी 1", "देसी कहानी 2", "प्रेम कहानी 6"};
-                createGridItems(Category_List, view);
+                createGridItems(Category_List, view, "Mixed content");
                 SplashScreen.DB_TABLE_NAME = "FakeStory";
 
             } else if (SplashScreen.Login_Times < 6) {
                 // censored Content
                 String[] Category_List = {"देसी कहानी 1", "देसी कहानी 2", "देसी कहानी 3", "देसी कहानी 4", "देसी कहानी 5", "देसी कहानी 6"};
-                createGridItems(Category_List, view);
+                createGridItems(Category_List, view, "censored Content");
                 SplashScreen.DB_TABLE_NAME = "FakeStory";
 
             } else {
                 // full Content
                 String[] Category_List = {"Latest Stories", "Aunty Sex Story", "Bhabhi Sex", "Desi Kahani", "Family Sex Stories", "First Time Sex", "Gay Sex Stories", "Group Sex Stories", "Indian Sex Stories", "Sali Sex", "Teacher Sex", "Teenage Girl", "XXX Kahani", "अन्तर्वासना", "हिंदी सेक्स स्टोरीज"};
-                createGridItems(Category_List, view);
+                createGridItems(Category_List, view, "full Content");
                 SplashScreen.DB_TABLE_NAME = "StoryItems";
 
             }
@@ -72,7 +74,7 @@ public class ftab1 extends Fragment {
 
     }
 
-    private void createGridItems(String[] Category_List, View view) {
+    private void createGridItems(String[] Category_List, View view, String contentType) {
 
 
         GridLayout gridLayout = view.findViewById(R.id.gridlayout);
@@ -85,6 +87,13 @@ public class ftab1 extends Fragment {
             TextView categoryTextView = vieww.findViewById(R.id.Textview1);
             ImageView auntyImageView = vieww.findViewById(R.id.auntyImageView);
             NeumorphCardView cardView = vieww.findViewById(R.id.cardview);
+            LinearLayout lockLayout = vieww.findViewById(R.id.lockLayout);
+
+            if (contentType.equals("full Content") && !SplashScreen.Vip_Member) {
+                if (i != 0) {
+                    lockLayout.setVisibility(View.VISIBLE);
+                }
+            }
 
             categoryTextView.setText(category);
 
@@ -146,6 +155,11 @@ public class ftab1 extends Fragment {
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (lockLayout.getVisibility() == View.VISIBLE) {
+                        Toast.makeText(view.getContext(), "Become a member to access premium content", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(view.getContext(), VipMembership.class));
+                        return;
+                    }
                     Intent intent = new Intent(getActivity(), Collection_detail.class);
                     intent.putExtra("category", category);
                     intent.putExtra("href", Category_List[finalI]);

@@ -273,6 +273,7 @@ public class SplashScreen extends AppCompatActivity {
                 apk_Downloadlink = (String) snapshot.child("apk_Downloadlink").getValue();
                 update_Mandatory = (boolean) snapshot.child("update_Mandatory").getValue();
                 databaseURL = (String) snapshot.child("databaseURL").getValue();
+                API_URL = (String) snapshot.child("API_URL").getValue();
 
 
                 Handler handler2 = new Handler();

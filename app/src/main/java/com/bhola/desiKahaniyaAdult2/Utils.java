@@ -1,5 +1,7 @@
 package com.bhola.desiKahaniyaAdult2;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +14,7 @@ public class Utils {
         //this method is used to get each field data from firebase object and add it in object
         String Title = (String) data.get("Title");
         String href = (String) data.get("href");
+        Log.d("asdfsadf", "FirebaseObject_TO_HashMap: "+data.get("date")+"  :  Title  :  "+data.get("Title"));
         String date = (String) data.get("date");
         String views = (String) data.get("views");
         String audiolink = (String) data.get("audiolink");
