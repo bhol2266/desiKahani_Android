@@ -15,6 +15,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="No stories available."/>
+
     <ProgressBar
         android:id="@+id/progressBar2"
         style="?android:attr/progressBarStyle"

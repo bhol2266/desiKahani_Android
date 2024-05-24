@@ -17,14 +17,14 @@
         android:background="@drawable/hooverffext"
         android:orientation="horizontal"
         android:paddingStart="10dp"
-        android:paddingTop="7dp">
+        android:paddingTop="5dp">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="10dp"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/vip_lottie"
@@ -44,13 +44,13 @@
 
                 <TextView
                     android:id="@+id/title"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="not set"
                     android:textColor="#9A3412"
                     android:textFontWeight="500"
-                    android:textSize="22sp" />
+                    android:textSize="18dp" />
 
                 <TextView
                     android:id="@+id/membershipType"
@@ -66,7 +66,7 @@
                     android:text="popular"
                     android:textColor="#ffffff"
                     android:textFontWeight="500"
-                    android:textSize="12sp" />
+                    android:textSize="10dp" />
 
             </LinearLayout>
 
@@ -81,7 +81,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/gnt_gray"
                 android:visibility="gone"
-                android:textSize="19dp"
+                android:textSize="18dp"
 
                 />
 
@@ -96,7 +96,7 @@
                 android:paddingRight="20dp"
                 android:textAlignment="center"
                 android:textColor="#9A3412"
-                android:textSize="22dp"
+                android:textSize="20dp"
                 android:textStyle="bold" />
 
         </LinearLayout>

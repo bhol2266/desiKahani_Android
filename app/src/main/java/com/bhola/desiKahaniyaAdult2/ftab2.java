@@ -120,6 +120,8 @@ public class ftab2 extends Fragment {
         }
         if (SplashScreen.App_updating.equals("active")) {
             collectionData.clear();
+            recyclerView.setVisibility(View.GONE);
+
         }
         adapter2 = new AudioStory_Details_Adapter(collectionData, getActivity(), storyLocked);
         recyclerView.setAdapter(adapter2);

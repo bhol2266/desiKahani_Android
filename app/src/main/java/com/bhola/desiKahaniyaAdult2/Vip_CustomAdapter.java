@@ -67,18 +67,26 @@ public class Vip_CustomAdapter extends BaseAdapter {
 
 
         ProductDetails productDetails = productDetailsList.get(i);
-        if(offer.equals("with offer")){
-            productDetails=mlist_offer.get(i);
+        if (offer.equals("with offer")) {
+            productDetails = mlist_offer.get(i);
         }
 
-        title.setText(productDetails.getTitle());
+
         price.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice().replace(".00", ""));
         if (i == 0) {
             membershipType.setText("limited peroid");
+            title.setText("VIP 1 Month");
         } else if (i == 1) {
             membershipType.setText("popular");
-        } else {
+            title.setText("VIP 3 Months");
+
+        } else if (i == 2) {
             membershipType.setText("special offer");
+            title.setText("VIP 9 Months");
+
+        } else {
+            membershipType.setText("most valuable");
+            title.setText("VIP Lifetime");
 
         }
 

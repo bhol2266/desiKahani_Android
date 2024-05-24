@@ -464,16 +464,16 @@ public class StoryPage extends AppCompatActivity {
         });
 
         ImageView VipMembership = findViewById(R.id.VipLottie);
+
+        if (SplashScreen.App_updating.equals("active")) {
+            VipMembership.setVisibility(View.GONE);
+        }
         VipMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (SplashScreen.isInternetAvailable(StoryPage.this)) {
-                    if (!SplashScreen.App_updating.equals("active")) {
-                        startActivity(new Intent(StoryPage.this, VipMembership.class));
-                    } else {
-                        Toast.makeText(StoryPage.this, "coming soon!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(StoryPage.this, VipMembership.class));
 
-                    }
                 } else {
                     Toast.makeText(StoryPage.this, "Check Internet Connection!", Toast.LENGTH_SHORT).show();
                 }

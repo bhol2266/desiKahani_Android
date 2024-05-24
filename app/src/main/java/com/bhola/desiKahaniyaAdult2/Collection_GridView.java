@@ -103,16 +103,16 @@ Collection_GridView extends AppCompatActivity {
         }
 
         ImageView VipMembership = findViewById(R.id.VipLottie);
+
+        if (SplashScreen.App_updating.equals("active")) {
+            VipMembership.setVisibility(View.GONE);
+        }
         VipMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (SplashScreen.isInternetAvailable(Collection_GridView.this)) {
-                    if (!SplashScreen.App_updating.equals("active")) {
-                        startActivity(new Intent(Collection_GridView.this, VipMembership.class));
-                    } else {
-                        Toast.makeText(Collection_GridView.this, "coming soon!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(Collection_GridView.this, VipMembership.class));
 
-                    }
                 } else {
                     Toast.makeText(Collection_GridView.this, "Check Internet Connection!", Toast.LENGTH_SHORT).show();
                 }
@@ -469,19 +469,6 @@ Collection_GridView extends AppCompatActivity {
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
-                    case R.id.menu_VIP:
-                        if (SplashScreen.isInternetAvailable(Collection_GridView.this)) {
-                            if (!SplashScreen.App_updating.equals("active")) {
-                                startActivity(new Intent(Collection_GridView.this, VipMembership.class));
-                            } else {
-                                Toast.makeText(Collection_GridView.this, "coming soon!", Toast.LENGTH_SHORT).show();
-
-                            }
-                        } else {
-                            Toast.makeText(Collection_GridView.this, "Check Internet Connection!", Toast.LENGTH_SHORT).show();
-                        }
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
 
                     case R.id.menu_contacts:
                         TextView whatsapp, email;
