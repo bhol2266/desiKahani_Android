@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="colorAccent">#03DAC5</color>
-    <color name="textcolor">#2B2326</color>
-    <color name="background_start">#FFFFFF</color>
-    <color name="background_end">#FFFFFF</color>
-    <color name="themeColor">#B52D5F</color>
-    <color name="themeColorlight">#F487B0</color>
-    <color name="textcolor2">#BF171717</color>
+    <color name="textcolor">#133855</color>
+    <color name="background_start">#E8F0FF</color>
+    <color name="background_end">#E8F0FF</color>
+    <color name="themeColor">#133855</color>
+    <color name="textcolor2">#133855</color>
+
+
+    <color name="themeColorlight">#4290CD</color>
     <color name="neuro_shadowcolor">#FFF1F5</color>
-    <color name="themeColorextralight">#FFE8D1</color>
+    <color name="themeColorextralight">#B3DEFF</color>
+    <color name="themeColor_super_extralight">#E6F4FF</color>
     <color name="black">#FF000000</color>
 
 

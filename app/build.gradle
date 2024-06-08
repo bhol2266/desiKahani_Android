@@ -18,11 +18,11 @@ android {
 
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
-        applicationId "com.bhola.desiKahaniyaAdult2"
+        applicationId "com.bhola.desiKahaniya"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 17
-        versionName "17.0"
+        versionCode 34
+        versionName "34"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -40,7 +40,7 @@ android {
     lint {
         checkReleaseBuilds false
     }
-    namespace 'com.bhola.desiKahaniyaAdult2'
+    namespace 'com.bhola.desiKahaniya'
 }
 
 dependencies {
@@ -58,8 +58,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
 
-    implementation 'com.google.android.gms:play-services-ads:22.6.0'
-    implementation 'com.facebook.android:audience-network-sdk:6.16.0'
+    implementation 'com.google.android.gms:play-services-ads:23.1.0'
+    implementation 'com.facebook.android:audience-network-sdk:6.17.0'
     implementation 'com.google.ads.mediation:facebook:6.16.0.0'
     implementation 'com.google.android.ads:mediation-test-suite:3.0.0'
     implementation project(':nativetemplates')

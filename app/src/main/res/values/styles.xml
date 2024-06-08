@@ -34,7 +34,7 @@
 
     <style name="GridView_Title">
         <item name="android:textSize">30dp</item>
-        <item name="android:fontFamily">@font/kalam_regular</item>
+        <item name="android:fontFamily">@font/robotoslab_regular</item>
         <item name="android:textColor">@color/textcolor</item>
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingBottom">5dp</item>

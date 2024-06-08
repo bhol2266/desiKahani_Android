@@ -51,7 +51,7 @@
                         android:maxLines="1"
                         android:textFontWeight="500"
                         android:text="Ek Purani Kahani"
-                        android:textColor="#9A3412"
+                        android:textColor="@color/textcolor2"
                         android:textSize="22sp"
                         />
 

@@ -1,15 +1,14 @@
 <resources>
     <string name="app_name">Desi Kahaniya</string>
-    <string name="app_ID">ca-app-pub-8226562131234590~1978496077</string>
+    <string name="app_ID">ca-app-pub-8226562131234590~7133484445</string>
 
 
     ADMOB Real Ads ID :
-    <string name="BannerAd">ca-app-pub-8226562131234590/9011588538</string>
+    <string name="BannerAd">ca-app-pub-8226562131234590/4469997350</string>
     <string name="RewardedInterstitial">ca-app-pub-8226562131234590/6116497115</string>
-    <string name="AppOpen">ca-app-pub-8226562131234590/7491511350</string>
-    <string name="NativeAd">ca-app-pub-8226562131234590/7451132840</string>
-    <string name="Interstitial">ca-app-pub-8226562131234590/2282566642</string>
-
+    <string name="AppOpen">ca-app-pub-8226562131234590/4634556992</string>
+    <string name="NativeAd">ca-app-pub-8226562131234590/5691853722</string>
+    <string name="Interstitial">ca-app-pub-8226562131234590/1460690637</string>
 
     ADMOB Test Ads ID:
 
@@ -19,12 +18,12 @@
 <!--        <string name="Interstitial">ca-app-pub-3940256099942544/1033173712</string>-->
 
     Facebook Ads ID:
-    <string name="Facebook_BannerAdUnit">971783093850449_971784240517001</string>
-    <string name="Facebook_InterstitialAdUnit">971783093850449_971784693850289</string>
-    <string name="Facebook_NativeAd_MediumRect">971783093850449_971784857183606</string>
+    <string name="Facebook_BannerAdUnit">773552330024929_773555740024588</string>
+    <string name="Facebook_InterstitialAdUnit">773552330024929_773553246691504</string>
+    <string name="Facebook_NativeAd_MediumRect">773552330024929_1164854600894698</string>
 
 
-    <string name="facebook_app_id">[971783093850449]</string>
+    <string name="facebook_app_id">[773552330024929]</string>
 
 
     <string name="open">Open</string>

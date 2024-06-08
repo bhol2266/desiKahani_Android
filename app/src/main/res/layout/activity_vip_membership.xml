@@ -141,12 +141,27 @@
         </LinearLayout>
 
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
         <ListView
             android:id="@+id/pricelist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@android:color/transparent"
             android:dividerHeight="0dp" />
+
+            <ProgressBar
+                android:id="@+id/coinsItem_progressbar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/themeColor" />
+        </FrameLayout>
+
 
         <TextView
             android:id="@+id/subscriptionDetailText"
@@ -234,8 +249,8 @@
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
 
-            android:backgroundTint="#AD5312"
-            android:indeterminateTint="#AD5312" />
+            android:backgroundTint="@color/themeColor"
+            android:indeterminateTint="@color/themeColor" />
 
         <TextView
             android:layout_width="wrap_content"

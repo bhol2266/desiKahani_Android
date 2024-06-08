@@ -1,34 +1,63 @@
 {
   "project_info": {
-    "project_number": "592504089214",
-    "firebase_url": "https://desikahaniyaadult2-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "desikahaniyaadult2",
-    "storage_bucket": "desikahaniyaadult2.appspot.com"
+    "project_number": "87881322646",
+    "firebase_url": "https://hot-hindi-story-default-rtdb.firebaseio.com",
+    "project_id": "hot-hindi-story",
+    "storage_bucket": "hot-hindi-story.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:592504089214:android:8cc95d3377cdfdf346462f",
+        "mobilesdk_app_id": "1:87881322646:android:9ce64d8eef68347a8272b7",
         "android_client_info": {
-          "package_name": "com.bhola.desiKahaniyaAdult2"
+          "package_name": "com.bhola.HindidesiKahaniya2"
         }
       },
       "oauth_client": [
         {
-          "client_id": "592504089214-ma5fgnr5oejarnvheghusqcobob37tmc.apps.googleusercontent.com",
+          "client_id": "87881322646-8ihgc3uuhvmjkdicncl2qp11lj3dl7va.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBpLld15SkbBeV0t903CCMEn4HJssQSq-w"
+          "current_key": "AIzaSyD64kZy1OeZHM6ReMywkHAeAohefdM-K8o"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "592504089214-ma5fgnr5oejarnvheghusqcobob37tmc.apps.googleusercontent.com",
+              "client_id": "87881322646-8ihgc3uuhvmjkdicncl2qp11lj3dl7va.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87881322646:android:ddc6b82880806dd68272b7",
+        "android_client_info": {
+          "package_name": "com.bhola.desiKahaniya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87881322646-8ihgc3uuhvmjkdicncl2qp11lj3dl7va.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD64kZy1OeZHM6ReMywkHAeAohefdM-K8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87881322646-8ihgc3uuhvmjkdicncl2qp11lj3dl7va.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

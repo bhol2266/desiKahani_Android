@@ -21,8 +21,8 @@
         <ImageView
             android:id="@+id/auntyImageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
             android:src="@drawable/aunty7" />
 
 
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
-            android:background="@color/themeColor"
+            android:background="@color/themeColorlight"
             android:breakStrategy="high_quality"
             android:gravity="center"
             android:padding="5dp"

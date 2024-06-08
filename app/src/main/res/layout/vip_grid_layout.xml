@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="not set"
-                    android:textColor="#9A3412"
+                    android:textColor="@color/textcolor2"
                     android:textFontWeight="500"
                     android:textSize="18dp" />
 
@@ -95,7 +95,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="20dp"
                 android:textAlignment="center"
-                android:textColor="#9A3412"
+                android:textColor="@color/textcolor2"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
