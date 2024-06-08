@@ -66,7 +66,7 @@ public class AudioPlayerOffline extends AppCompatActivity {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mediaPlayer.isPlaying()) {  //  PLAY
+                if (mediaPlayer != null && !mediaPlayer.isPlaying()) {  //  PLAY
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                     mediaPlayer.seekTo(pausePosition - 500);
                     mediaPlayer.start();
