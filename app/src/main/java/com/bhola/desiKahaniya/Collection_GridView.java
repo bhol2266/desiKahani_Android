@@ -44,10 +44,16 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
+import com.google.android.play.core.review.ReviewException;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.review.model.ReviewErrorCode;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -382,6 +388,8 @@ Collection_GridView extends AppCompatActivity {
             TextView exitMSG;
             exitMSG = promptView.findViewById(R.id.exitMSG);
             exitMSG.setVisibility(View.VISIBLE);
+            showRateApp();
+
         }
 
         if ((SplashScreen.Ads_State.equals("active") && SplashScreen.Ad_Network_Name.equals("admob"))) {
@@ -593,6 +601,30 @@ Collection_GridView extends AppCompatActivity {
         inAppUpdate.checkForAppUpdate();
 
     }
+
+    public void showRateApp() {
+        ReviewManager manager = ReviewManagerFactory.create(this);
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // We can get the ReviewInfo object
+                ReviewInfo reviewInfo = task.getResult();
+
+                Task<Void> flow = manager.launchReviewFlow(Collection_GridView.this, reviewInfo);
+                flow.addOnCompleteListener(task2 -> {
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                });
+            } else {
+                // There was some problem, log or handle the error code.
+                @ReviewErrorCode int reviewErrorCode = ((ReviewException) task.getException()).getErrorCode();
+            }
+        });
+
+
+    }
+
 
 
     private void insertDataIN_Database() {

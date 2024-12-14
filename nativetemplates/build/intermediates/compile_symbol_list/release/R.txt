@@ -100,6 +100,7 @@ int attr buttonCompat 0x0
 int attr buttonGravity 0x0
 int attr buttonIconDimen 0x0
 int attr buttonPanelSideLayout 0x0
+int attr buttonSize 0x0
 int attr buttonStyle 0x0
 int attr buttonStyleSmall 0x0
 int attr buttonTint 0x0
@@ -107,6 +108,7 @@ int attr buttonTintMode 0x0
 int attr chainUseRtl 0x0
 int attr checkboxStyle 0x0
 int attr checkedTextViewStyle 0x0
+int attr circleCrop 0x0
 int attr circleRadius 0x0
 int attr clickAction 0x0
 int attr closeIcon 0x0
@@ -123,6 +125,7 @@ int attr colorControlNormal 0x0
 int attr colorError 0x0
 int attr colorPrimary 0x0
 int attr colorPrimaryDark 0x0
+int attr colorScheme 0x0
 int attr colorSwitchThumbNormal 0x0
 int attr commitIcon 0x0
 int attr constraintSet 0x0
@@ -141,7 +144,6 @@ int attr contentInsetStart 0x0
 int attr contentInsetStartWithNavigation 0x0
 int attr contrast 0x0
 int attr controlBackground 0x0
-int attr coordinatorLayoutStyle 0x0
 int attr crossfade 0x0
 int attr currentState 0x0
 int attr curveFit 0x0
@@ -218,6 +220,7 @@ int attr fontProviderFetchStrategy 0x0
 int attr fontProviderFetchTimeout 0x0
 int attr fontProviderPackage 0x0
 int attr fontProviderQuery 0x0
+int attr fontProviderSystemFontFamily 0x0
 int attr fontStyle 0x0
 int attr fontVariationSettings 0x0
 int attr fontWeight 0x0
@@ -233,20 +236,19 @@ int attr icon 0x0
 int attr iconTint 0x0
 int attr iconTintMode 0x0
 int attr iconifiedByDefault 0x0
+int attr imageAspectRatio 0x0
+int attr imageAspectRatioAdjust 0x0
 int attr imageButtonStyle 0x0
 int attr indeterminateProgressStyle 0x0
 int attr initialActivityCount 0x0
 int attr isLightTheme 0x0
 int attr itemPadding 0x0
 int attr keyPositionType 0x0
-int attr keylines 0x0
+int attr lStar 0x0
 int attr lastBaselineToBottomHeight 0x0
 int attr layout 0x0
 int attr layoutDescription 0x0
 int attr layoutDuringTransition 0x0
-int attr layout_anchor 0x0
-int attr layout_anchorGravity 0x0
-int attr layout_behavior 0x0
 int attr layout_constrainedHeight 0x0
 int attr layout_constrainedWidth 0x0
 int attr layout_constraintBaseline_creator 0x0
@@ -289,7 +291,6 @@ int attr layout_constraintWidth_default 0x0
 int attr layout_constraintWidth_max 0x0
 int attr layout_constraintWidth_min 0x0
 int attr layout_constraintWidth_percent 0x0
-int attr layout_dodgeInsetEdges 0x0
 int attr layout_editor_absoluteX 0x0
 int attr layout_editor_absoluteY 0x0
 int attr layout_goneMarginBottom 0x0
@@ -298,8 +299,6 @@ int attr layout_goneMarginLeft 0x0
 int attr layout_goneMarginRight 0x0
 int attr layout_goneMarginStart 0x0
 int attr layout_goneMarginTop 0x0
-int attr layout_insetEdge 0x0
-int attr layout_keyline 0x0
 int attr layout_optimizationLevel 0x0
 int attr limitBoundsTo 0x0
 int attr lineHeight 0x0
@@ -349,6 +348,7 @@ int attr navigationContentDescription 0x0
 int attr navigationIcon 0x0
 int attr navigationMode 0x0
 int attr nestedScrollFlags 0x0
+int attr nestedScrollViewStyle 0x0
 int attr numericModifiers 0x0
 int attr onCross 0x0
 int attr onHide 0x0
@@ -382,6 +382,7 @@ int attr progressBarPadding 0x0
 int attr progressBarStyle 0x0
 int attr queryBackground 0x0
 int attr queryHint 0x0
+int attr queryPatterns 0x0
 int attr radioButtonStyle 0x0
 int attr ratingBarStyle 0x0
 int attr ratingBarStyleIndicator 0x0
@@ -393,12 +394,14 @@ int attr region_widthMoreThan 0x0
 int attr round 0x0
 int attr roundPercent 0x0
 int attr saturation 0x0
+int attr scopeUris 0x0
 int attr searchHintIcon 0x0
 int attr searchIcon 0x0
 int attr searchViewStyle 0x0
 int attr seekBarStyle 0x0
 int attr selectableItemBackground 0x0
 int attr selectableItemBackgroundBorderless 0x0
+int attr shortcutMatchRequired 0x0
 int attr showAsAction 0x0
 int attr showDividers 0x0
 int attr showPaths 0x0
@@ -413,7 +416,6 @@ int attr splitTrack 0x0
 int attr srcCompat 0x0
 int attr staggered 0x0
 int attr state_above_anchor 0x0
-int attr statusBarBackground 0x0
 int attr subMenuArrow 0x0
 int attr submitBackground 0x0
 int attr subtitle 0x0
@@ -503,6 +505,7 @@ int bool abc_action_bar_embed_tabs 0x0
 int bool abc_allow_stacked_button_bar 0x0
 int bool abc_config_actionMenuItemAllCaps 0x0
 int bool enable_system_alarm_service_default 0x0
+int bool enable_system_foreground_service_default 0x0
 int bool enable_system_job_service_default 0x0
 int bool workmanager_test_configuration 0x0
 int color abc_background_cache_hint_selector_material_dark 0x0
@@ -550,6 +553,17 @@ int color browser_actions_text_color 0x0
 int color browser_actions_title_color 0x0
 int color button_material_dark 0x0
 int color button_material_light 0x0
+int color common_google_signin_btn_text_dark 0x0
+int color common_google_signin_btn_text_dark_default 0x0
+int color common_google_signin_btn_text_dark_disabled 0x0
+int color common_google_signin_btn_text_dark_focused 0x0
+int color common_google_signin_btn_text_dark_pressed 0x0
+int color common_google_signin_btn_text_light 0x0
+int color common_google_signin_btn_text_light_default 0x0
+int color common_google_signin_btn_text_light_disabled 0x0
+int color common_google_signin_btn_text_light_focused 0x0
+int color common_google_signin_btn_text_light_pressed 0x0
+int color common_google_signin_btn_tint 0x0
 int color dim_foreground_disabled_material_dark 0x0
 int color dim_foreground_disabled_material_light 0x0
 int color dim_foreground_material_dark 0x0
@@ -829,6 +843,9 @@ int drawable abc_textfield_search_activated_mtrl_alpha 0x0
 int drawable abc_textfield_search_default_mtrl_alpha 0x0
 int drawable abc_textfield_search_material 0x0
 int drawable abc_vector_test 0x0
+int drawable admob_close_button_black_circle_white_cross 0x0
+int drawable admob_close_button_white_circle_black_cross 0x0
+int drawable admob_close_button_white_cross 0x0
 int drawable btn_checkbox_checked_mtrl 0x0
 int drawable btn_checkbox_checked_to_unchecked_mtrl_animation 0x0
 int drawable btn_checkbox_unchecked_mtrl 0x0
@@ -837,8 +854,29 @@ int drawable btn_radio_off_mtrl 0x0
 int drawable btn_radio_off_to_on_mtrl_animation 0x0
 int drawable btn_radio_on_mtrl 0x0
 int drawable btn_radio_on_to_off_mtrl_animation 0x0
+int drawable common_full_open_on_phone 0x0
+int drawable common_google_signin_btn_icon_dark 0x0
+int drawable common_google_signin_btn_icon_dark_focused 0x0
+int drawable common_google_signin_btn_icon_dark_normal 0x0
+int drawable common_google_signin_btn_icon_dark_normal_background 0x0
+int drawable common_google_signin_btn_icon_disabled 0x0
+int drawable common_google_signin_btn_icon_light 0x0
+int drawable common_google_signin_btn_icon_light_focused 0x0
+int drawable common_google_signin_btn_icon_light_normal 0x0
+int drawable common_google_signin_btn_icon_light_normal_background 0x0
+int drawable common_google_signin_btn_text_dark 0x0
+int drawable common_google_signin_btn_text_dark_focused 0x0
+int drawable common_google_signin_btn_text_dark_normal 0x0
+int drawable common_google_signin_btn_text_dark_normal_background 0x0
+int drawable common_google_signin_btn_text_disabled 0x0
+int drawable common_google_signin_btn_text_light 0x0
+int drawable common_google_signin_btn_text_light_focused 0x0
+int drawable common_google_signin_btn_text_light_normal 0x0
+int drawable common_google_signin_btn_text_light_normal_background 0x0
 int drawable gnt_outline_shape 0x0
 int drawable gnt_rounded_corners_shape 0x0
+int drawable googleg_disabled_color_18 0x0
+int drawable googleg_standard_color_18 0x0
 int drawable notification_action_background 0x0
 int drawable notification_bg 0x0
 int drawable notification_bg_low 0x0
@@ -851,6 +889,8 @@ int drawable notification_template_icon_bg 0x0
 int drawable notification_template_icon_low_bg 0x0
 int drawable notification_tile_bg 0x0
 int drawable notify_panel_notification_icon_bg 0x0
+int drawable offline_dialog_background 0x0
+int drawable offline_dialog_default_icon_42dp 0x0
 int drawable tooltip_frame_dark 0x0
 int drawable tooltip_frame_light 0x0
 int id NO_DEBUG 0x0
@@ -912,12 +952,15 @@ int id actions 0x0
 int id activity_chooser_view_content 0x0
 int id ad_notification_view 0x0
 int id add 0x0
+int id adjust_height 0x0
+int id adjust_width 0x0
 int id alertTitle 0x0
 int id aligned 0x0
 int id animateToEnd 0x0
 int id animateToStart 0x0
 int id asConfigured 0x0
 int id async 0x0
+int id auto 0x0
 int id autoComplete 0x0
 int id autoCompleteToEnd 0x0
 int id autoCompleteToStart 0x0
@@ -944,6 +987,7 @@ int id cos 0x0
 int id cta 0x0
 int id custom 0x0
 int id customPanel 0x0
+int id dark 0x0
 int id decelerate 0x0
 int id decelerateAndComplete 0x0
 int id decor_content_parent 0x0
@@ -972,6 +1016,7 @@ int id home 0x0
 int id honorRequest 0x0
 int id icon 0x0
 int id icon_group 0x0
+int id icon_only 0x0
 int id ignore 0x0
 int id ignoreRequest 0x0
 int id image 0x0
@@ -982,6 +1027,7 @@ int id jumpToEnd 0x0
 int id jumpToStart 0x0
 int id layout 0x0
 int id left 0x0
+int id light 0x0
 int id line1 0x0
 int id line3 0x0
 int id linear 0x0
@@ -999,6 +1045,9 @@ int id notification_background 0x0
 int id notification_main_column 0x0
 int id notification_main_column_container 0x0
 int id off 0x0
+int id offline_dialog_advertiser_name 0x0
+int id offline_dialog_image 0x0
+int id offline_dialog_text 0x0
 int id on 0x0
 int id packed 0x0
 int id parent 0x0
@@ -1062,10 +1111,15 @@ int id tag_accessibility_actions 0x0
 int id tag_accessibility_clickable_spans 0x0
 int id tag_accessibility_heading 0x0
 int id tag_accessibility_pane_title 0x0
+int id tag_on_apply_window_listener 0x0
+int id tag_on_receive_content_listener 0x0
+int id tag_on_receive_content_mime_types 0x0
 int id tag_screen_reader_focusable 0x0
+int id tag_state_description 0x0
 int id tag_transition_group 0x0
 int id tag_unhandled_key_event_manager 0x0
 int id tag_unhandled_key_listeners 0x0
+int id tag_window_insets_animation_callback 0x0
 int id text 0x0
 int id text2 0x0
 int id textSpacerNoButtons 0x0
@@ -1080,7 +1134,9 @@ int id triangle 0x0
 int id unchecked 0x0
 int id uniform 0x0
 int id up 0x0
+int id view_tree_lifecycle_owner 0x0
 int id visible 0x0
+int id wide 0x0
 int id wrap 0x0
 int id wrap_content 0x0
 int integer abc_config_activityDefaultDur 0x0
@@ -1124,6 +1180,7 @@ int layout abc_search_dropdown_item_icons_2line 0x0
 int layout abc_search_view 0x0
 int layout abc_select_dialog_material 0x0
 int layout abc_tooltip 0x0
+int layout admob_empty_layout 0x0
 int layout browser_actions_context_menu_page 0x0
 int layout browser_actions_context_menu_row 0x0
 int layout custom_dialog 0x0
@@ -1135,6 +1192,7 @@ int layout notification_template_custom_big 0x0
 int layout notification_template_icon_group 0x0
 int layout notification_template_part_chronometer 0x0
 int layout notification_template_part_time 0x0
+int layout offline_ads_dialog 0x0
 int layout select_dialog_item_material 0x0
 int layout select_dialog_multichoice_material 0x0
 int layout select_dialog_singlechoice_material 0x0
@@ -1166,11 +1224,40 @@ int string abc_searchview_description_voice 0x0
 int string abc_shareactionprovider_share_with 0x0
 int string abc_shareactionprovider_share_with_application 0x0
 int string abc_toolbar_collapse_description 0x0
+int string androidx_startup 0x0
+int string common_google_play_services_enable_button 0x0
+int string common_google_play_services_enable_text 0x0
+int string common_google_play_services_enable_title 0x0
+int string common_google_play_services_install_button 0x0
+int string common_google_play_services_install_text 0x0
+int string common_google_play_services_install_title 0x0
+int string common_google_play_services_notification_channel_name 0x0
+int string common_google_play_services_notification_ticker 0x0
 int string common_google_play_services_unknown_issue 0x0
-int string offline_notification_text 0x0
+int string common_google_play_services_unsupported_text 0x0
+int string common_google_play_services_update_button 0x0
+int string common_google_play_services_update_text 0x0
+int string common_google_play_services_update_title 0x0
+int string common_google_play_services_updating_text 0x0
+int string common_google_play_services_wear_update_text 0x0
+int string common_open_on_phone 0x0
+int string common_signin_button_text 0x0
+int string common_signin_button_text_long 0x0
+int string copy_toast_msg 0x0
+int string fallback_menu_item_copy_link 0x0
+int string fallback_menu_item_open_in_browser 0x0
+int string fallback_menu_item_share_link 0x0
+int string native_body 0x0
+int string native_headline 0x0
+int string native_media_view 0x0
+int string notifications_permission_confirm 0x0
+int string notifications_permission_decline 0x0
+int string notifications_permission_title 0x0
+int string offline_dialog_image_description 0x0
+int string offline_dialog_text 0x0
 int string offline_notification_title 0x0
+int string offline_notification_title_with_advertiser 0x0
 int string offline_opt_in_confirm 0x0
-int string offline_opt_in_confirmation 0x0
 int string offline_opt_in_decline 0x0
 int string offline_opt_in_message 0x0
 int string offline_opt_in_title 0x0
@@ -1183,6 +1270,7 @@ int string s6 0x0
 int string s7 0x0
 int string search_menu_title 0x0
 int string status_bar_notification_info_overflow 0x0
+int string watermark_label_prefix 0x0
 int style AlertDialog_AppCompat 0x0
 int style AlertDialog_AppCompat_Light 0x0
 int style Animation_AppCompat_Dialog 0x0
@@ -1534,7 +1622,6 @@ int style Widget_AppCompat_Toolbar 0x0
 int style Widget_AppCompat_Toolbar_Button_Navigation 0x0
 int style Widget_Compat_NotificationActionContainer 0x0
 int style Widget_Compat_NotificationActionText 0x0
-int style Widget_Support_CoordinatorLayout 0x0
 int[] styleable ActionBar { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable ActionBar_background 0
 int styleable ActionBar_backgroundSplit 1
@@ -1776,10 +1863,15 @@ int styleable AppCompatTheme_windowMinWidthMinor 123
 int styleable AppCompatTheme_windowNoTitle 124
 int[] styleable ButtonBarLayout { 0x0 }
 int styleable ButtonBarLayout_allowStacking 0
-int[] styleable ColorStateListItem { 0x0, 0x101031f, 0x10101a5 }
+int[] styleable Capability { 0x0, 0x0 }
+int styleable Capability_queryPatterns 0
+int styleable Capability_shortcutMatchRequired 1
+int[] styleable ColorStateListItem { 0x0, 0x101031f, 0x10101a5, 0x1010647, 0x0 }
 int styleable ColorStateListItem_alpha 0
 int styleable ColorStateListItem_android_alpha 1
 int styleable ColorStateListItem_android_color 2
+int styleable ColorStateListItem_android_lStar 3
+int styleable ColorStateListItem_lStar 4
 int[] styleable CompoundButton { 0x1010107, 0x0, 0x0, 0x0 }
 int styleable CompoundButton_android_button 0
 int styleable CompoundButton_buttonCompat 1
@@ -2104,17 +2196,6 @@ int styleable ConstraintSet_pathMotionArc 108
 int styleable ConstraintSet_pivotAnchor 109
 int styleable ConstraintSet_transitionEasing 110
 int styleable ConstraintSet_transitionPathRotate 111
-int[] styleable CoordinatorLayout { 0x0, 0x0 }
-int styleable CoordinatorLayout_keylines 0
-int styleable CoordinatorLayout_statusBarBackground 1
-int[] styleable CoordinatorLayout_Layout { 0x10100b3, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
-int styleable CoordinatorLayout_Layout_android_layout_gravity 0
-int styleable CoordinatorLayout_Layout_layout_anchor 1
-int styleable CoordinatorLayout_Layout_layout_anchorGravity 2
-int styleable CoordinatorLayout_Layout_layout_behavior 3
-int styleable CoordinatorLayout_Layout_layout_dodgeInsetEdges 4
-int styleable CoordinatorLayout_Layout_layout_insetEdge 5
-int styleable CoordinatorLayout_Layout_layout_keyline 6
 int[] styleable CustomAttribute { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable CustomAttribute_attributeName 0
 int styleable CustomAttribute_customBoolean 1
@@ -2134,13 +2215,14 @@ int styleable DrawerArrowToggle_drawableSize 4
 int styleable DrawerArrowToggle_gapBetweenBars 5
 int styleable DrawerArrowToggle_spinBars 6
 int styleable DrawerArrowToggle_thickness 7
-int[] styleable FontFamily { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+int[] styleable FontFamily { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable FontFamily_fontProviderAuthority 0
 int styleable FontFamily_fontProviderCerts 1
 int styleable FontFamily_fontProviderFetchStrategy 2
 int styleable FontFamily_fontProviderFetchTimeout 3
 int styleable FontFamily_fontProviderPackage 4
 int styleable FontFamily_fontProviderQuery 5
+int styleable FontFamily_fontProviderSystemFontFamily 6
 int[] styleable FontFamilyFont { 0x1010532, 0x101053f, 0x1010570, 0x1010533, 0x101056f, 0x0, 0x0, 0x0, 0x0, 0x0 }
 int styleable FontFamilyFont_android_font 0
 int styleable FontFamilyFont_android_fontStyle 1
@@ -2350,6 +2432,10 @@ int styleable LinearLayoutCompat_Layout_android_layout_width 3
 int[] styleable ListPopupWindow { 0x10102ac, 0x10102ad }
 int styleable ListPopupWindow_android_dropDownHorizontalOffset 0
 int styleable ListPopupWindow_android_dropDownVerticalOffset 1
+int[] styleable LoadingImageView { 0x0, 0x0, 0x0 }
+int styleable LoadingImageView_circleCrop 0
+int styleable LoadingImageView_imageAspectRatio 1
+int styleable LoadingImageView_imageAspectRatioAdjust 2
 int[] styleable MenuGroup { 0x10101e0, 0x101000e, 0x10100d0, 0x10101de, 0x10101df, 0x1010194 }
 int styleable MenuGroup_android_checkableBehavior 0
 int styleable MenuGroup_android_enabled 1
@@ -2471,6 +2557,10 @@ int styleable SearchView_searchIcon 13
 int styleable SearchView_submitBackground 14
 int styleable SearchView_suggestionRowLayout 15
 int styleable SearchView_voiceIcon 16
+int[] styleable SignInButton { 0x0, 0x0, 0x0 }
+int styleable SignInButton_buttonSize 0
+int styleable SignInButton_colorScheme 1
+int styleable SignInButton_scopeUris 2
 int[] styleable Spinner { 0x1010262, 0x10100b2, 0x1010176, 0x101017b, 0x0 }
 int styleable Spinner_android_dropDownWidth 0
 int styleable Spinner_android_entries 1
@@ -2600,3 +2690,5 @@ int[] styleable ViewStubCompat { 0x10100d0, 0x10100f3, 0x10100f2 }
 int styleable ViewStubCompat_android_id 0
 int styleable ViewStubCompat_android_inflatedId 1
 int styleable ViewStubCompat_android_layout 2
+int xml gma_ad_services_config 0x0
+int xml image_share_filepaths 0x0
