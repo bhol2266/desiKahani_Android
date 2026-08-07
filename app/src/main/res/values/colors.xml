@@ -10,8 +10,8 @@
 
     <!-- Primary / anchor -->
     <color name="themeColor">#16293C</color>          <!-- deep ink navy -->
-    <color name="themeColorlight">#B08843</color>     <!-- antique gold/bronze -->
-    <color name="themeColorextralight">#E3D3AE</color><!-- light gold -->
+    <!-- antique gold/bronze -->
+    <!-- light gold -->
     <color name="themeColor_super_extralight">#F4EBD9</color> <!-- pale cream -->
 
     <!-- Page background gradient (background2.xml) -->
@@ -20,13 +20,10 @@
 
     <!-- Text -->
     <color name="textcolor">#16293C</color>           <!-- headings, ink -->
-    <color name="textcolor2">#5A4F42</color>          <!-- body/secondary, warm gray -->
+    <!-- body/secondary, warm gray -->
 
-    <color name="colorAccent">#C8A24A</color>         <!-- gold accent -->
-    <color name="neuro_shadowcolor">#FFF1F5</color>
+    <!-- gold accent -->
 
-    <color name="black">#FF000000</color>
-    <color name="semi_black">#BF171717</color>
     <color name="white">#ffffff</color>
     <color name="grey">#BFDFDFDF</color>
 
@@ -61,7 +58,5 @@
 
     <!-- States -->
     <color name="locked_veil">#73101D2B</color>       <!-- frosted veil over locked art -->
-    <color name="scrim_top">#00000000</color>
-    <color name="scrim_bottom">#C4000000</color>
 
 </resources>

@@ -22,8 +22,8 @@ android {
         applicationId "com.bhola.desiKahaniya"
         minSdkVersion 23
         targetSdkVersion 36
-        versionCode 38
-        versionName "38"
+        versionCode 39
+        versionName "39"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

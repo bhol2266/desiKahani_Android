@@ -9,7 +9,6 @@
 
     ADMOB Real Ads ID :
     <string name="BannerAd">ca-app-pub-8226562131234590/4469997350</string>
-    <string name="RewardedInterstitial">ca-app-pub-8226562131234590/6116497115</string>
     <string name="AppOpen">ca-app-pub-8226562131234590/4634556992</string>
     <string name="NativeAd">ca-app-pub-8226562131234590/5691853722</string>
     <string name="Interstitial">ca-app-pub-8226562131234590/1460690637</string>
@@ -28,12 +27,6 @@
 
 
     <string name="facebook_app_id">[773552330024929]</string>
-
-
-    <string name="open">Open</string>
-    <string name="close">Close</string>
-
-
 
 
     <string name="FakeStory">एक समय की बात है, एक छोटे से गांव में, वहां एक जवान कपल रहता था जिनके नाम राहुल और प्रियंका थे। राहुल एक हंसमुख और प्रियंका एक सुंदर लड़की थी। वे दिल से एक-दूसरे से प्यार करते थे और एक साथ बहुत खुश रहते थे।
