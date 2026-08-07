@@ -3,19 +3,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background2">
+    android:background="@drawable/background2"
+    android:clipToPadding="false"
+    android:scrollbars="none">
 
-
-    <GridLayout
-        android:id="@+id/gridlayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alignmentMode="alignBounds"
-        android:columnCount="2"
-        android:padding="15dp">
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
 
+        <!-- Editorial section header -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
 
-    </GridLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="आपके लिए कहानियाँ"
+                android:textAppearance="@style/TextAppearance.Editorial.SectionHeader" />
+
+            <View
+                android:layout_width="36dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:text="श्रेणी चुनें और पढ़ना शुरू करें"
+            android:textAppearance="@style/TextAppearance.Editorial.Meta" />
+
+        <!-- Half-gap padding; ftab1 gives each card a matching half-gap margin
+             so the outer gutters and the centre seam are all equal. -->
+        <GridLayout
+            android:id="@+id/gridlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignMargins"
+            android:columnCount="2"
+            android:paddingHorizontal="7dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp" />
+
+    </LinearLayout>
 
 
 </ScrollView>

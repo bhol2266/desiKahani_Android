@@ -90,6 +90,7 @@ public class StoryPage extends AppCompatActivity {
 
         Intents_and_InitViews();
         actionBar();
+        reportButton();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -430,6 +431,18 @@ public class StoryPage extends AppCompatActivity {
         clicked = !clicked;
     }
 
+
+    /** "Report this story" link at the end of the story body. */
+    private void reportButton() {
+        View reportBtn = findViewById(R.id.reportStoryBtn);
+        if (reportBtn == null) return;
+        reportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReportDialog.show(StoryPage.this, ReportDialog.TYPE_STORY, title, href);
+            }
+        });
+    }
 
     private void actionBar() {
         text2Speech();

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ink hero for the membership screen. Replaces the stock banner artwork so the
+     screen carries the app's own ink + gold identity. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="315"
+        android:startColor="#0D1B29"
+        android:centerColor="#1C3A55"
+        android:endColor="#2B4A66"
+        android:type="linear" />
+</shape>

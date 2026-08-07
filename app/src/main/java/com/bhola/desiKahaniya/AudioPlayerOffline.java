@@ -22,9 +22,7 @@ import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 
 public class AudioPlayerOffline extends AppCompatActivity {
     ImageView playBtn;
-    LinearLayout progressbar;
     LinearLayout playBtn_and_SeekbarLayout;
-    TextView loadingMessage;
     MediaPlayer mediaPlayer;
     int pausePosition = -1;
     String storyURL, storyName;
@@ -47,9 +45,7 @@ public class AudioPlayerOffline extends AppCompatActivity {
         loadAds();
 
 
-        progressbar = findViewById(R.id.progressbar);
         playBtn_and_SeekbarLayout = findViewById(R.id.playBtn_and_SeekbarLayout);
-        loadingMessage = findViewById(R.id.message);
         storyTitle = findViewById(R.id.storyTitle);
         currentTime = findViewById(R.id.currentTime);
         seekbar = findViewById(R.id.seekbar);

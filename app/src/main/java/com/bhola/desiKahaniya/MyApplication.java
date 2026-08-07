@@ -18,15 +18,26 @@ package com.bhola.desiKahaniya;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Application.ActivityLifecycleCallbacks;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
+
+import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
@@ -51,6 +62,24 @@ public class MyApplication extends Application
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Must run before any FirebaseDatabase reference is created anywhere in the
+        // app (SplashScreen's remote-config read, admin_panel's toggle state, etc.).
+        // Without this, the RTDB connection is torn down whenever nothing is actively
+        // listening, so every screen that reads it - most visibly the admin panel,
+        // opened and closed repeatedly in one session - pays a fresh ~2s WebSocket
+        // handshake on every read even though the config node itself is tiny.
+        // keepSynced() keeps that node's local cache warm so later reads return
+        // instantly while syncing with the server in the background.
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase.getInstance().getReference("Sexy_Desi_Kahani").keepSynced(true);
+
+        // Runs on EVERY process start, including when Android restores a task after
+        // killing the process. SplashScreen may not run on that path, so the gating
+        // statics (DB_TABLE_NAME / Vip_Member / App_updating / Login_Times) are
+        // re-derived from disk here instead of being left at their defaults.
+        SplashScreen.restoreSessionState(this);
+
         this.registerActivityLifecycleCallbacks(this);
 
         // Log the Mobile Ads SDK version.
@@ -66,6 +95,16 @@ public class MyApplication extends Application
 
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
         appOpenAdManager = new AppOpenAdManager();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    AudioPlayerService.CHANNEL_ID,
+                    "Audio Playback",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
     }
 
     /**
@@ -81,6 +120,58 @@ public class MyApplication extends Application
     /** ActivityLifecycleCallback methods. */
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {}
+
+    /**
+     * Edge-to-edge inset handling, applied centrally to every activity.
+     *
+     * From targetSdk 35 Android draws content behind the system bars and ignores
+     * android:statusBarColor / navigationBarColor; on API 36 there is no opt-out.
+     * Padding is applied to the activity's own root view rather than the content
+     * frame, because a View still paints its background across its padding - so the
+     * screen's background (ivory gradient, ink, sepia) stays full-bleed behind the
+     * bars while the actual content is inset far enough to stay tappable.
+     *
+     * Runs in onActivityPostCreated so setContentView() has already happened. That
+     * callback only exists on API 29+, which is fine: edge-to-edge is only enforced
+     * from API 35.
+     */
+    @Override
+    public void onActivityPostCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            return; // pre-API 35 keeps the classic, non-edge-to-edge behaviour
+        }
+
+        View content = activity.findViewById(android.R.id.content);
+        if (!(content instanceof ViewGroup) || ((ViewGroup) content).getChildCount() == 0) {
+            Log.d(TAG, "insets: no content child for " + activity.getClass().getSimpleName());
+            return;
+        }
+        final View root = ((ViewGroup) content).getChildAt(0);
+
+        // Screens with hero artwork keep the status-bar strip for themselves.
+        final boolean skipTopInset = activity instanceof DrawsUnderStatusBar;
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, windowInsets) -> {
+            Insets full = windowInsets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            Insets bars = Insets.of(full.left, skipTopInset ? 0 : full.top, full.right, full.bottom);
+
+            if (v instanceof DrawerLayout) {
+                // DrawerLayout lays its children out at their margins and ignores its
+                // own padding, so padding the DrawerLayout itself has no effect.
+                // Inset each pane instead (content pane + drawer).
+                ViewGroup dl = (ViewGroup) v;
+                for (int i = 0; i < dl.getChildCount(); i++) {
+                    dl.getChildAt(i).setPadding(bars.left, bars.top, bars.right, bars.bottom);
+                }
+            } else {
+                v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            }
+            // Consumed, so a child with fitsSystemWindows="true" cannot pad again.
+            return WindowInsetsCompat.CONSUMED;
+        });
+        root.requestApplyInsets();
+    }
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {

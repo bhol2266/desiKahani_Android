@@ -7,7 +7,10 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -15,6 +18,7 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
@@ -26,17 +30,27 @@
         tools:targetApi="n"
      >
 
-        <activity android:name=".TermsAndConditions" />
-        <activity android:name=".AudioPlayer" />
+        <activity
+            android:name=".TermsAndConditions"
+            android:theme="@style/Theme.App.M3" />
+        <activity
+            android:name=".PrivacyPolicy"
+            android:exported="false"
+            android:theme="@style/Theme.App.M3" />
+        <activity
+            android:name=".AudioPlayer"
+            android:theme="@style/Theme.App.M3.Dark" />
         <activity
             android:name=".AudioPlayerOffline"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.App.M3.Dark" />
         <activity
             android:name=".OfflineAudioStory"
             android:exported="false" />
         <activity
             android:name=".VipMembership"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.App.M3.HeroTop" />
         <activity
             android:name=".Download_StoryPage"
             android:hardwareAccelerated="true" />
@@ -50,22 +64,27 @@
 
         <activity
             android:name=".StoryPage"
-            android:hardwareAccelerated="true" />
+            android:hardwareAccelerated="true"
+            android:theme="@style/Theme.App.M3" />
         <activity
             android:name=".Collection_detail"
-            android:screenOrientation="portrait" />
-        <activity android:name=".admin_panel" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.App.M3" />
+        <activity
+            android:name=".admin_panel"
+            android:theme="@style/Theme.App.Admin" />
         <activity android:name=".Download_Detail" />
         <activity android:name=".Notification_Story_Detail" />
         <activity
             android:name=".Collection_GridView"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.App" />
+            android:theme="@style/Theme.App.M3" />
         <activity
             android:name=".SplashScreen"
             android:exported="true"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.App.M3">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -86,6 +105,13 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".AudioPlayerService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false" />
+
+        <receiver android:name=".NotificationDismissedReceiver" android:exported="false" />
+
         <service
             android:name=".TimerService"
             android:enabled="true"

@@ -5,16 +5,18 @@
     android:id="@+id/tag"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:alpha="0.9"
-    android:padding="5dp"
-    android:background="@drawable/hooverffext"
-    android:gravity="start"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:ellipsize="end"
+    android:focusable="true"
+    android:fontFamily="@font/inter"
+    android:gravity="center_vertical|start"
     android:maxLines="1"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
-    android:text="sadfsadf"
-    android:textColor="@color/textcolor2"
-    android:textSize="18dp">
+    android:paddingHorizontal="18dp"
+    android:paddingVertical="13dp"
+    android:textColor="@color/ink_muted"
+    android:textSize="14sp"
+    android:text="sadfsadf">
 
 </TextView>
 

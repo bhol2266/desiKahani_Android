@@ -1,33 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="20dp"
-    android:padding="20dp"
-    android:background="@drawable/background2"
-    android:orientation="vertical">
+    android:layout_margin="18dp"
+    app:cardBackgroundColor="@color/surface_ivory"
+    app:cardCornerRadius="26dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="0dp">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="About Us"
-        android:textColor="@color/textcolor"
-        android:textSize="32dp"
-      />
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="left"
-        android:padding="5dp"
-        android:fontFamily="@font/inter"
-        android:text="Hello Guys! Our Company name is UK DEVELOPERS. And I beleive you all are liking this Desi Kahani Story APP. If you have any Advice and Feedback regarding this Application then you can Contact Us through our E-mail: ukdevelopers007@gmail.com"
-        android:textColor="@color/textcolor2"
-        android:textSize="15dp"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:letterSpacing="0.14"
+            android:text="UK DEVELOPERS"
+            android:textColor="@color/gold_deep"
+            android:textSize="10sp"
+            android:textStyle="bold" />
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/kalam_regular"
+            android:text="About Us"
+            android:textColor="@color/ink"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="36dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="14dp"
+            android:background="@color/gold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:lineSpacingExtra="5dp"
+            android:text="Hello Guys! Our Company name is UK DEVELOPERS. And I beleive you all are liking this Desi Kahani Story APP. If you have any Advice and Feedback regarding this Application then you can Contact Us through our E-mail: ukdevelopers007@gmail.com"
+            android:textColor="@color/ink_muted"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/legalOnlineBtn"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/inter"
+            android:text="Privacy Policy &amp; Terms"
+            android:textColor="@color/gold_deep"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:strokeColor="@color/gold_soft" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

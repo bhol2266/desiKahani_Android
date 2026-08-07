@@ -1,95 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardCornerRadius="15dp"
-    android:background="@drawable/hoovercolor">
+    android:layout_margin="18dp"
+    app:cardBackgroundColor="@color/surface_ivory"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="0dp">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-    >
+        android:orientation="vertical"
+        android:padding="22dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:letterSpacing="0.14"
+            android:text="डाउनलोड"
+            android:textColor="@color/gold_deep"
+            android:textSize="10sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:fontFamily="@font/rajdhani_regular"
+            android:layout_marginTop="6dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/robotoslab_regular"
             android:gravity="start"
-            android:textColor="@color/semi_black"
+            android:maxLines="2"
             android:text="asdfdsfa.mp3 downloading..."
-            android:textSize="18dp" />
+            android:textColor="@color/ink"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-
-    <ProgressBar
-        android:id="@+id/seekbar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/description"
-        android:layout_margin="10dp"
-        android:max="100"
-        android:progress="0"
-        android:progressBackgroundTint="@color/themeColor"
-        android:progressTint="@color/themeColor" />
-
-    <TextView
-        android:id="@+id/progress_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/seekbar"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:fontFamily="@font/rajdhani_regular"
-        android:text="connecting..."
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/downloadSize"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-android:layout_toRightOf="@+id/progress_indicator"
-        android:layout_below="@id/seekbar"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:fontFamily="@font/rajdhani_regular"
-        android:text="(2MB/50MB)"
-        android:visibility="gone"
-        android:textSize="14dp" />
-
-
-        <Button
-            android:id="@+id/cancelbtn"
-            android:layout_width="wrap_content"
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/seekbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/seekbar"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_hoovereffect"
-            android:fontFamily="@font/inter"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:text="Cancel"
-            android:textSize="14dp" />
-    </RelativeLayout>
+            android:layout_marginTop="18dp"
+            android:max="100"
+            android:progress="0"
+            app:indicatorColor="@color/gold"
+            app:trackColor="@color/gold_soft"
+            app:trackCornerRadius="4dp"
+            app:trackThickness="7dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/progress_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotoslab_regular"
+                android:text="connecting..."
+                android:textColor="@color/ink"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/downloadSize"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter"
+                android:text="(2MB/50MB)"
+                android:textColor="@color/ink_faint"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelbtn"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
+                android:text="Cancel"
+                android:textColor="@color/ink_muted"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:cornerRadius="14dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

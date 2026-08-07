@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background2"
+    android:background="@color/surface_sepia"
     tools:context=".StoryPage">
 
     <LinearLayout
@@ -22,6 +22,8 @@
             android:id="@+id/deltaRelative"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/surface_sepia"
+            android:paddingVertical="6dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -30,14 +32,16 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
+                android:padding="7dp"
                 app:srcCompat="@drawable/back_arrow"
-                app:tint="@color/themeColor" />
+                app:tint="@color/ink" />
 
             <TextView
                 android:id="@+id/title_collection"
@@ -45,25 +49,25 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="0dp"
-                android:fontFamily="@font/robotoslab_regular"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/kalam_regular"
                 android:longClickable="true"
                 android:text="Full Story"
-                android:textColor="#454545"
-                android:textFontWeight="700"
-                android:textSize="27sp" />
+                android:textColor="@color/ink"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
 
             <ImageView
                 android:id="@+id/VipLottie"
-                android:layout_width="35dp"
-                android:layout_height="40dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="14dp"
+                android:background="@drawable/vip_pill_bg"
+                android:padding="7dp"
                 android:src="@drawable/crown" />
 
         </RelativeLayout>
@@ -88,117 +92,161 @@
             app:layout_constraintTop_toBottomOf="@+id/deltaRelative" />
 
 
-        <LinearLayout
+        <!-- The "page" of the book -->
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/scrollview_story_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFF8FB"
-            android:elevation="20dp"
-            android:orientation="vertical"
-            android:padding="5dp">
+            app:cardBackgroundColor="#FCF7EC"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="3dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.StoryCardTop"
+            app:strokeWidth="0dp">
 
-
-            <TextView
-                android:id="@+id/storyPage_Title_textview"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/kalam_regular"
-                android:gravity="center"
-                android:text="Story Title"
-                android:textColor="@color/themeColor"
-                android:textSize="25dp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:paddingHorizontal="6dp">
 
-
-            <ScrollView
-                android:id="@+id/scrolltext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <LinearLayout
+                <!-- Title block with gold rule -->
+                <TextView
+                    android:id="@+id/storyPage_Title_textview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="22dp"
+                    android:fontFamily="@font/kalam_regular"
+                    android:gravity="center"
+                    android:paddingHorizontal="22dp"
+                    android:text="Story Title"
+                    android:textColor="@color/ink"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="46dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/gold" />
 
 
-                    <TextView
-                        android:id="@+id/story_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top|start"
-                        android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/jaldi"
-                        android:text="                                                                                                                                                                                                                                                              Loading........"
-                        android:textColor="#434F5A"
-                        android:textSize="20dp" />
-
-
-
-                    <Button
-                        android:id="@+id/speakWithWriter"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/vip_membership_textbg"
-                        android:fontFamily="@font/inter"
-                        android:text="लेखक के साथ बात करे"
-                        android:textColor="@color/white"
-                        android:textSize="20dp" />
+                <ScrollView
+                    android:id="@+id/scrolltext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    android:scrollbars="none">
 
                     <LinearLayout
-                        android:id="@+id/storiesInsideparagraph"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background2"
                         android:orientation="vertical"
-                        android:padding="5dp">
+                        android:paddingBottom="88dp">
+
 
                         <TextView
+                            android:id="@+id/story_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="12dp"
+                            android:fontFamily="@font/jaldi"
+                            android:lineSpacingExtra="9dp"
+                            android:text="                                                                                                                                                                                                                                                              Loading........"
+                            android:textColor="#3E3A33"
+                            android:textSize="20sp" />
+
+
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/speakWithWriter"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:fontFamily="@font/kalam_regular"
-                            android:gravity="center"
-                            android:text="ईश कहानी के कुछ और भाग"
-                            android:textColor="@color/themeColor"
-                            android:textSize="20dp"
-                            android:textStyle="bold" />
+                            android:layout_gravity="center"
+                            android:layout_marginVertical="12dp"
+                            android:fontFamily="@font/inter"
+                            android:text="लेखक के साथ बात करे"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            app:backgroundTint="@color/gold"
+                            app:cornerRadius="18dp" />
+
+                        <LinearLayout
+                            android:id="@+id/storiesInsideparagraph"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/section_label_chip"
+                                android:fontFamily="@font/kalam_regular"
+                                android:gravity="center"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="7dp"
+                                android:text="ईश कहानी के कुछ और भाग"
+                                android:textColor="@color/ink"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/reportStoryBtn"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/inter"
+                            android:text="Report this story"
+                            android:textColor="@color/ink_faint"
+                            android:textSize="12sp"
+                            app:cornerRadius="14dp"
+                            app:icon="@drawable/ic_report_flag"
+                            app:iconGravity="textStart"
+                            app:iconSize="15dp"
+                            app:iconTint="@color/ink_faint" />
+
+                        <LinearLayout
+                            android:id="@+id/relatedStoriesLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/section_label_chip"
+                                android:fontFamily="@font/kalam_regular"
+                                android:gravity="center"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="7dp"
+                                android:text="ऐसी ही कुछ और कहानियाँ"
+                                android:textColor="@color/ink"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/relatedStoriesLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/background2"
-                        android:orientation="vertical"
-                        android:padding="5dp">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:fontFamily="@font/kalam_regular"
-                            android:gravity="center"
-                            android:text="ऐसी ही कुछ और कहानियाँ"
-                            android:textColor="@color/themeColor"
-                            android:textSize="20dp"
-                            android:textStyle="bold" />
+                </ScrollView>
 
-                    </LinearLayout>
+            </LinearLayout>
 
-                </LinearLayout>
-
-
-            </ScrollView>
-
-
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
 
     </LinearLayout>
@@ -208,70 +256,84 @@
         android:id="@+id/floatingActionButtonMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:backgroundTint="@color/themeColorlight"
+        android:layout_margin="22dp"
+        android:backgroundTint="@color/ink"
         android:clickable="true"
         android:focusable="true"
+        app:elevation="8dp"
+        app:fabCustomSize="58dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/floatingactionbar" />
+        app:maxImageSize="24dp"
+        app:srcCompat="@drawable/floatingactionbar"
+        app:tint="@color/gold_soft" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonCopy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/themeColorlight"
+        android:layout_marginRight="26dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/surface_ivory"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
+        app:elevation="4dp"
+        app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButtonMain"
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/floatingbar_copy"
+        app:tint="@color/ink"
         tools:ignore="VectorDrawableCompat" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/themeColorlight"
-
+        android:layout_marginRight="26dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/surface_ivory"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
+        app:elevation="4dp"
+        app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButtonCopy"
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/floatingbar_share"
+        app:tint="@color/ink"
         tools:ignore="VectorDrawableCompat" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/themeColorlight"
+        android:layout_marginRight="26dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/surface_ivory"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
+        app:elevation="4dp"
+        app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButtonShare"
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/floatingbar_textsize"
+        app:tint="@color/ink"
         tools:ignore="VectorDrawableCompat" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionFavouriteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/themeColorlight"
+        android:layout_marginRight="26dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/surface_ivory"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
+        app:elevation="4dp"
+        app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButtonText"
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/favourote_border"

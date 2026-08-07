@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background2"
+    android:background="@drawable/audio_player_bg_gradient"
     android:orientation="vertical"
     tools:context=".AudioPlayer">
 
@@ -20,53 +20,68 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingVertical="6dp">
 
             <ImageView
                 android:id="@+id/back_arrow"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
                 android:onClick="backBtn"
-                app:tint="@color/themeColor"
+                android:padding="7dp"
+                app:tint="@color/gold_soft"
                 app:srcCompat="@drawable/back_arrow" />
 
             <TextView
                 android:id="@+id/title_collection"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_alignParentTop="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="120dp"
-                android:layout_marginTop="0dp"
-                android:fontFamily="@font/rajdhani_regular"
+                android:fontFamily="@font/inter"
                 android:gravity="center"
+                android:letterSpacing="0.14"
                 android:longClickable="true"
-                android:text="Audio Player"
-                android:textColor="#454545"
-                android:textFontWeight="700"
-                android:textSize="27sp" />
+                android:text="अब चल रहा है"
+                android:textColor="@color/gold_soft"
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/downloadBtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_toRightOf="@+id/title_collection"
+                android:layout_marginEnd="14dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="backBtn"
-                app:srcCompat="@drawable/download" />
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_download_line"
+                app:tint="@color/gold_soft" />
+
+            <ImageView
+                android:id="@+id/reportBtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="2dp"
+                android:layout_toStartOf="@id/downloadBtn"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Report this audio story"
+                android:focusable="true"
+                android:padding="9dp"
+                app:srcCompat="@drawable/ic_report_flag"
+                app:tint="@color/gold_soft" />
 
         </RelativeLayout>
 
@@ -75,7 +90,6 @@
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background2"
             android:visibility="gone"
             ads:adSize="BANNER"
             ads:adUnitId="@string/BannerAd" />
@@ -98,70 +112,84 @@
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/playBtn_and_SeekbarLayout"
-
         app:layout_constraintTop_toBottomOf="@id/relativeLayout">
 
+        <!-- Album art plate -->
+        <FrameLayout
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/art_frame_bg">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/mp3" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="104dp"
+                android:layout_height="104dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/mp3" />
+
+        </FrameLayout>
 
 
         <TextView
             android:id="@+id/storyTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="26dp"
+            android:fontFamily="@font/kalam_regular"
             android:gravity="center"
-            android:padding="5dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:paddingHorizontal="28dp"
             android:text="Audio Player"
             android:textAlignment="center"
-            android:textColor="@color/textcolor2"
-            android:textSize="25sp"
-         />
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="14dp"
+            android:background="@color/gold" />
 
         <LinearLayout
             android:id="@+id/progressbar"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <ProgressBar
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/progressbarUnit"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:layout_gravity="center"
-                android:indeterminateTint="@color/themeColor"
-                />
+                android:indeterminate="false"
+                app:indicatorColor="@color/gold"
+                app:trackColor="#33FFFFFF"
+                app:trackThickness="3dp" />
 
             <TextView
                 android:id="@+id/message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="@font/rajdhani_regular"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/inter"
                 android:gravity="center"
                 android:text="loading from server.... (audio will play at 5%)"
                 android:textAlignment="center"
-                android:textColor="@color/textcolor2"
-                android:textSize="13sp"
-                />
+                android:textColor="#B3FFFFFF"
+                android:textSize="12sp" />
         </LinearLayout>
 
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="86dp"
             android:elevation="5dp"
             android:visibility="invisible"
             app:lottie_autoPlay="true"
@@ -176,7 +204,7 @@
         android:id="@+id/playBtn_and_SeekbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="26dp"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="invisible"
@@ -187,41 +215,44 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="26dp">
 
             <SeekBar
                 android:id="@+id/seekbar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
                 android:layout_weight="3"
                 android:progress="0"
-                android:progressBackgroundTint="@color/themeColor"
-                android:progressTint="@color/themeColor"
-                android:thumbTint="@color/themeColor" />
+                android:progressBackgroundTint="#40FFFFFF"
+                android:progressTint="@color/gold"
+                android:thumbTint="@color/gold" />
 
             <TextView
                 android:id="@+id/currentTime"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/rajdhani_regular"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/inter"
                 android:gravity="center"
                 android:text="00:00"
-                android:textColor="@color/textcolor"
-                android:textSize="20dp"
+                android:textColor="@color/gold_soft"
+                android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/playBtn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="82dp"
+            android:layout_height="82dp"
             android:layout_gravity="center"
-            android:layout_margin="15dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/circle_button_bg"
+            android:elevation="8dp"
             android:orientation="horizontal"
-            android:scaleType="fitXY"
+            android:padding="21dp"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

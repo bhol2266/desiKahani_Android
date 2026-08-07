@@ -18,13 +18,17 @@ import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
-import soup.neumorphism.NeumorphCardView;
+import com.google.android.material.card.MaterialCardView;
 
 public class ftab1 extends Fragment {
     Context context = getActivity();
-    soup.neumorphism.NeumorphCardView collection1, collection2, collection3, collection4, collection5, collection6;
+    MaterialCardView collection1, collection2, collection3, collection4, collection5, collection6;
     private String TAG = "TAGA";
+
+    /** Gutter between grid cards, and between the cards and the screen edges. */
+    private static final float GRID_GAP_DP = 14f;
 
     public ftab1() {
         // Required empty public constructor
@@ -44,34 +48,35 @@ public class ftab1 extends Fragment {
 
 
     private void gridItems(View view) {
-        if (SplashScreen.App_updating.equals("active")) {
+        // Update mode is an absolute override - it outranks the login-count staging
+        // and VIP alike.
+        if ("active".equals(SplashScreen.App_updating)) {
             //fake content while upadting app
             String[] Category_List = {"प्रेम कहानी 1", "प्रेम कहानी 2", "प्रेम कहानी 3", "प्रेम कहानी 4", "प्रेम कहानी 5", "प्रेम कहानी 6"};
             createGridItems(Category_List, view, "fake content while upadting app");
-            SplashScreen.DB_TABLE_NAME = "FakeStory";
         } else {
 
             if (SplashScreen.Login_Times < 4) {
                 //Mixed content
                 String[] Category_List = {"प्रेम कहानी 1", "प्रेम कहानी 2", "प्रेम कहानी 3", "देसी कहानी 1", "देसी कहानी 2", "प्रेम कहानी 6"};
                 createGridItems(Category_List, view, "Mixed content");
-                SplashScreen.DB_TABLE_NAME = "FakeStory";
 
             } else if (SplashScreen.Login_Times < 6) {
                 // censored Content
                 String[] Category_List = {"देसी कहानी 1", "देसी कहानी 2", "देसी कहानी 3", "देसी कहानी 4", "देसी कहानी 5", "देसी कहानी 6"};
                 createGridItems(Category_List, view, "censored Content");
-                SplashScreen.DB_TABLE_NAME = "FakeStory";
 
             } else {
                 // full Content
                 String[] Category_List = {"Latest Stories", "Aunty Sex Story", "Bhabhi Sex", "Desi Kahani", "Family Sex Stories", "First Time Sex", "Gay Sex Stories", "Group Sex Stories", "Indian Sex Stories", "Sali Sex", "Teacher Sex", "Teenage Girl", "XXX Kahani", "अन्तर्वासना", "हिंदी सेक्स स्टोरीज"};
                 createGridItems(Category_List, view, "full Content");
-                SplashScreen.DB_TABLE_NAME = "StoryItems";
 
             }
         }
 
+        // Derived from the same rules the process-restore path uses, so the two can
+        // never disagree about which table to read.
+        SplashScreen.DB_TABLE_NAME = SplashScreen.resolveContentTable();
     }
 
     private void createGridItems(String[] Category_List, View view, String contentType) {
@@ -86,8 +91,10 @@ public class ftab1 extends Fragment {
             View vieww = getLayoutInflater().inflate(R.layout.homepage_griditem, null);
             TextView categoryTextView = vieww.findViewById(R.id.Textview1);
             ImageView auntyImageView = vieww.findViewById(R.id.auntyImageView);
-            NeumorphCardView cardView = vieww.findViewById(R.id.cardview);
+            MaterialCardView cardView = vieww.findViewById(R.id.cardview);
             LinearLayout lockLayout = vieww.findViewById(R.id.lockLayout);
+            TextView itemIndexBadge = vieww.findViewById(R.id.itemIndexBadge);
+            itemIndexBadge.setText(String.format(Locale.getDefault(), "%02d", i + 1));
 
             if (contentType.equals("full Content") && !SplashScreen.Vip_Member) {
                 if (i != 0) {
@@ -146,11 +153,23 @@ public class ftab1 extends Fragment {
             }
 
 
+            // Equal gutters: with a half-gap of padding on the GridLayout and a
+            // half-gap margin on every card, the outer edges and the centre seam
+            // all end up exactly GAP wide.
+            //   width = (screen - 3 * GAP) / 2
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            float requiredWidth = (float) (displayMetrics.widthPixels / 2.2);
+            int gap = Math.round(GRID_GAP_DP * displayMetrics.density);
+            int halfGap = gap / 2;
+            int requiredWidth = (displayMetrics.widthPixels - (3 * gap)) / 2;
+            int requiredHeight = Math.round(requiredWidth * 1.18f);
 
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams((int) requiredWidth, 800);
+            // Must be GridLayout.LayoutParams - using FrameLayout.LayoutParams here
+            // silently discarded the margins declared in homepage_griditem.xml.
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = requiredWidth;
+            params.height = requiredHeight;
+            params.setMargins(halfGap, halfGap, halfGap, halfGap);
             cardView.setLayoutParams(params);
 
             int finalI = i;

@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
 
-import soup.neumorphism.NeumorphCardView;
+import com.google.android.material.card.MaterialCardView;
 
 public class Vip_CustomAdapter extends BaseAdapter {
 
@@ -98,7 +98,7 @@ public class Vip_CustomAdapter extends BaseAdapter {
         }
 
 
-        NeumorphCardView lauchBilling = view.findViewById(R.id.launchBilling);
+        MaterialCardView lauchBilling = view.findViewById(R.id.launchBilling);
         ProductDetails finalProductDetails = productDetails;
         lauchBilling.setOnClickListener(new View.OnClickListener() {
             @Override

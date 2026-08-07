@@ -22,7 +22,9 @@ public class TimerService extends Service {
         timer = new CountDownTimer(ONE_HOUR, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                // Scoped to our own package - the receiver is NOT_EXPORTED.
                 Intent intent = new Intent("timer-update");
+                intent.setPackage(getPackageName());
                 intent.putExtra("remainingTime", millisUntilFinished);
                 sendBroadcast(intent);
             }
@@ -30,6 +32,7 @@ public class TimerService extends Service {
             @Override
             public void onFinish() {
                 Intent intent = new Intent("timer-finish");
+                intent.setPackage(getPackageName());
                 sendBroadcast(intent);
             }
         };

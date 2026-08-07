@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
@@ -42,8 +43,11 @@ import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PendingPurchasesParams;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
+import com.android.billingclient.api.QueryProductDetailsResult;
+import com.android.billingclient.api.QueryPurchasesParams;
 import com.google.common.collect.ImmutableList;
 
 import java.text.SimpleDateFormat;
@@ -54,7 +58,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class VipMembership extends AppCompatActivity {
+public class VipMembership extends AppCompatActivity implements DrawsUnderStatusBar {
 
 
     AlertDialog dialog;
@@ -65,7 +69,10 @@ public class VipMembership extends AppCompatActivity {
     private BroadcastReceiver timerUpdateReceiver, timerUpdateReceiverCheck;
     private boolean isTimerRunning = false;
     int backpressCount = 0;
-    ArrayList<ProductDetails> mlist_offer;
+    // Initialised here, not just in createListView(): that runs from the async
+    // billing callback, so pressing back before billing responds used to hit a
+    // NullPointerException in onBackPressed().
+    ArrayList<ProductDetails> mlist_offer = new ArrayList<>();
 
 
     PurchasesUpdatedListener purchaseUpdatedListener = new PurchasesUpdatedListener() {
@@ -112,18 +119,8 @@ public class VipMembership extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        int Validity_period = 0;
-                        Log.d("sdafasdfsdaf", "run: "+purchase.getProducts().get(0));
-                        if (purchase.getProducts().get(0).contains("vip_1")) {
-                            Validity_period = 30;
-                        } else if (purchase.getProducts().get(0).contains("vip_3")) {
-                            Validity_period = 90;
-                        } else if (purchase.getProducts().get(0).contains("vip_12")){
-                            Validity_period = 365;
-                        }else{
-                            //lifetime
-                            Validity_period = 3650;
-                        }
+                        // Same mapping the restore path uses, so the two cannot drift.
+                        int Validity_period = validityDaysFor(purchase.getProducts().get(0));
 
                         savePurchaseDetails_inSharedPreference(purchase.getPurchaseToken(), Validity_period, purchase.getPurchaseTime());
 
@@ -164,6 +161,13 @@ public class VipMembership extends AppCompatActivity {
 
 
 
+        // While the app is in update mode the benefits list is hidden, which also
+        // frees the vertical space the plan cards need.
+        View benefitsCard = findViewById(R.id.benefitsCard);
+        if (benefitsCard != null && "active".equals(SplashScreen.App_updating)) {
+            benefitsCard.setVisibility(View.GONE);
+        }
+
         checkTimeRunning();
         billingfunction();
 
@@ -174,7 +178,10 @@ public class VipMembership extends AppCompatActivity {
         //Initialize
         billingClient = BillingClient.newBuilder(VipMembership.this)
                 .setListener(purchaseUpdatedListener)
-                .enablePendingPurchases()
+                .enablePendingPurchases(
+                        PendingPurchasesParams.newBuilder()
+                                .enableOneTimeProducts()
+                                .build())
                 .build();
 
 
@@ -201,7 +208,9 @@ public class VipMembership extends AppCompatActivity {
                     } else {
                         getProductDetails("no offer");
                     }
-                    // The BillingClient is ready. You can query purchases here.
+                    // Re-grant membership from Google Play if this device lost its
+                    // local record (e.g. after a reinstall or "clear data").
+                    restorePurchases();
                 }
             }
 
@@ -245,8 +254,9 @@ public class VipMembership extends AppCompatActivity {
         QueryProductDetailsParams queryProductDetailsParams = queryBuilder.build();
 
         billingClient.queryProductDetailsAsync(queryProductDetailsParams, new ProductDetailsResponseListener() {
-            public void onProductDetailsResponse(BillingResult billingResult, List<ProductDetails> productDetailsList) {
+            public void onProductDetailsResponse(BillingResult billingResult, QueryProductDetailsResult queryProductDetailsResult) {
                 // Handle the product details response for multiple products
+                List<ProductDetails> productDetailsList = queryProductDetailsResult.getProductDetailsList();
 
                 ((Activity) VipMembership.this).runOnUiThread(new Runnable() {
                     @Override
@@ -318,22 +328,99 @@ public class VipMembership extends AppCompatActivity {
 
 
     private void savePurchaseDetails_inSharedPreference(String purchaseToken, int validity_period, long purchaseTime) {
-        //Reading purchase Token
-        SharedPreferences sh = getSharedPreferences("UserInfo", MODE_PRIVATE);
-        String a = sh.getString("purchaseToken", purchaseToken);
-
-        // Creating purchase Token into SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
         SharedPreferences.Editor myEdit = sharedPreferences.edit();
         myEdit.putString("purchaseToken", purchaseToken);
         myEdit.putInt("validity_period", validity_period);
 
-        Date currentDate = new Date();
+        // Use Google Play's own purchase time, NOT today's date. This method was
+        // handed purchaseTime but ignored it, which meant a restore (or any re-save)
+        // silently reset the validity clock and handed out free extra days.
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String dateString = dateFormat.format(currentDate);
-        myEdit.putString("purchase_date", dateString);
+        myEdit.putString("purchase_date", dateFormat.format(new Date(purchaseTime)));
         myEdit.commit();
 
+        long expiryMillis = purchaseTime + (validity_period * 86400000L);
+        MembershipReminderScheduler.schedule(getApplicationContext(), expiryMillis);
+    }
+
+    /** Membership length implied by a product id. */
+    private static int validityDaysFor(String productId) {
+        if (productId == null) return 0;
+        if (productId.contains("vip_1")) return 30;
+        if (productId.contains("vip_3")) return 90;
+        if (productId.contains("vip_12")) return 365;
+        return 3650; // lifetime
+    }
+
+    /**
+     * Re-grants membership from Google Play.
+     *
+     * The membership record lives in SharedPreferences, which Android deletes on
+     * uninstall - so a paying member who reinstalled lost access even with validity
+     * remaining. The purchases themselves survive: they are acknowledged but never
+     * consumed, so they stay owned by the Google account permanently and can be
+     * queried back. Play also reports the original purchase time, so the remaining
+     * validity is restored accurately rather than being reset.
+     *
+     * Runs whenever billing connects, so simply opening this screen recovers it.
+     */
+    private void restorePurchases() {
+        billingClient.queryPurchasesAsync(
+                QueryPurchasesParams.newBuilder()
+                        .setProductType(BillingClient.ProductType.INAPP)
+                        .build(),
+                (billingResult, purchases) -> {
+                    if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK
+                            || purchases == null || purchases.isEmpty()) {
+                        return;
+                    }
+
+                    String bestToken = null;
+                    int bestValidity = 0;
+                    long bestPurchaseTime = 0L;
+                    long bestExpiry = 0L;
+
+                    for (Purchase p : purchases) {
+                        if (p.getPurchaseState() != Purchase.PurchaseState.PURCHASED) continue;
+                        if (p.getProducts().isEmpty()) continue;
+
+                        // A purchase made on another device may not be acknowledged yet.
+                        if (!p.isAcknowledged()) {
+                            billingClient.acknowledgePurchase(
+                                    AcknowledgePurchaseParams.newBuilder()
+                                            .setPurchaseToken(p.getPurchaseToken()).build(),
+                                    r -> Log.d(SplashScreen.TAG, "restore: acknowledged"));
+                        }
+
+                        int days = validityDaysFor(p.getProducts().get(0));
+                        long expiry = p.getPurchaseTime() + (days * 86400000L);
+                        // Keep whichever owned plan runs longest.
+                        if (expiry > bestExpiry) {
+                            bestExpiry = expiry;
+                            bestToken = p.getPurchaseToken();
+                            bestValidity = days;
+                            bestPurchaseTime = p.getPurchaseTime();
+                        }
+                    }
+
+                    if (bestToken == null || bestExpiry <= System.currentTimeMillis()) {
+                        return; // nothing owned, or everything already expired
+                    }
+
+                    SharedPreferences sp = getSharedPreferences("UserInfo", MODE_PRIVATE);
+                    boolean wasMissing = !bestToken.equals(sp.getString("purchaseToken", "not set"));
+
+                    savePurchaseDetails_inSharedPreference(bestToken, bestValidity, bestPurchaseTime);
+                    // Re-derive Vip_Member / Login_Times / DB_TABLE_NAME from the
+                    // record we just wrote, so the app reflects it immediately.
+                    SplashScreen.restoreSessionState(getApplicationContext());
+
+                    if (wasMissing) {
+                        runOnUiThread(() -> Toast.makeText(VipMembership.this,
+                                "Membership restored", Toast.LENGTH_LONG).show());
+                    }
+                });
     }
 
 
@@ -349,7 +436,7 @@ public class VipMembership extends AppCompatActivity {
         AlertDialog dialog;
 
         final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(VipMembership.this);
-        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        LayoutInflater inflater = LayoutInflater.from(VipMembership.this);
         View promptView = inflater.inflate(R.layout.membership_exit_dialog, null);
         builder.setView(promptView);
         builder.setCancelable(true);
@@ -484,11 +571,10 @@ public class VipMembership extends AppCompatActivity {
             filter.addAction("timer-finish");
 
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                registerReceiver(timerUpdateReceiverCheck, filter, Context.RECEIVER_EXPORTED);
-            } else {
-                registerReceiver(timerUpdateReceiverCheck, filter);
-            }
+            // NOT_EXPORTED: only our own TimerService sends these. Exported, any
+            // installed app could broadcast "timer-finish" and kill the offer.
+            ContextCompat.registerReceiver(this, timerUpdateReceiverCheck, filter,
+                    ContextCompat.RECEIVER_NOT_EXPORTED);
 
         }
 
@@ -512,11 +598,9 @@ public class VipMembership extends AppCompatActivity {
         filter.addAction("timer-update");
         filter.addAction("timer-finish");
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(timerUpdateReceiver, filter, Context.RECEIVER_EXPORTED);
-        } else {
-            registerReceiver(timerUpdateReceiver, filter);
-        }
+        // Was also gated on API 26 rather than 33, which was the wrong constant.
+        ContextCompat.registerReceiver(this, timerUpdateReceiver, filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED);
 
 
 
@@ -557,14 +641,46 @@ public class VipMembership extends AppCompatActivity {
 
 
     private void actionBar() {
+        // Close control in the hero. Routed through onBackPressed() rather than
+        // finish() so the exit offer still gets its chance to appear.
+        View close = findViewById(R.id.vipCloseBtn);
+        if (close != null) {
+            close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
 
+        // The "User Agreement" and "Privacy Policy" labels under the plan list had
+        // no click handlers at all, so they were dead text. Both now open the
+        // in-app documents.
+        TextView terms = findViewById(R.id.terms);
+        if (terms != null) {
+            terms.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(VipMembership.this, TermsAndConditions.class));
+                }
+            });
+        }
 
+        TextView privacy = findViewById(R.id.privacy);
+        if (privacy != null) {
+            privacy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(VipMembership.this, PrivacyPolicy.class));
+                }
+            });
+        }
     }
 
 
     @Override
     public void onBackPressed() {
-        if (backpressCount == 0 && mlist_offer.size() != 0) {
+        if (backpressCount == 0 && mlist_offer != null && !mlist_offer.isEmpty()) {
             exit_dialog();
             backpressCount++;
         } else {

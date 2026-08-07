@@ -4,180 +4,312 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/surface_cream"
     tools:context=".VipMembership">
 
-
+    <!-- NOTE: deliberately NOT wrapped in a ScrollView - #pricelist is a ListView,
+         which cannot measure its children inside one. Everything is sized to fit
+         a single screen instead, so all plans stay visible without scrolling. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="6dp">
 
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="fitXY"
-
-            android:src="@drawable/vip_banner" />
-
-
-        <LinearLayout
+        <!-- ================= HERO =================
+             Ink gradient carrying the app's own identity, drawn behind the status
+             bar (VipMembership implements DrawsUnderStatusBar). -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:background="@drawable/vip_hero_bg">
 
+            <ImageView
+                android:id="@+id/vipCloseBtn"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="14dp"
+                android:background="@drawable/vip_close_bg"
+                android:clickable="true"
+                android:contentDescription="Close"
+                android:focusable="true"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_close_line"
+                app:tint="@color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="18dp"
+                android:paddingBottom="20dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/vip_lottie"
+                    app:lottie_speed="0.8" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/inter"
+                    android:letterSpacing="0.28"
+                    android:text="MEMBERSHIP"
+                    android:textColor="@color/gold"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/kalam_regular"
+                    android:text="सब कुछ अनलॉक करें"
+                    android:textColor="@color/white"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/gold" />
+
+            </LinearLayout>
+        </FrameLayout>
+
+
+        <!-- ================= BENEFITS =================
+             Compact rows rather than a tall card, so the plans stay above the fold.
+             Hidden entirely while the app is in update mode. -->
+        <LinearLayout
+            android:id="@+id/benefitsCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="14dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="3dp">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/vip_benefit_dot"
+                    android:padding="3dp"
                     android:src="@drawable/no_ads" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:fontFamily="@font/inter"
+                    android:paddingStart="12dp"
                     android:text="No more Ads will be shown."
-                    android:textColor="@color/semi_black"
-                    android:textSize="14dp" />
-
+                    android:textColor="@color/ink_muted"
+                    android:textSize="12.5sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="3dp">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/vip_benefit_dot"
+                    android:padding="3dp"
                     android:src="@drawable/unlocked" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:fontFamily="@font/inter"
+                    android:paddingStart="12dp"
                     android:text="Unlock latest stories with daily Notification."
-                    android:textColor="@color/semi_black"
-                    android:textSize="14dp" />
-
+                    android:textColor="@color/ink_muted"
+                    android:textSize="12.5sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="3dp">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/vip_benefit_dot"
+                    android:padding="3dp"
                     android:src="@drawable/chat" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:fontFamily="@font/inter"
+                    android:paddingStart="12dp"
                     android:text="Chat with story writers and give feedback."
-                    android:textColor="@color/semi_black"
-                    android:textSize="14dp" />
-
+                    android:textColor="@color/ink_muted"
+                    android:textSize="12.5sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="3dp">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/vip_benefit_dot"
+                    android:padding="3dp"
                     android:src="@drawable/telephone" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:fontFamily="@font/inter"
+                    android:paddingStart="12dp"
                     android:text="Get aunties and bhabhi contact number."
-                    android:textColor="@color/semi_black"
-                    android:textSize="14dp" />
-
+                    android:textColor="@color/ink_muted"
+                    android:textSize="12.5sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="3dp">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/vip_benefit_dot"
+                    android:padding="3dp"
                     android:src="@drawable/sex" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="15dp"
+                    android:fontFamily="@font/inter"
+                    android:paddingStart="12dp"
                     android:text="Get a chance for Ghapaghap."
-                    android:textColor="@color/semi_black"
-                    android:textSize="14dp" />
-
+                    android:textColor="@color/ink_muted"
+                    android:textSize="12.5sp" />
             </LinearLayout>
-
 
         </LinearLayout>
 
 
+        <!-- ================= OFFER TIMER ================= -->
+        <TextView
+            android:id="@+id/offerTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/offer_timer_bg"
+            android:drawablePadding="6dp"
+            android:fontFamily="@font/inter"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="5dp"
+            android:text="Offer ends in 59:00"
+            android:textColor="#C0392B"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+
+        <!-- ================= PLANS ================= -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="2dp"
+            android:text="प्लान चुनें"
+            android:textAppearance="@style/TextAppearance.Editorial.SectionHeader"
+            android:textSize="17sp" />
+
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="4dp"
+            android:paddingBottom="8dp">
 
+            <!-- Bounded (match_parent inside the weighted frame) so the list keeps
+                 its own scrolling if plans are ever added, while sitting directly
+                 under its header. -->
+            <!-- Spacing lives here, not on the row: ListView items are laid out with
+                 AbsListView.LayoutParams, which ignores margins on the item root.
+                 A transparent divider provides the gap between cards, and the
+                 list's own padding provides the side inset. -->
+            <ListView
+                android:id="@+id/pricelist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="13dp"
+                android:paddingHorizontal="18dp"
+                android:paddingBottom="6dp"
+                android:scrollbars="none" />
 
-
-        <ListView
-            android:id="@+id/pricelist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp" />
-
-            <ProgressBar
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/coinsItem_progressbar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                style="@style/Widget.Editorial.ProgressIndicator"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:layout_gravity="center"
-                android:indeterminateTint="@color/themeColor" />
+                android:indeterminate="true" />
         </FrameLayout>
 
+
+        <!-- ================= FOOTER ================= -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/divider_warm" />
 
         <TextView
             android:id="@+id/subscriptionDetailText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
-            android:paddingRight="10dp"
-            android:text="One time payment. By tapping Continue, your payment will be charged to your Google account, and your purchase is refundable within 24 hrs if something goes wrong. By tapping Continue, you agree to our"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter"
+            android:paddingHorizontal="22dp"
+            android:text="One time payment, charged to your Google account. Not a subscription - it will not renew automatically."
             android:textAlignment="center"
-            android:textColor="@color/semi_black"
-            android:textSize="12dp" />
+            android:textColor="@color/ink_faint"
+            android:textSize="10.5sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -185,82 +317,73 @@
                 android:id="@+id/terms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/inter"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="4dp"
                 android:text="User Agreement"
-                android:textAlignment="center"
-                android:textColor="@color/semi_black"
-                android:textSize="14dp" />
+                android:textColor="@color/gold_deep"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:text="&amp;"
-                android:textAlignment="center"
-                android:textColor="@color/semi_black"
-                android:textSize="12dp" />
+                android:fontFamily="@font/inter"
+                android:text="•"
+                android:textColor="@color/ink_faint"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/privacy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/inter"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="4dp"
                 android:text="Privacy Policy"
-                android:textAlignment="center"
-                android:textColor="@color/semi_black"
-                android:textSize="14dp" />
-
+                android:textColor="@color/gold_deep"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
-
-
-
-        <TextView
-            android:id="@+id/offerTimer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="7dp"
-            android:fontFamily="@font/inter"
-            android:text="Offer ends in 59:00"
-            android:textColor="#DF2A1C"
-            android:textSize="16dp"
-            android:visibility="gone" />
-
 
     </LinearLayout>
 
 
+    <!-- ================= PROCESSING OVERLAY ================= -->
     <LinearLayout
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="#80000000"
+        android:background="#B30D1B29"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:orientation="vertical"
         android:visibility="gone">
 
-        <ProgressBar
-            style="?android:attr/progressBarStyle"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-
-            android:backgroundTint="@color/themeColor"
-            android:indeterminateTint="@color/themeColor" />
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:indeterminate="true"
+            app:indicatorColor="@color/gold"
+            app:trackColor="#40FFFFFF"
+            app:trackThickness="4dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="14dp"
             android:fontFamily="@font/inter"
-            android:gravity="center"
-            android:text="processing.."
-            android:textColor="#FDE4C7"
-            android:textSize="25dp" />
+            android:text="processing..."
+            android:textColor="@color/gold_soft"
+            android:textSize="14sp" />
     </LinearLayout>
+
 </FrameLayout>

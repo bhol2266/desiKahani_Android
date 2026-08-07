@@ -81,7 +81,7 @@ public class SplashScreen extends AppCompatActivity {
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
 
     public static int DB_VERSION = 1;//manual set
-    public static int currentApp_Version = 1;//manual set
+    public static int currentApp_Version = 2;//manual set
     public static int Firebase_Version_Code = 1;//manual set
     public static int DB_VERSION_INSIDE_TABLE = 2; //manual set
     Handler handlerr;
@@ -227,8 +227,10 @@ public class SplashScreen extends AppCompatActivity {
             handler2.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    // Offline: keep the cached App_updating restored in
+                    // MyApplication. Clearing it here would let a failed config
+                    // read unlock real content, which must never outrank update mode.
                     if (Login_Times > 5) {
-                        App_updating = "inactive";
                         Ads_State = "active";
                         Ad_Network_Name = "admob";
                     }
@@ -268,6 +270,9 @@ public class SplashScreen extends AppCompatActivity {
                 databaseURL = (String) snapshot.child("databaseURL").getValue();
                 API_URL = (String) snapshot.child("API_URL").getValue();
 
+                // Keep a local copy so these survive the process being killed.
+                cacheRemoteConfig(SplashScreen.this);
+
 
                 Handler handler2 = new Handler();
                 handler2.postDelayed(new Runnable() {
@@ -281,8 +286,8 @@ public class SplashScreen extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // As above: do not clear App_updating on a failed read.
                 if (Login_Times > 5) {
-                    App_updating = "inactive";
                     Ads_State = "active";
                     Ad_Network_Name = "admob";
                 }
@@ -318,6 +323,21 @@ public class SplashScreen extends AppCompatActivity {
 
         if (SplashScreen.Vip_Member) {
             vipMemberPrivileges();
+        }
+
+        // Coming from the audio notification's PendingIntent (app was relaunched from a killed
+        // state) — route straight into AudioPlayer with the extras carried by the notification.
+        if ("ComingFromAudioPlayer".equals(getIntent().getStringExtra("ComingFromAudioPlayer"))) {
+            Intent intent = new Intent(getApplicationContext(), AudioPlayer.class);
+            intent.putExtra("storyURL", getIntent().getStringExtra("storyURL"));
+            intent.putExtra("storyName", getIntent().getStringExtra("storyName"));
+            intent.putExtra("title", getIntent().getStringExtra("title"));
+            intent.putExtra("audioHref", getIntent().getStringExtra("audioHref"));
+            intent.putExtra("AudioDownloadState", getIntent().getStringExtra("AudioDownloadState"));
+            intent.putExtra("ComingFromAudioPlayer", getIntent().getStringExtra("ComingFromAudioPlayer"));
+            startActivity(intent);
+            finish();
+            return;
         }
 
         if (Notification_Intent_Firebase.equals("active")) {
@@ -380,76 +400,168 @@ public class SplashScreen extends AppCompatActivity {
 
     private void sharedPrefrences() {
 
-        //Reading Login Times
-        SharedPreferences sh = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        SharedPreferences sh = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        //Reading Login Times, then writing the incremented value back.
         int a = sh.getInt("loginTimes", 0);
         Login_Times = a + 1;
+        sh.edit().putInt("loginTimes", a + 1).commit();
 
-        // Updating Login Times data into SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
-        SharedPreferences.Editor myEdit = sharedPreferences.edit();
-        myEdit.putInt("loginTimes", a + 1);
-        myEdit.commit();
-
-        //Reading purchase Token
-        SharedPreferences sharedPreferences1 = SplashScreen.this.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
-        String purchaseToken = sharedPreferences1.getString("purchaseToken", "not set");
-        int validity_period = sharedPreferences1.getInt("validity_period", 0);
-        String purchase_date = sharedPreferences1.getString("purchase_date", "not set");
-
-        if (purchaseToken.equals("not set") || validity_period == 0) {
+        if (!hasPurchaseRecord(sh)) {
             return;
         }
 
+        Vip_Member = isMembershipActive(sh);
+        if (!Vip_Member) {
+            Toast.makeText(this, "Your Membership has expried", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        // Convert String back to Date
+    /** SharedPreferences file holding both the login counter and the cached config. */
+    private static final String PREFS_NAME = "UserInfo";
+
+    /** Whether a purchase has ever been recorded on this device. */
+    static boolean hasPurchaseRecord(SharedPreferences sp) {
+        return !"not set".equals(sp.getString("purchaseToken", "not set"))
+                && sp.getInt("validity_period", 0) != 0;
+    }
+
+    /**
+     * Epoch millis this device's stored purchase expires, or -1 if there's no
+     * parseable purchase record. Shared by isMembershipActive(), the home-grid
+     * renewal banner, and the pre-expiry reminder scheduling.
+     */
+    static long expiryMillis(SharedPreferences sp) {
+        if (!hasPurchaseRecord(sp)) return -1;
+
+        String purchase_date = sp.getString("purchase_date", "not set");
+        int validity_period = sp.getInt("validity_period", 0);
+        if ("not set".equals(purchase_date)) return -1;
+
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-            // Parse the original date
             Date originalDate = dateFormat.parse(purchase_date);
+            if (originalDate == null) return -1;
 
-            // Create a Calendar instance and set it to the original date
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(originalDate);
-
-            // Add 30 days to the original date
             calendar.add(Calendar.DAY_OF_MONTH, validity_period);
-
-            // Get the resulting date
-            Date newDate = calendar.getTime();
-
-            // Format the new date as a string
-            String expirationDateString = dateFormat.format(newDate);
-
-            Log.d(TAG, "Membership Expiry Date: " + expirationDateString);
-            // Get the current date
-            Date currentDate = new Date();
-            String currentDateString = dateFormat.format(currentDate);
-
-
-            // Compare the new date with the current date
-            if (expirationDateString.equals(currentDateString)) {
-                Vip_Member = false;
-                Toast.makeText(this, "Your Membership has expried", Toast.LENGTH_SHORT).show();
-            } else if (newDate.after(currentDate)) {
-                Vip_Member = true;
-
-            } else if (newDate.before(currentDate)) {
-                Toast.makeText(this, "Your Membership has expried", Toast.LENGTH_SHORT).show();
-                Vip_Member = false;
-
-            }
-
-
-        } catch (ParseException | java.text.ParseException e) {
+            return calendar.getTimeInMillis();
+        } catch (Exception e) {
             e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * True when the stored purchase is still inside its validity window.
+     * Pure check with no UI, so it is safe to call during process restore.
+     */
+    static boolean isMembershipActive(SharedPreferences sp) {
+        long expiry = expiryMillis(sp);
+        if (expiry == -1) return false;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date now = new Date();
+        Log.d(TAG, "Membership Expiry Date: " + dateFormat.format(new Date(expiry)));
+
+        // Expiring today counts as expired - matches the original behaviour.
+        if (dateFormat.format(new Date(expiry)).equals(dateFormat.format(now))) return false;
+        return expiry > now.getTime();
+    }
+
+    /**
+     * Days since membership lapsed, or -1 if membership is still active or there's
+     * no record at all. Used to show the home-grid renewal banner for a short
+     * window after expiry rather than nagging forever.
+     */
+    static int daysSinceExpiry(SharedPreferences sp) {
+        if (isMembershipActive(sp)) return -1;
+        long expiry = expiryMillis(sp);
+        if (expiry == -1) return -1;
+
+        long diff = System.currentTimeMillis() - expiry;
+        if (diff < 0) return -1;
+        return (int) (diff / 86400000L);
+    }
+
+    /**
+     * Which SQLite table the current gating state implies. Single source of truth,
+     * so ftab1 and the process-restore path below cannot drift apart.
+     */
+    public static String resolveContentTable() {
+        if ("active".equals(App_updating)) return "FakeStory";   // update mode wins
+        return (Login_Times >= 6) ? "StoryItems" : "FakeStory";
+    }
+
+    /** Persists the remote config so it survives the process being killed. */
+    static void cacheRemoteConfig(Context ctx) {
+        SharedPreferences.Editor e =
+                ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit();
+        if (App_updating != null) e.putString("cfg_App_updating", App_updating);
+        if (Ads_State != null) e.putString("cfg_Ads_State", Ads_State);
+        if (Ad_Network_Name != null) e.putString("cfg_Ad_Network_Name", Ad_Network_Name);
+        if (databaseURL != null) e.putString("cfg_databaseURL", databaseURL);
+        if (exit_Refer_appNavigation != null)
+            e.putString("cfg_exitRefer", exit_Refer_appNavigation);
+        if (Refer_App_url2 != null) e.putString("cfg_ReferUrl2", Refer_App_url2);
+        e.apply();
+    }
+
+    /**
+     * Re-derives every piece of gating state from disk.
+     *
+     * All of these flags are statics that were previously written only by
+     * SplashScreen. When Android kills a backgrounded process and later restores
+     * the task, the top activity is recreated WITHOUT SplashScreen running, so the
+     * statics fell back to their declared defaults: DB_TABLE_NAME became ""
+     * (every story query hit a non-existent table and returned an empty list) and
+     * Vip_Member became false (a paying member silently saw placeholder content
+     * and ads).
+     *
+     * MyApplication.onCreate() always runs on process start - including that
+     * restore path - so this is invoked from there. It deliberately does NOT touch
+     * the stored loginTimes counter; only SplashScreen may increment it.
+     */
+    public static void restoreSessionState(Context ctx) {
+        SharedPreferences sp = ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        Login_Times = sp.getInt("loginTimes", 0);
+
+        // Last known remote config. Defaults leave update mode ON, which is the
+        // fail-safe direction (placeholder content rather than real content).
+        App_updating = sp.getString("cfg_App_updating", App_updating);
+        Ads_State = sp.getString("cfg_Ads_State", Ads_State);
+        Ad_Network_Name = sp.getString("cfg_Ad_Network_Name", Ad_Network_Name);
+        databaseURL = sp.getString("cfg_databaseURL", databaseURL);
+        exit_Refer_appNavigation = sp.getString("cfg_exitRefer", exit_Refer_appNavigation);
+        Refer_App_url2 = sp.getString("cfg_ReferUrl2", Refer_App_url2);
+
+        Vip_Member = isMembershipActive(sp);
+        if (Vip_Member) {
+            // Mirrors vipMemberPrivileges(): no ads, skip the login-count staging.
+            // App_updating is intentionally left alone - update mode outranks VIP.
+            Ads_State = "inactive";
+            if (Login_Times < 10) Login_Times = 10;
+
+            // Keep the pre-expiry reminder re-armed on every process start, not
+            // just at purchase/restore time - cheap, idempotent (REPLACE policy),
+            // and a safety net in case WorkManager's own reboot-rescheduling ever
+            // misses this device.
+            MembershipReminderScheduler.schedule(ctx, expiryMillis(sp));
         }
 
+        DB_TABLE_NAME = resolveContentTable();
+        Log.d(TAG, "restoreSessionState: table=" + DB_TABLE_NAME
+                + " login=" + Login_Times + " vip=" + Vip_Member
+                + " updateMode=" + App_updating);
     }
 
     private void vipMemberPrivileges() {
-        App_updating = "inactive";
+        // NOTE: App_updating is deliberately NOT cleared here. Update mode is an
+        // absolute override - while it is active everyone, VIP included, sees the
+        // placeholder catalogue with the audio section hidden. VIP still skips the
+        // login-count staging and ads.
         Ads_State = "inactive";
         Login_Times = 10;
     }
@@ -461,6 +573,7 @@ public class SplashScreen extends AppCompatActivity {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference storiesRef = db.collection("storymodels");
+        Log.d("dfdsfasdfsadf", "Im here");
 
         storiesRef.whereGreaterThan("completeDate", completeDate)
                 .orderBy("completeDate", Query.Direction.DESCENDING)
@@ -471,6 +584,8 @@ public class SplashScreen extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
 
+                            Log.d("dfdsfasdfsadf", "onComplete: "+task.getResult().isEmpty());
+                            Log.d("dfdsfasdfsadf", "onComplete: "+completeDate);
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Access your document data here
 
@@ -491,7 +606,6 @@ public class SplashScreen extends AppCompatActivity {
                 });
 
     }
-
 
     private String encryption(String text) {
 

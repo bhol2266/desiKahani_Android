@@ -3,51 +3,55 @@
 
 
   <item android:id="@+id/menu_notificaton"
-      android:icon="@drawable/menu_notification"
+      android:icon="@drawable/ic_menu_bell"
       android:title="Notifications"
       />
 
   <item android:id="@+id/menu_downloads"
-      android:icon="@drawable/mark"
-      android:title=" Saved Offline Stories"
+      android:icon="@drawable/ic_menu_bookmark"
+      android:title="Saved Offline Stories"
       />
 
   <item
       android:id="@+id/menu_audio"
-      android:icon="@drawable/download"
+      android:icon="@drawable/ic_menu_headphones"
       android:title="Offline Audio stories" />
 
 
 
   <item android:id="@+id/menu_share_app"
-      android:icon="@drawable/sharee"
+      android:icon="@drawable/ic_menu_share"
       android:title="Share App"/>
 
   <item android:id="@+id/menu_second_app"
-      android:icon="@drawable/playstore"
+      android:icon="@drawable/ic_menu_apps"
       android:title="App 1"/>
   <item android:id="@+id/menu_rating"
-      android:icon="@drawable/rating_star"
+      android:icon="@drawable/ic_menu_star"
       android:title="Give Rating"/>
   <item android:id="@+id/menu_contacts"
-      android:icon="@drawable/phone"
+      android:icon="@drawable/ic_menu_phone"
       android:title="Contacts"/>
+
+  <item android:id="@+id/menu_report"
+      android:icon="@drawable/ic_report_flag"
+      android:title="Report a problem"/>
 
   <group android:id="@+id/group_feature">
 
     <item
         android:id="@+id/Terms_and_Condition"
-        android:icon="@drawable/terms_and_conditions"
+        android:icon="@drawable/ic_menu_doc"
         android:title="Terms and Condition" />
 
     <item
         android:id="@+id/Privacy_Policy"
-        android:icon="@drawable/privacy_policy"
+        android:icon="@drawable/ic_menu_shield"
         android:title="Privacy Policy" />
 
     <item
         android:id="@+id/About_Us"
-        android:icon="@drawable/aboutus"
+        android:icon="@drawable/ic_menu_info"
         android:title="About Us" />
 
   </group>

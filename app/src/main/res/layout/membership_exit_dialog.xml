@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80dp"
-                android:background="#F1F1F1"
+                android:background="@drawable/offer_sheet_bg"
                 android:orientation="vertical"
 
                 >
@@ -29,18 +29,18 @@
 
                 <TextView
                     android:id="@+id/exitMSG"
-                    android:layout_width="200dp"
+                    android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/inter"
+                    android:fontFamily="@font/kalam_regular"
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingTop="120dp"
                     android:paddingRight="5dp"
                     android:text="You are the luckiest! Get 20% off"
-                    android:textColor="@color/themeColor"
-                    android:textSize="18dp"
-                    android:textStyle="italic|bold" />
+                    android:textColor="@color/ink"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
 
                 <FrameLayout
@@ -60,7 +60,8 @@
                             android:id="@+id/clickForPayment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/themeColorextralight"
+                            android:background="@color/gold_wash"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:padding="15dp">
 
@@ -70,11 +71,12 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:fontFamily="@font/inter"
+                                android:fontFamily="@font/robotoslab_regular"
                                 android:maxLines="1"
                                 android:text="VIP 1 Month"
-                                android:textColor="@color/black"
-                                android:textSize="20dp" />
+                                android:textColor="@color/ink"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
 
                             <LinearLayout
@@ -87,21 +89,23 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:fontFamily="@font/inter"
                                     android:text="Only"
-                                    android:textColor="@color/black"
-                                    android:textSize="18dp" />
+                                    android:textColor="@color/ink_faint"
+                                    android:textSize="13sp" />
 
 
                                 <TextView
                                     android:id="@+id/price"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:fontFamily="@font/inter"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="8dp"
+                                    android:fontFamily="@font/robotoslab_regular"
                                     android:text="₹"
-                                    android:textColor="@color/black"
-                                    android:textSize="20dp"
+                                    android:textColor="@color/gold_deep"
+                                    android:textSize="19sp"
                                     android:textStyle="bold"
 
                                     />
@@ -133,13 +137,15 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="15dp"
-                    android:background="@drawable/vip_membership_textbg"
+                    android:background="@drawable/buy_now_bg"
                     android:fontFamily="@font/inter"
                     android:gravity="center"
-                    android:padding="10dp"
+                    android:letterSpacing="0.04"
+                    android:padding="13dp"
                     android:text="BUY NOW 59:12"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
 
                 <LinearLayout

@@ -6,6 +6,7 @@ plugins {
 }
 
 repositories {
+    google()
     mavenCentral()
     flatDir {
         dirs 'libs'
@@ -13,16 +14,16 @@ repositories {
 }
 
 android {
-    compileSdkVersion 34
-    buildToolsVersion "30.0.3"
+    compileSdk 36
+    buildToolsVersion '36.0.0'
 
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
         applicationId "com.bhola.desiKahaniya"
         minSdkVersion 23
-        targetSdkVersion 34
-        versionCode 35
-        versionName "35"
+        targetSdkVersion 36
+        versionCode 38
+        versionName "38"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -34,8 +35,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     lint {
         checkReleaseBuilds false
@@ -46,52 +47,64 @@ android {
 dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.recyclerview:recyclerview:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.14.0'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation 'com.android.support:multidex:1.0.3'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+    // androidx.multidex not needed: minSdk 23 uses native multidex. Its only
+    // reference was an accidental BuildConfig import (see Collection_GridView).
 
 
-    implementation 'com.google.android.gms:play-services-ads:23.6.0'
-    implementation 'com.facebook.android:audience-network-sdk:6.18.0'
-    implementation 'com.google.ads.mediation:facebook:6.18.0.0'
-    implementation 'com.google.android.ads:mediation-test-suite:3.0.0'
+    implementation 'com.google.android.gms:play-services-ads:25.4.0'
+    implementation 'com.facebook.android:audience-network-sdk:6.21.0'
+    implementation 'com.google.ads.mediation:facebook:6.21.0.4'
+    // mediation-test-suite removed: it is debug-only tooling that was being shipped
+    // in release builds, and nothing in the app referenced it.
     implementation project(':nativetemplates')
 
+    // Volley is used directly by Collection_GridView / StoryPage but used to arrive
+    // only transitively via mediation-test-suite. Declared explicitly now.
+    implementation 'com.android.volley:volley:1.2.1'
+
     //Firebase
-    implementation 'com.google.firebase:firebase-database:21.0.0'
-    implementation 'com.google.firebase:firebase-messaging:24.1.0'
-    implementation 'com.google.firebase:firebase-auth:23.1.0'
-    implementation 'com.google.firebase:firebase-storage:21.0.1'
-    implementation 'com.google.firebase:firebase-firestore:25.1.1'
-    implementation 'com.google.firebase:firebase-crashlytics:19.3.0'
-    implementation 'com.google.firebase:firebase-analytics:22.1.2'
-    implementation platform('com.google.firebase:firebase-bom:33.7.0')
-    implementation 'com.firebaseui:firebase-ui-database:8.0.0'
+    implementation platform('com.google.firebase:firebase-bom:34.16.0')
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    // firebase-ui-database removed: no FirebaseRecyclerAdapter/FirebaseListAdapter
+    // usage anywhere in the app, and upstream is near-dormant.
 
     implementation 'com.google.android.play:review:2.0.2'
-    implementation 'com.google.android.play:asset-delivery:2.2.2'
+    implementation 'com.google.android.play:asset-delivery:2.3.0'
     implementation 'com.google.android.play:app-update:2.1.0'
-    implementation 'com.google.android.gms:play-services-tasks:18.2.0'
+    implementation 'com.google.android.gms:play-services-tasks:18.4.1'
 
 
 //    Jsoup
-    implementation 'com.github.fornewid:neumorphism:0.3.0'
+    implementation 'com.github.fornewid:neumorphism:0.3.2'
     // Lottie Animation
-    implementation "com.airbnb.android:lottie:5.0.3"
+    implementation "com.airbnb.android:lottie:6.7.1"
 
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-runtime:2.5.1"
-    implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
+    // lifecycle-extensions removed: deprecated artifact, frozen at 2.2.0, unused.
+    implementation "androidx.lifecycle:lifecycle-runtime:2.11.0"
+    implementation 'androidx.lifecycle:lifecycle-process:2.11.0'
     //noinspection LifecycleAnnotationProcessorWithJava8
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.5.1"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.11.0"
 
-    implementation "com.android.billingclient:billing:7.1.1"
+    implementation "com.android.billingclient:billing:9.1.0"
 
+    implementation 'androidx.media:media:1.8.0'
+    implementation 'androidx.activity:activity:1.13.0'
+
+    // Schedules the local pre-expiry membership reminder notification.
+    implementation 'androidx.work:work-runtime:2.10.1'
 
 }

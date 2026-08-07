@@ -1,12 +1,16 @@
 <resources>
     <string name="app_name">Desi Kahaniya</string>
+    <string name="membership_expired_banner_text">आपकी Membership समाप्त हो गई है। जारी रखने के लिए रिन्यू करें।</string>
+    <string name="membership_expired_banner_cta">रिन्यू करें</string>
+    <string name="membership_reminder_title">आपकी सदस्यता जल्द समाप्त हो रही है</string>
+    <string name="membership_reminder_body">बिना रुकावट प्रीमियम कहानियाँ जारी रखने के लिए अभी रिन्यू करें।</string>
     <string name="app_ID">ca-app-pub-8226562131234590~7133484445</string>
 
 
     ADMOB Real Ads ID :
     <string name="BannerAd">ca-app-pub-8226562131234590/4469997350</string>
     <string name="RewardedInterstitial">ca-app-pub-8226562131234590/6116497115</string>
-    <string name="AppOpen">.ca-app-pub-8226562131234590/4634556992</string>
+    <string name="AppOpen">ca-app-pub-8226562131234590/4634556992</string>
     <string name="NativeAd">ca-app-pub-8226562131234590/5691853722</string>
     <string name="Interstitial">ca-app-pub-8226562131234590/1460690637</string>
 

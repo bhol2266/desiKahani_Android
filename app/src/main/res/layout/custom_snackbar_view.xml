@@ -5,37 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingStart="10dp"
-    android:paddingTop="20dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="20dp"
+    android:paddingStart="6dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="6dp"
+    android:paddingBottom="16dp"
     tools:ignore="HardcodedText">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/rajdhani_regular"
+        android:fontFamily="@font/inter"
         android:text="Story already downloaded"
-        android:textSize="14dp"
         android:textColor="#FFF7ED"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/gotoDownloads"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
         android:id="@+id/gotoDownloads"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:fontFamily="@font/rajdhani_regular"
-        android:gravity="right"
+        android:fontFamily="@font/inter"
+        android:gravity="end"
+        android:letterSpacing="0.05"
         android:text="GO TO DOWNLOADS"
-        android:textColor="#F33224"
-        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="@color/gold"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="14dp"
-        android:textStyle="bold" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

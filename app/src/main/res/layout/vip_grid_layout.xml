@@ -1,111 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<soup.neumorphism.NeumorphCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- One selectable plan row. Ids are bound by Vip_CustomAdapter:
+     launchBilling (root, click target), title, membershipType, mrp, price. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/launchBilling"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/hooverffext"
-    app:cardCornerRadius="10dp"
-    app:neumorph_shadowColorDark="@color/themeColorextralight">
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/surface_ivory"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="1dp"
+    app:strokeColor="@color/gold_soft"
+    app:strokeWidth="1dp">
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/hooverffext"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="10dp"
-        android:paddingTop="5dp">
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="15dp">
 
+        <!-- Plan mark -->
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/vip_plan_icon_bg"
+            android:padding="6dp"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/vip_lottie"
             app:lottie_speed="0.8" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="14dp"
+            android:paddingEnd="10dp">
 
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:orientation="vertical">
+                android:ellipsize="end"
+                android:fontFamily="@font/robotoslab_regular"
+                android:maxLines="1"
+                android:text="not set"
+                android:textColor="@color/ink"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:text="not set"
-                    android:textColor="@color/textcolor2"
-                    android:textFontWeight="500"
-                    android:textSize="18dp" />
+            <TextView
+                android:id="@+id/membershipType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/vip_tag_bg"
+                android:fontFamily="@font/inter"
+                android:letterSpacing="0.07"
+                android:maxLines="1"
+                android:paddingHorizontal="9dp"
+                android:paddingVertical="3dp"
+                android:text="popular"
+                android:textColor="@color/white"
+                android:textSize="9sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/membershipType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/vip_membership_textbg"
-                    android:maxLines="1"
-                    android:paddingLeft="4dp"
-                    android:paddingTop="2dp"
-                    android:paddingRight="4dp"
-                    android:paddingBottom="2dp"
-                    android:text="popular"
-                    android:textColor="#ffffff"
-                    android:textFontWeight="500"
-                    android:textSize="10dp" />
+        </LinearLayout>
 
-            </LinearLayout>
-
-
+        <!-- Price: struck-through MRP above the live price -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/mrp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|right"
+                android:layout_gravity="end"
+                android:fontFamily="@font/inter"
                 android:text="not set"
-                android:textAlignment="center"
-                android:textColor="@color/gnt_gray"
-                android:visibility="gone"
-                android:textSize="18dp"
-
-                />
-
+                android:textColor="@color/ink_faint"
+                android:textSize="12sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|right"
+                android:layout_gravity="end"
+                android:fontFamily="@font/robotoslab_regular"
                 android:text="not set"
-                android:paddingLeft="10dp"
-                android:paddingRight="20dp"
-                android:textAlignment="center"
-                android:textColor="@color/textcolor2"
-                android:textSize="20dp"
+                android:textColor="@color/gold_deep"
+                android:textSize="21sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
 
+        <!-- Affordance: makes the whole row read as tappable -->
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="6dp"
+            android:contentDescription="@null"
+            app:srcCompat="@drawable/ic_chevron_right"
+            app:tint="@color/gold" />
+
     </LinearLayout>
 
-
-</soup.neumorphism.NeumorphCardView>
-
-
-
-
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  In-app legal documents. Rendered by PrivacyPolicy / TermsAndConditions, which
+  walk the heading array and the matching body array in order, so the two arrays
+  for a document MUST stay the same length.
+
+  This content was drafted from what the app actually does (the SDKs it bundles
+  and the permissions it declares). It is not legal advice - have it reviewed
+  before publishing.
+-->
+<resources>
+
+    <string name="legal_last_updated">Last updated: 6 August 2026</string>
+    <string name="legal_contact_email">ukdevelopers007@gmail.com</string>
+
+    <!-- Canonical hosted copies. These are the URLs given to Google Play and any
+         other store listing; the in-app screens mirror them so the documents are
+         still readable offline. -->
+    <string name="legal_url_home" translatable="false">https://uktechdeveloper.co.uk/apps/desi-kahaniya</string>
+    <string name="legal_url_privacy" translatable="false">https://uktechdeveloper.co.uk/apps/desi-kahaniya/privacy-policy</string>
+    <string name="legal_url_terms" translatable="false">https://uktechdeveloper.co.uk/apps/desi-kahaniya/terms</string>
+    <string name="legal_view_online">View the latest version online</string>
+
+    <string name="privacy_title">Privacy Policy</string>
+    <string name="terms_title">Terms &amp; Conditions</string>
+
+    <!-- ===================== PRIVACY POLICY ===================== -->
+    <string-array name="privacy_headings">
+        <item>Overview</item>
+        <item>What we do NOT collect</item>
+        <item>Information collected automatically</item>
+        <item>Information kept only on your device</item>
+        <item>Advertising</item>
+        <item>Purchases and membership</item>
+        <item>Notifications</item>
+        <item>Permissions we request</item>
+        <item>Third-party services</item>
+        <item>Data retention and deletion</item>
+        <item>Security</item>
+        <item>Changes to this policy</item>
+        <item>Contact us</item>
+    </string-array>
+
+    <string-array name="privacy_bodies">
+        <item>This app is published by UK DEVELOPERS. This policy explains what information the app handles, why, and what control you have over it. By installing and using the app you agree to this policy.</item>
+
+        <item>You do not need to create an account to use this app. We do not ask for and do not collect your name, email address, phone number, date of birth, photographs, contacts, calendar, microphone input, camera input, or precise GPS location. We do not sell your personal information.</item>
+
+        <item>Like most mobile apps, some information is gathered automatically by the services the app uses:
+\n\n• Usage and device analytics — general events such as app opens and screens viewed, plus device model, Android version, language and country. Collected via Google Firebase Analytics.
+\n• Crash diagnostics — if the app crashes, a technical report (stack trace, device model, Android version) is sent so the fault can be fixed. Collected via Firebase Crashlytics.
+\n• Advertising identifier — a resettable device advertising ID used to serve and measure ads.
+\n• Notification token — an anonymous push token so new-story notifications can reach your device.
+\n• Install count — the app records that an installation occurred, so we can see overall install numbers. This is not tied to your identity.</item>
+
+        <item>The following stays on your phone and is never uploaded by us:
+\n\n• How many times you have opened the app.
+\n• Your chosen reading font and text size.
+\n• Which stories you have marked as favourite or already read.
+\n• Stories and audio you download for offline use, saved in the app private storage area.
+\n• A record of your membership purchase (the Google Play purchase token, the validity period and the purchase date) so the app can tell whether your membership is still active.
+\n\nAll of this is removed when you uninstall the app or clear its data.</item>
+
+        <item>Free use of the app is supported by advertising, provided by Google AdMob and Meta (Facebook) Audience Network. These partners may use your resettable advertising ID and general device information to select and measure ads. They may show personalised ads where permitted.
+\n\nYou can limit this at any time in Android under Settings, then Privacy, then Ads, where you can reset or delete your advertising ID and opt out of ad personalisation. An active VIP membership removes ads from the app.</item>
+
+        <item>VIP memberships are sold and processed entirely by Google Play Billing. We never see or store your card number, bank details or billing address — Google handles payment. The app only stores the purchase token and validity dates on your device so it can unlock member features and detect expiry.</item>
+
+        <item>If you allow notifications, the app can alert you about newly added stories. You can turn notifications off at any time in your Android system settings for this app, without affecting anything else.</item>
+
+        <item>• Internet, network state and Wi-Fi state — to load stories, audio and ads.
+\n• Notifications — to tell you about new stories. Optional.
+\n• Foreground service and media playback — so audio stories keep playing when you leave the app, with controls in your notification shade.
+\n• Storage — to save stories and audio you choose to download.
+\n• Vibrate — for notification feedback.
+\n• Billing and advertising ID — for memberships and ads, as described above.</item>
+
+        <item>The app relies on these providers, each of which has its own privacy policy that governs the data it receives:
+\n\n• Google Firebase (Analytics, Crashlytics, Cloud Messaging, Realtime Database, Firestore, Storage)
+\n• Google AdMob
+\n• Google Play Billing and Google Play Services
+\n• Meta Audience Network
+\n\nWe recommend reading their policies to understand how they process data.</item>
+
+        <item>Analytics and crash data are retained by the relevant provider according to that provider policy, and are used only in aggregate to understand app stability and usage. Everything the app stores locally is deleted when you uninstall the app or clear its data from Android settings. If you would like us to remove any information associated with your device from our systems, email us using the address below and we will act on it.</item>
+
+        <item>Content is fetched over encrypted HTTPS connections. Your membership record is kept in the app private storage area, which other apps cannot read. No system is perfectly secure, so we cannot guarantee absolute security, but we take reasonable steps to protect your information.</item>
+
+        <item>We may update this policy as the app changes or as legal requirements change. The revised policy will appear on this screen with a new date at the top. Continuing to use the app after an update means you accept the revised policy.</item>
+
+        <item>Questions, concerns or requests about privacy are welcome. Email us at ukdevelopers007@gmail.com and we will respond as soon as we reasonably can.</item>
+    </string-array>
+
+    <!-- ===================== TERMS AND CONDITIONS ===================== -->
+    <string-array name="terms_headings">
+        <item>Acceptance of these terms</item>
+        <item>All stories are fiction</item>
+        <item>How you may use the app</item>
+        <item>Content and intellectual property</item>
+        <item>VIP membership and payment</item>
+        <item>Refunds and cancellation</item>
+        <item>Advertising</item>
+        <item>Availability of the service</item>
+        <item>Disclaimer</item>
+        <item>Limitation of liability</item>
+        <item>Suspension and termination</item>
+        <item>Changes to these terms</item>
+        <item>Governing law</item>
+        <item>Contact us</item>
+    </string-array>
+
+    <string-array name="terms_bodies">
+        <item>These terms are an agreement between you and UK DEVELOPERS covering your use of this app. By installing, opening or continuing to use the app you accept them. If you do not accept them, please uninstall the app.</item>
+
+        <item>Every story in this app is a work of fiction, written for entertainment. Characters, names, places and events are imaginary or used fictitiously. Any resemblance to real people, living or dead, or to actual events, is entirely coincidental and unintended. Nothing in the app describes, endorses or encourages real-world illegal activity.</item>
+
+        <item>You are granted a personal, non-exclusive, non-transferable licence to use the app for your own private entertainment. You agree not to copy, republish, resell, redistribute or publicly perform the content, and not to reverse engineer, modify, or attempt to bypass any technical or payment restriction in the app.</item>
+
+        <item>Story text, audio, artwork and the app itself are either owned by UK DEVELOPERS, contributed by users, or sourced from openly available material, and are protected by applicable law. If you believe any content in the app infringes your rights or was published without permission, contact us at the address below with details and we will review and remove it where appropriate.</item>
+
+        <item>Some categories and audio stories require a VIP membership. Memberships are one-time purchases valid for a fixed period which is shown to you before you pay. All payments are processed by Google Play — we never receive your card or bank details. When the validity period ends, member features stop automatically and you are not charged again; buy another membership if you wish to continue. Prices are set in your Google Play account currency and may change for future purchases.</item>
+
+        <item>Purchases are made through Google Play, so Google Play refund rules apply, together with any consumer rights you have under the law of your country. If a purchase does not unlock correctly, or something otherwise goes wrong, contact us promptly at the address below and we will try to resolve it or help you request a refund through Google Play.</item>
+
+        <item>The app is free to download and is supported by advertising for non-members. Ads are supplied by third-party networks and we do not control which specific ads you see or endorse what they promote. Interacting with an ad is a matter between you and that advertiser. An active VIP membership removes ads.</item>
+
+        <item>We aim to keep the app working and to keep adding stories, but we do not guarantee uninterrupted availability. Features and content may be added, changed, temporarily hidden or removed at any time, including while an update is being prepared or reviewed. Access requires a working internet connection except for content you have already downloaded.</item>
+
+        <item>The app and its content are provided on an as-is and as-available basis, without warranties of any kind, whether express or implied, to the fullest extent permitted by law. We do not warrant that the content will be accurate, complete, or suited to any particular purpose, or that the app will be free of errors or interruptions.</item>
+
+        <item>To the fullest extent permitted by law, UK DEVELOPERS will not be liable for any indirect, incidental, special or consequential loss arising from your use of the app, including lost data or lost profits. Nothing in these terms limits any liability that cannot lawfully be limited, and nothing removes consumer rights you have under the law of your country.</item>
+
+        <item>We may restrict or end your access to the app if you breach these terms, misuse the service, or attempt to defraud the payment system. You may stop using the app at any time by uninstalling it.</item>
+
+        <item>We may revise these terms as the app develops or as the law requires. The current version always appears on this screen with its date at the top. Continuing to use the app after a revision means you accept the updated terms.</item>
+
+        <item>These terms are governed by the laws of India, without affecting any mandatory consumer protection rights available to you in your own country of residence.</item>
+
+        <item>For any question about these terms, or to report content, email us at ukdevelopers007@gmail.com.</item>
+    </string-array>
+
+</resources>

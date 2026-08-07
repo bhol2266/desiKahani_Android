@@ -1,23 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorAccent">#03DAC5</color>
-    <color name="textcolor">#133855</color>
-    <color name="background_start">#E8F0FF</color>
-    <color name="background_end">#E8F0FF</color>
-    <color name="themeColor">#133855</color>
-    <color name="textcolor2">#133855</color>
+    <!-- ============================================================
+         Warm editorial palette: deep ink navy + warm ivory + gold.
+         The legacy token names below are retained (layouts across the
+         app reference them) but retuned to the new identity, so the
+         whole app shifts consistently.
+         ============================================================ -->
 
+    <!-- Primary / anchor -->
+    <color name="themeColor">#16293C</color>          <!-- deep ink navy -->
+    <color name="themeColorlight">#B08843</color>     <!-- antique gold/bronze -->
+    <color name="themeColorextralight">#E3D3AE</color><!-- light gold -->
+    <color name="themeColor_super_extralight">#F4EBD9</color> <!-- pale cream -->
 
-    <color name="themeColorlight">#4290CD</color>
+    <!-- Page background gradient (background2.xml) -->
+    <color name="background_start">#FBF6EC</color>    <!-- warm ivory -->
+    <color name="background_end">#F3EADA</color>      <!-- deeper cream -->
+
+    <!-- Text -->
+    <color name="textcolor">#16293C</color>           <!-- headings, ink -->
+    <color name="textcolor2">#5A4F42</color>          <!-- body/secondary, warm gray -->
+
+    <color name="colorAccent">#C8A24A</color>         <!-- gold accent -->
     <color name="neuro_shadowcolor">#FFF1F5</color>
-    <color name="themeColorextralight">#B3DEFF</color>
-    <color name="themeColor_super_extralight">#E6F4FF</color>
+
     <color name="black">#FF000000</color>
-
-
     <color name="semi_black">#BF171717</color>
     <color name="white">#ffffff</color>
     <color name="grey">#BFDFDFDF</color>
+
+    <!-- ===================== New semantic tokens ===================== -->
+
+    <!-- Surfaces -->
+    <color name="surface_ivory">#FDFAF4</color>       <!-- cards, sheets -->
+    <color name="surface_cream">#F6EFE2</color>       <!-- inset/secondary surface -->
+    <color name="surface_sepia">#F4EAD8</color>       <!-- story reading surface -->
+    <color name="surface_ink">#16293C</color>         <!-- dark surface (nav header) -->
+
+    <!-- Gold family -->
+    <color name="gold">#C8A24A</color>
+    <color name="gold_deep">#9C7B2E</color>
+    <color name="gold_soft">#EFE2C2</color>
+    <color name="gold_wash">#FBF4E4</color>
+
+    <!-- Ink family -->
+    <color name="ink">#16293C</color>
+    <color name="ink_muted">#5A4F42</color>
+    <color name="ink_faint">#8C8375</color>
+
+    <!-- Lines / dividers -->
+    <color name="divider_warm">#E4D9C6</color>
+
+    <!-- Admin console -->
+    <color name="admin_card">#1C2E42</color>
+    <color name="admin_card_alt">#24384F</color>
+    <color name="admin_outline">#33FFFFFF</color>
+    <color name="admin_text_dim">#A8BACB</color>
+    <color name="admin_danger">#E5705F</color>
+
+    <!-- States -->
+    <color name="locked_veil">#73101D2B</color>       <!-- frosted veil over locked art -->
+    <color name="scrim_top">#00000000</color>
+    <color name="scrim_bottom">#C4000000</color>
 
 </resources>

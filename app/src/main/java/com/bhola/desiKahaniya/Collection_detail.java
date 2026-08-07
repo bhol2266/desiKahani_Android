@@ -279,7 +279,7 @@ public class Collection_detail extends AppCompatActivity {
                 AlertDialog dialog;
 
                 final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(v.getContext());
-                LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+                LayoutInflater inflater = LayoutInflater.from(Collection_detail.this);
                 View promptView = inflater.inflate(R.layout.admin_panel_entry, null);
                 builder.setView(promptView);
                 builder.setCancelable(true);

@@ -1,9 +1,11 @@
 package com.bhola.desiKahaniya;
 
+import android.annotation.SuppressLint;
 import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -24,14 +26,12 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.multidex.BuildConfig;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Request;
@@ -45,9 +45,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabItem;
-import com.google.android.material.tabs.TabLayout;
 
 import com.google.android.play.core.review.ReviewException;
 import com.google.android.play.core.review.ReviewInfo;
@@ -65,15 +64,17 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class
 Collection_GridView extends AppCompatActivity {
     String Ads_State;
     NavigationView nav;
-    ActionBarDrawerToggle toggle;
     DrawerLayout drawerLayout;
     AlertDialog dialog;
 
@@ -82,8 +83,7 @@ Collection_GridView extends AppCompatActivity {
     AdView mAdView;
 
     ViewPager viewPager;
-    TabLayout tabLayout;
-    TabItem tabItem1, tabItem2;
+    BottomNavigationView bottomNav;
     PageAdapter pageAdapter;
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
     final int PERMISSION_REQUEST_CODE = 112;
@@ -125,7 +125,50 @@ Collection_GridView extends AppCompatActivity {
             }
         });
 
+    }
 
+    private static final int MEMBERSHIP_BANNER_WINDOW_DAYS = 7;
+
+    /**
+     * Soft on-screen reminder for a lapsed VIP membership, shown for a short
+     * window after expiry. The SplashScreen toast (SplashScreen.sharedPrefrences)
+     * only fires once on a cold start and disappears in ~2 seconds, so it's easy
+     * to miss entirely - this stays visible on the home screen until acted on
+     * or dismissed. Dismissing snoozes it for the rest of the day only, so it
+     * can still remind tomorrow while inside the window. Re-run from onResume()
+     * so it clears itself immediately after a purchase/restore.
+     */
+    private void membershipReminderBanner() {
+        View banner = findViewById(R.id.membershipExpiredBanner);
+        if (banner == null) return;
+
+        SharedPreferences sp = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        int daysSinceExpiry = SplashScreen.daysSinceExpiry(sp);
+
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        boolean dismissedToday = today.equals(sp.getString("membership_banner_dismissed_date", ""));
+
+        boolean shouldShow = !"active".equals(SplashScreen.App_updating)
+                && daysSinceExpiry >= 0
+                && daysSinceExpiry <= MEMBERSHIP_BANNER_WINDOW_DAYS
+                && !dismissedToday;
+
+        if (!shouldShow) {
+            banner.setVisibility(View.GONE);
+            return;
+        }
+
+        banner.setVisibility(View.VISIBLE);
+
+        View.OnClickListener openVip = v ->
+                startActivity(new Intent(Collection_GridView.this, VipMembership.class));
+        banner.setOnClickListener(openVip);
+        findViewById(R.id.membershipBannerRenew).setOnClickListener(openVip);
+
+        findViewById(R.id.membershipBannerClose).setOnClickListener(v -> {
+            sp.edit().putString("membership_banner_dismissed_date", today).apply();
+            banner.setVisibility(View.GONE);
+        });
     }
 
     private void showAds() {
@@ -144,8 +187,16 @@ Collection_GridView extends AppCompatActivity {
     }
 
 
+    // Deliberately does not call super: back should close the drawer, or show the
+    // exit dialog, rather than finishing the activity outright. exit_dialog() is
+    // what actually exits once the user confirms.
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
+        if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return;
+        }
         exit_dialog();
     }
 
@@ -204,42 +255,55 @@ Collection_GridView extends AppCompatActivity {
 
 
     private void tabview() {
-        tabLayout = findViewById(R.id.tablayout1);
-        tabItem1 = findViewById(R.id.tab1);
-        tabItem2 = findViewById(R.id.tab2);
         viewPager = findViewById(R.id.vpager);
+        bottomNav = findViewById(R.id.bottomNav);
 
-        if (SplashScreen.App_updating.equals("active")) {
-            tabLayout.removeTabAt(1); // Remove the second tab
+        // While the app is in "updating" mode the audio section is hidden entirely,
+        // mirroring the previous tabLayout.removeTabAt(1) behaviour.
+        boolean audioAvailable = !SplashScreen.App_updating.equals("active");
+        if (!audioAvailable) {
+            bottomNav.getMenu().removeItem(R.id.nav_audio);
         }
 
-
-        pageAdapter = new PageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        pageAdapter = new PageAdapter(getSupportFragmentManager(), audioAvailable ? 2 : 1);
         viewPager.setAdapter(pageAdapter);
 
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
 
-                if (tab.getPosition() == 0 || tab.getPosition() == 1)
-                    pageAdapter.notifyDataSetChanged();
+            if (id == R.id.nav_home) {
+                viewPager.setCurrentItem(0);
+                pageAdapter.notifyDataSetChanged();
+                return true;
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
+            if (id == R.id.nav_audio) {
+                viewPager.setCurrentItem(1);
+                pageAdapter.notifyDataSetChanged();
+                return true;
             }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
+            if (id == R.id.nav_saved) {
+                Intent saved = new Intent(getApplicationContext(), Download_Detail.class);
+                saved.putExtra("Ads_Status", Ads_State);
+                startActivity(saved);
+                return false; // don't leave "Saved" visually selected
             }
+            if (id == R.id.nav_more) {
+                drawerLayout.openDrawer(GravityCompat.START);
+                return false; // "More" is a surface, not a destination
+            }
+            return false;
         });
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        //listen for scroll or page change
-
+        // Keep the bar in sync when the pager is swiped.
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                int id = (position == 1) ? R.id.nav_audio : R.id.nav_home;
+                if (bottomNav.getMenu().findItem(id) != null) {
+                    bottomNav.getMenu().findItem(id).setChecked(true);
+                }
+            }
+        });
     }
 
     private void checkForAppUpdate() {
@@ -249,7 +313,7 @@ Collection_GridView extends AppCompatActivity {
             Button updateBtn;
             TextView yourVersion, latestVersion;
             final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(Collection_GridView.this);
-            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            LayoutInflater inflater = LayoutInflater.from(Collection_GridView.this);
             View promptView = inflater.inflate(R.layout.appupdate, null);
             builder.setView(promptView);
             builder.setCancelable(!SplashScreen.update_Mandatory);
@@ -354,6 +418,15 @@ Collection_GridView extends AppCompatActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Re-evaluate every time this screen becomes visible again (e.g. returning
+        // from VipMembership after a purchase or an automatic restore), not just
+        // on cold start, so the banner clears itself the moment membership is active.
+        membershipReminderBanner();
+    }
+
+    @Override
     protected void onPause() {
 
         super.onPause();
@@ -379,7 +452,7 @@ Collection_GridView extends AppCompatActivity {
 
         Button exit, exit2;
         final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(nav.getContext());
-        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        LayoutInflater inflater = LayoutInflater.from(Collection_GridView.this);
         View promptView = inflater.inflate(R.layout.exit_dialog, null);
         builder.setView(promptView);
         builder.setCancelable(true);
@@ -457,13 +530,19 @@ Collection_GridView extends AppCompatActivity {
     private void navigationDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         nav = findViewById(R.id.navmenu);
-        nav.setItemIconTintList(null);
+        // Icons are monochrome vectors now, so let the theme tint them
+        // (previously null, to preserve the old multicolour PNGs).
         drawerLayout = findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        // The drawer is opened from the bottom bar's "More" item, so no hamburger toggle.
+
+        // Mirrors tabview()'s removal of the bottom-nav audio tab: while update
+        // mode is active there's no real audio content behind it either.
+        if ("active".equals(SplashScreen.App_updating)) {
+            nav.getMenu().removeItem(R.id.menu_audio);
+        }
 
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -559,22 +638,37 @@ Collection_GridView extends AppCompatActivity {
                         }
                         break;
 
-                    case R.id.Privacy_Policy:
+                    case R.id.menu_report:
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        ReportDialog.show(Collection_GridView.this,
+                                ReportDialog.TYPE_GENERAL, null, null);
+                        break;
 
-                        Intent i5 = new Intent(Intent.ACTION_VIEW);
-                        i5.setData(Uri.parse("https://sites.google.com/view/desikhaniya"));
-                        startActivity(i5);
+                    case R.id.Privacy_Policy:
+                        // Was an external Google Sites link that no longer resolves;
+                        // the policy now lives inside the app.
+                        startActivity(new Intent(getApplicationContext(), PrivacyPolicy.class));
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case R.id.About_Us:
 
                         final androidx.appcompat.app.AlertDialog.Builder builder2 = new androidx.appcompat.app.AlertDialog.Builder(nav.getContext());
-                        LayoutInflater inflater2 = LayoutInflater.from(getApplicationContext());
+                        LayoutInflater inflater2 = LayoutInflater.from(Collection_GridView.this);
                         View promptView2 = inflater2.inflate(R.layout.about_us, null);
                         builder2.setView(promptView2);
                         builder2.setCancelable(true);
 
+
+                        // Opens the hosted index listing both legal documents.
+                        promptView2.findViewById(R.id.legalOnlineBtn)
+                                .setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        LegalDocRenderer.openUrl(Collection_GridView.this,
+                                                getString(R.string.legal_url_home));
+                                    }
+                                });
 
                         dialog = builder2.create();
                         dialog.show();

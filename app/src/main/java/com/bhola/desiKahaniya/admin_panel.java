@@ -1,5 +1,6 @@
 package com.bhola.desiKahaniya;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,12 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,7 +38,9 @@ public class admin_panel extends AppCompatActivity {
 
     DatabaseReference mref, notificationMref;  TextView Users_Counters;
     Button   Refer_App_url_BTN, databaseBtn;
-    Switch switch_Exit_Nav, switch_Activate_Ads, switch_App_Updating;
+    // MaterialSwitch extends SwitchCompat, NOT android.widget.Switch, so these
+    // fields must be MaterialSwitch or findViewById would ClassCastException.
+    MaterialSwitch switch_Exit_Nav, switch_Activate_Ads, switch_App_Updating;
     Button Ad_Network;
     static String uncensored_title = "";
     FirebaseFirestore firestore;
@@ -48,6 +53,7 @@ public class admin_panel extends AppCompatActivity {
 
 
         initViews();
+        restartAppButton();
         appControl();
         Ad_Network_Selection();
         deleteNotification_Stories();
@@ -75,6 +81,37 @@ public class admin_panel extends AppCompatActivity {
 
 
 
+    }
+
+    /**
+     * Relaunches the app from scratch. The remote flags (App_updating, Ads, Ad
+     * network) are read once by SplashScreen and cached in statics, so a full
+     * process restart is the only way to see a change applied end to end.
+     */
+    private void restartAppButton() {
+        View restart = findViewById(R.id.restartAppBtn);
+        if (restart == null) return;
+
+        restart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(admin_panel.this)
+                        .setTitle("Restart app?")
+                        .setMessage("The app will close and reopen from the splash screen.")
+                        .setNegativeButton("Cancel", null)
+                        .setPositiveButton("Restart", (d, w) -> {
+                            Intent intent = getPackageManager()
+                                    .getLaunchIntentForPackage(getPackageName());
+                            if (intent == null) return;
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            // Kill the current process so the statics are re-derived.
+                            Runtime.getRuntime().exit(0);
+                        })
+                        .show();
+            }
+        });
     }
 
     private void totalInstallsAlltime() {
@@ -254,8 +291,12 @@ public class admin_panel extends AppCompatActivity {
 
 
     private void checkButtonState() {
-
-        mref.addValueEventListener(new ValueEventListener() {
+        // Single-value read, not a persistent listener: this only needs to seed the
+        // toggle positions once when the screen opens. addValueEventListener() was
+        // never removed in onDestroy(), so every re-open of this screen left another
+        // listener permanently attached to mref - each one re-fetched on every future
+        // remote change, for the lifetime of the process.
+        mref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String match = (String) snapshot.child("switch_Exit_Nav").getValue().toString().trim();

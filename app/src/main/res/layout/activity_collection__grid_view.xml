@@ -2,60 +2,113 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background2"
-
-    >
+    android:background="@drawable/background2">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
-
-        <RelativeLayout
-
+        <!-- Editorial masthead -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="62dp"
+            android:background="@color/surface_ivory"
+            android:contentInsetStart="20dp"
+            android:elevation="0dp">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background2"
-                app:title="देसी कहानियाँ"
-                app:titleTextAppearance="@style/GridView_Title" />
-
+                android:layout_gravity="start|center_vertical"
+                android:text="देसी कहानियाँ"
+                android:textAppearance="@style/TextAppearance.Editorial.Wordmark" />
 
             <ImageView
                 android:id="@+id/VipLottie"
-                android:layout_width="35dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/vip_pill_bg"
+                android:padding="8dp"
+                android:src="@drawable/crown" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <!-- Gold hairline under the masthead -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_warm" />
+
+        <!-- Soft renewal reminder: shown for a short window after membership lapses.
+             See Collection_GridView#membershipReminderBanner(). -->
+        <LinearLayout
+            android:id="@+id/membershipExpiredBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:background="@drawable/vip_banner_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@null"
                 android:src="@drawable/crown"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                />
-        </RelativeLayout>
+                app:tint="@color/gold_deep" />
+
+            <TextView
+                android:id="@+id/membershipBannerText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/inter"
+                android:text="@string/membership_expired_banner_text"
+                android:textColor="@color/ink"
+                android:textSize="12.5sp" />
+
+            <TextView
+                android:id="@+id/membershipBannerRenew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/vip_tag_bg"
+                android:fontFamily="@font/inter"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="@string/membership_expired_banner_cta"
+                android:textColor="@color/white"
+                android:textSize="11.5sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/membershipBannerClose"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="@null"
+                android:padding="7dp"
+                android:src="@drawable/ic_close_line"
+                app:tint="@color/ink_faint" />
+
+        </LinearLayout>
 
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/background2"
             android:visibility="gone"
             ads:adSize="BANNER"
             ads:adUnitId="@string/BannerAd" />
@@ -67,41 +120,30 @@
             android:orientation="vertical"
             android:visibility="gone" />
 
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-            app:tabIndicatorColor="@color/themeColor"
-            app:tabBackground="@drawable/hooverffext"
-            app:tabRippleColor="@null"
-            app:tabSelectedTextColor="@color/themeColor"
-            app:tabTextAppearance="@style/tabText"
-            app:tabTextColor="@color/semi_black"
-            app:tabUnboundedRipple="false">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Desi Kahaniya" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Audio Story" />
-
-
-        </com.google.android.material.tabs.TabLayout>
-
-
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/vpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             tools:ignore="SpeakableTextPresentCheck" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surface_ivory"
+            android:elevation="12dp"
+            app:activeIndicatorLabelPadding="4dp"
+            app:itemActiveIndicatorStyle="@style/Widget.Editorial.NavIndicator"
+            app:itemIconSize="28dp"
+            app:itemPaddingTop="12dp"
+            app:itemPaddingBottom="12dp"
+            app:itemIconTint="@color/nav_item_tint"
+            app:itemTextColor="@color/nav_item_tint"
+            app:itemTextAppearanceActive="@style/TextAppearance.Editorial.NavLabelActive"
+            app:itemTextAppearanceInactive="@style/TextAppearance.Editorial.NavLabel"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav_menu" />
 
 
     </LinearLayout>
@@ -109,12 +151,17 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navmenu"
-        style="@style/NavigationDrawerStyle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/background2"
+        android:background="@color/surface_ivory"
         app:headerLayout="@layout/navheader"
-        app:itemTextAppearance="@style/NavigationDrawerStyle"
+        app:itemHorizontalPadding="16dp"
+        app:itemIconPadding="18dp"
+        app:itemIconTint="@color/nav_item_tint"
+        app:itemShapeInsetEnd="12dp"
+        app:itemShapeInsetStart="12dp"
+        app:itemTextAppearance="@style/TextAppearance.Editorial.Body"
+        app:itemTextColor="@color/ink"
         app:menu="@menu/iconmenu" />
 </androidx.drawerlayout.widget.DrawerLayout>

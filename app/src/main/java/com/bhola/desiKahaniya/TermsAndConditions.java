@@ -2,28 +2,19 @@ package com.bhola.desiKahaniya;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 
+/**
+ * No in-app screen: opens the hosted terms page directly in the browser and
+ * finishes immediately, so there is only one copy of the document to keep
+ * accurate rather than an in-app mirror that can drift from it.
+ */
 public class TermsAndConditions extends AppCompatActivity {
-    ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_terms_conditions);
-
-
-        back = findViewById(R.id.back_arrow);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Collection_GridView.class);
-
-                startActivity(intent);
-            }
-        });
+        LegalDocRenderer.openUrl(this, getString(R.string.legal_url_terms));
+        finish();
     }
 }

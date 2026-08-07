@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_nav_home"
+        android:title="कहानियाँ" />
+
+    <item
+        android:id="@+id/nav_audio"
+        android:icon="@drawable/ic_nav_audio"
+        android:title="ऑडियो" />
+
+    <item
+        android:id="@+id/nav_saved"
+        android:icon="@drawable/ic_nav_saved"
+        android:title="सेव्ड" />
+
+    <item
+        android:id="@+id/nav_more"
+        android:icon="@drawable/ic_nav_more"
+        android:title="मेन्यू" />
+
+</menu>

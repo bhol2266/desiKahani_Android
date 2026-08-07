@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One heading + body block of an in-app legal document. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="22dp">
+
+    <TextView
+        android:id="@+id/docSectionHeading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/robotoslab_regular"
+        android:textColor="@color/ink"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Overview"
+        xmlns:tools="http://schemas.android.com/tools" />
+
+    <View
+        android:layout_width="26dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="9dp"
+        android:background="@color/gold" />
+
+    <TextView
+        android:id="@+id/docSectionBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+        android:lineSpacingExtra="6dp"
+        android:textColor="@color/ink_muted"
+        android:textSize="14sp" />
+
+</LinearLayout>

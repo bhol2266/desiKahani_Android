@@ -1,135 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="20dp"
-    android:elevation="10dp"
-    android:background="@drawable/background2"
-    android:orientation="vertical"
-    android:outlineAmbientShadowColor="@color/themeColor"
-    android:outlineSpotShadowColor="@color/themeColor"
-    android:padding="20dp">
-
+    android:layout_margin="18dp"
+    app:cardBackgroundColor="@color/surface_ivory"
+    app:cardCornerRadius="26dp"
+    app:cardElevation="8dp"
+    app:strokeWidth="0dp">
 
     <LinearLayout
-        android:id="@+id/banner_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone" />
+        android:padding="22dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:textColor="@color/semi_black"
-        android:text="Please update the app to latest version."
-        android:textSize="16dp"
-        android:textStyle="bold" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/banner_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/currentVersion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:fontFamily="@font/robotoslab_regular"
-            android:gravity="left"
-            android:text="Your Version: 1" />
+            android:fontFamily="@font/inter"
+            android:letterSpacing="0.14"
+            android:text="अपडेट"
+            android:textColor="@color/gold_deep"
+            android:textSize="10sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/NewerVersion"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/kalam_regular"
+            android:text="Please update the app to latest version."
+            android:textColor="@color/ink"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/currentVersion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/section_label_chip"
+                android:fontFamily="@font/inter"
+                android:gravity="center"
+                android:paddingVertical="7dp"
+                android:text="Your Version: 1"
+                android:textColor="@color/ink_muted"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/NewerVersion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/vip_tag_bg"
+                android:fontFamily="@font/inter"
+                android:gravity="center"
+                android:paddingVertical="7dp"
+                android:text="Latest Version: 1"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="16dp"
+            android:background="@color/divider_warm" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/robotoslab_regular"
-            android:gravity="left"
-            android:paddingLeft="20dp"
-            android:text="Latest Version: 1" />
+            android:text="What's new"
+            android:textColor="@color/ink"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="1. 100000+ Latest Stories Added"
+            android:textAppearance="@style/TextAppearance.Editorial.Body" />
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="2. Bug Fixes"
+            android:textAppearance="@style/TextAppearance.Editorial.Body" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        android:layout_marginTop="10dp"
-        android:gravity="left"        android:textColor="@color/semi_black"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="3. New Features Added"
+            android:textAppearance="@style/TextAppearance.Editorial.Body" />
 
-        android:text="What's new"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="4. Fully Optimized App"
+            android:textAppearance="@style/TextAppearance.Editorial.Body" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        android:gravity="left"
-        android:text="1. 100000+ Latest Stories Added" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="5. New Download Feature Added"
+            android:textAppearance="@style/TextAppearance.Editorial.Body" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="2. Bug Fixes" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="3. New Features Added" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="4. Fully Optimized App" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="5. New Download Feature Added" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <!--        <Button-->
-        <!--            android:id="@+id/cancelBtn"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="5dp"-->
-        <!--            android:layout_weight="1"-->
-        <!--            android:text="CANCEL"-->
-        <!--            android:textAlignment="center" />-->
-
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/UpdateBtn"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@color/themeColor"
-            android:padding="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/inter"
             android:text="UPDATE"
             android:textAlignment="center"
-            android:textColor="#ffffff" />
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@color/ink"
+            app:cornerRadius="18dp" />
 
 
     </LinearLayout>
 
 
-</LinearLayout>
-
+</com.google.android.material.card.MaterialCardView>

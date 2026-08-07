@@ -1,54 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/background2"
-   >
+    android:layout_gravity="center"
+    android:layout_margin="18dp"
+    app:cardBackgroundColor="@color/surface_ivory"
+    app:cardCornerRadius="26dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="0dp">
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="20dp">
-    <TextView
-        android:id="@+id/whatsappnumber"
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="20dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="WhatsApp: +91-9108825914"
-        android:textColor="#000000"
-        android:background="@drawable/hooverffext"
-android:visibility="gone"
-        android:gravity="center"
-        android:textSize="20dp" />
+        android:orientation="vertical"
+        android:padding="22dp">
+
+        <TextView
+            android:id="@+id/CANCEL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/kalam_regular"
+            android:gravity="center"
+            android:text="Feel Free To Contact Me"
+            android:textColor="@color/ink"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="34dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/gold" />
+
+        <TextView
+            android:id="@+id/whatsappnumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/contact_row_bg"
+            android:fontFamily="@font/inter"
+            android:gravity="center"
+            android:paddingVertical="14dp"
+            android:text="WhatsApp: +91-9108825914"
+            android:textColor="@color/ink"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/contact_row_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/inter"
+            android:gravity="center"
+            android:paddingVertical="14dp"
+            android:text="Email: ukdevelopers007@gmail.com"
+            android:textColor="@color/ink"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="टैप करके कॉपी करें"
+            android:textAppearance="@style/TextAppearance.Editorial.Meta" />
 
 
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/hooverffext"
-        android:text="Email: ukdevelopers007@gmail.com"
-        android:textColor="@color/textcolor"
-        android:gravity="center"
-        android:textSize="18dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/whatsappnumber"
-        />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/CANCEL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Feel Free To Contact Me"
-        android:textColor="#000000"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/email"
-        />
-
-
-
-</RelativeLayout>
-</RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

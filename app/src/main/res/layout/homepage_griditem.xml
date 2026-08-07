@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<soup.neumorphism.NeumorphCardView
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_columnWeight="1"
     android:layout_gravity="center"
-    app:neumorph_shadowColorDark="#FFF8FB"
-    app:neumorph_shadowColorLight="@color/neuro_shadowcolor">
+    app:cardBackgroundColor="@color/surface_ivory"
+    app:cardCornerRadius="22dp"
+    app:cardElevation="3dp"
+    app:strokeWidth="0dp">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -21,42 +18,103 @@
         <ImageView
             android:id="@+id/auntyImageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/aunty7" />
 
-
-        <TextView
-            android:id="@+id/Textview1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:background="@color/themeColorlight"
-            android:breakStrategy="high_quality"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="Latest Story"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16dp" />
-
+        <!-- Locked (non-VIP) veil + gold seal.
+             Declared BEFORE the caption so the category title still reads
+             clearly on top of the veil. -->
         <LinearLayout
             android:id="@+id/lockLayout"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#70000000"
+            android:background="@color/locked_veil"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="34dp"
+            android:visibility="gone">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:src="@drawable/lock" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:cardBackgroundColor="@color/gold_wash"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/gold"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/lock" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:fontFamily="@font/inter"
+                android:letterSpacing="0.18"
+                android:text="VIP"
+                android:textColor="@color/gold_soft"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Caption scrim -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="88dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/image_caption_scrim" />
+
+        <!-- Numbered index chip -->
+        <TextView
+            android:id="@+id/itemIndexBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="10dp"
+            android:background="@drawable/index_badge_bg"
+            android:gravity="center"
+            android:minWidth="26dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp"
+            android:text="01"
+            android:textAppearance="@style/TextAppearance.Editorial.Badge" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="12dp">
+
+            <!-- Gold rule above the title -->
+            <View
+                android:layout_width="22dp"
+                android:layout_height="2dp"
+                android:layout_marginBottom="6dp"
+                android:background="@color/gold" />
+
+            <TextView
+                android:id="@+id/Textview1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/kalam_regular"
+                android:maxLines="2"
+                android:text="Latest Story"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
 
     </FrameLayout>
 
-</soup.neumorphism.NeumorphCardView>
+</com.google.android.material.card.MaterialCardView>

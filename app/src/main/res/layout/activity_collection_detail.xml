@@ -9,52 +9,61 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/surface_ivory"
+        android:paddingVertical="6dp">
 
         <ImageView
             android:id="@+id/back_arrow"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            app:tint="@color/themeColor"
+            android:padding="7dp"
+            app:tint="@color/ink"
             app:srcCompat="@drawable/back_arrow" />
 
         <TextView
             android:id="@+id/title_collection"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/robotoslab_regular"
+            android:layout_marginStart="62dp"
+            android:layout_marginEnd="62dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/kalam_regular"
             android:gravity="center"
             android:longClickable="true"
+            android:maxLines="1"
             android:text="Detail View"
-            android:textColor="#454545"
-            android:textFontWeight="700"
-            android:textSize="27sp" />
+            android:textColor="@color/ink"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/VipLottie"
-            android:layout_width="35dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:src="@drawable/crown"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            />
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/vip_pill_bg"
+            android:padding="7dp"
+            android:src="@drawable/crown" />
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_warm" />
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
@@ -62,7 +71,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/background2"
         android:visibility="gone"
         ads:adSize="BANNER"
         ads:adUnitId="@string/BannerAd" />
@@ -77,43 +85,46 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-         />
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:paddingBottom="10dp"
+            android:scrollbars="none" />
 
         <LinearLayout
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
-            android:background="@drawable/background2"
+            android:background="@color/surface_ivory"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
 
-            <ProgressBar
-                style="?android:attr/progressBarStyle"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                style="@style/Widget.Editorial.ProgressIndicator"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                android:backgroundTint="#FF0000"
-                android:indeterminateTint="#9A3412" />
+                android:indeterminate="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="12dp"
                 android:fontFamily="@font/inter"
                 android:gravity="center"
-                android:text="loading stories..." />
+                android:text="loading stories..."
+                android:textColor="@color/ink_muted"
+                android:textSize="13sp" />
         </LinearLayout>
 
         <TextView
@@ -122,14 +133,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="120dp"
+            android:fontFamily="@font/inter"
             android:text="No stories Downloaded..."
-            android:textColor="#454545"
-            android:textSize="20dp"
+            android:textColor="@color/ink_muted"
+            android:textSize="15sp"
             android:visibility="gone" />
 
     </FrameLayout>
-
-
 
 
     <TextView
@@ -138,23 +148,26 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/inter"
         android:text="Check Internet Connection !"
-        android:textColor="#000000"
-        android:textSize="20dp"
+        android:textColor="@color/ink"
+        android:textSize="15sp"
         android:visibility="gone" />
 
-    <soup.neumorphism.NeumorphButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/retryBtn"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/hooverffext"
-        android:fontFamily="@font/robotoslab_regular"
-        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/inter"
+        android:paddingHorizontal="34dp"
         android:text="Retry"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:backgroundTint="@color/ink"
+        app:cornerRadius="20dp" />
 
 
 </LinearLayout>
