@@ -91,6 +91,7 @@ public class StoryPage extends AppCompatActivity {
         Intents_and_InitViews();
         actionBar();
         reportButton();
+        hideExtrasDuringUpdateMode();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -444,6 +445,29 @@ public class StoryPage extends AppCompatActivity {
         });
     }
 
+    /**
+     * While update mode is on, the story body is placeholder text, so everything
+     * that hangs off a *real* story is meaningless: "talk to the writer" only
+     * had a "coming soon!" toast behind it, the other-parts/related-stories
+     * sections have nothing to link to, and reporting placeholder text is
+     * pointless. Hiding them keeps the screen honest instead of showing controls
+     * that lead nowhere.
+     */
+    private void hideExtrasDuringUpdateMode() {
+        if (!"active".equals(SplashScreen.App_updating)) return;
+
+        int[] extras = {
+                R.id.speakWithWriter,
+                R.id.storiesInsideparagraph,
+                R.id.reportStoryBtn,
+                R.id.relatedStoriesLayout,
+        };
+        for (int id : extras) {
+            View view = findViewById(id);
+            if (view != null) view.setVisibility(View.GONE);
+        }
+    }
+
     private void actionBar() {
         text2Speech();
         back = findViewById(R.id.back_arrow);
@@ -478,9 +502,7 @@ public class StoryPage extends AppCompatActivity {
 
         ImageView VipMembership = findViewById(R.id.VipLottie);
 
-        if (SplashScreen.App_updating.equals("active")) {
-            VipMembership.setVisibility(View.GONE);
-        }
+        // Visible during update mode as well - see Collection_GridView.
         VipMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -667,6 +689,11 @@ public class StoryPage extends AppCompatActivity {
                 }
             });
             storiesInsideparagraphLayout.addView(view);
+            // Reveal the section only now that it actually has something in it,
+            // and never while update mode is showing placeholder text.
+            if (!"active".equals(SplashScreen.App_updating)) {
+                storiesInsideparagraphLayout.setVisibility(View.VISIBLE);
+            }
         }
 
 
@@ -705,6 +732,9 @@ public class StoryPage extends AppCompatActivity {
                 }
             });
             relatedStoriesLayout.addView(view);
+            if (!"active".equals(SplashScreen.App_updating)) {
+                relatedStoriesLayout.setVisibility(View.VISIBLE);
+            }
         }
 
 

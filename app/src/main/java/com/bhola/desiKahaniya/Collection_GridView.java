@@ -110,9 +110,9 @@ Collection_GridView extends AppCompatActivity {
 
         ImageView VipMembership = findViewById(R.id.VipLottie);
 
-        if (SplashScreen.App_updating.equals("active")) {
-            VipMembership.setVisibility(View.GONE);
-        }
+        // Kept visible during update mode too - the membership screen itself is
+        // fully functional then (it hides its benefits list and just shows the
+        // plans), so there's no reason to make the entry point disappear.
         VipMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -542,6 +542,19 @@ Collection_GridView extends AppCompatActivity {
         // mode is active there's no real audio content behind it either.
         if ("active".equals(SplashScreen.App_updating)) {
             nav.getMenu().removeItem(R.id.menu_audio);
+        }
+
+        // "App 1" is the cross-promo link to the other app. Its handler already
+        // does nothing unless exit_Refer_appNavigation is active AND
+        // Refer_App_url2 is a real URL, so whenever either is unset the row is a
+        // dead menu entry that silently swallows the tap. Only show it when it
+        // will actually do something, and never during update mode.
+        boolean referralUsable = !"active".equals(SplashScreen.App_updating)
+                && "active".equals(SplashScreen.exit_Refer_appNavigation)
+                && SplashScreen.Refer_App_url2 != null
+                && SplashScreen.Refer_App_url2.startsWith("http");
+        if (!referralUsable) {
+            nav.getMenu().removeItem(R.id.menu_second_app);
         }
 
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {

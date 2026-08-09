@@ -83,16 +83,13 @@ public class Collection_detail extends AppCompatActivity {
         retryBtn = findViewById(R.id.retryBtn);
 
 
-        if (isInternetAvailable(Collection_detail.this)) {
-//
-            Send_ALL_DATA_TO_RECYCLERVIEW();
-
-
-        } else {
-            check_Internet_Connection.setVisibility(View.VISIBLE);
-            check_Internet_Connection.setText("No Internet Connection");
-            retryBtn.setVisibility(View.VISIBLE);
-        }
+        // Stories are served entirely from the SQLite database bundled with the
+        // app - getDataFromDB()/getfakeStories() make no network call at all.
+        // This used to be gated behind a connectivity check, so an app named
+        // "Desi Kahaniya (Offline)" showed "No Internet Connection" instead of
+        // content it already had on disk. Load unconditionally; the empty state
+        // below only appears if the database genuinely returns nothing.
+        Send_ALL_DATA_TO_RECYCLERVIEW();
 
         retryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +176,27 @@ public class Collection_detail extends AppCompatActivity {
         cursor.close();
         adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
+        showEmptyStateIfNeeded();
 
+    }
+
+    /**
+     * Only shown when the local database really had nothing for this category -
+     * never as a substitute for content that is already on disk.
+     */
+    private void showEmptyStateIfNeeded() {
+        if (!collectonData.isEmpty()) {
+            check_Internet_Connection.setVisibility(View.GONE);
+            retryBtn.setVisibility(View.GONE);
+            return;
+        }
+
+        check_Internet_Connection.setVisibility(View.VISIBLE);
+        check_Internet_Connection.setText(
+                isInternetAvailable(Collection_detail.this)
+                        ? "No stories found"
+                        : "No Internet Connection");
+        retryBtn.setVisibility(View.VISIBLE);
     }
 
 
@@ -202,6 +219,7 @@ public class Collection_detail extends AppCompatActivity {
         cursor.close();
         adapter.notifyDataSetChanged();
         progressBar.setVisibility(View.GONE);
+        showEmptyStateIfNeeded();
     }
 
     boolean isInternetAvailable(Context context) {
@@ -315,9 +333,7 @@ public class Collection_detail extends AppCompatActivity {
         });
         ImageView VipMembership = findViewById(R.id.VipLottie);
 
-        if (SplashScreen.App_updating.equals("active")) {
-            VipMembership.setVisibility(View.GONE);
-        }
+        // Visible during update mode as well - see Collection_GridView.
         VipMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

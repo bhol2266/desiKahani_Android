@@ -174,12 +174,17 @@
                             app:backgroundTint="@color/gold"
                             app:cornerRadius="18dp" />
 
+                        <!-- Hidden until a link is actually added (see
+                             StoryPage#setStoriesLinksInLayout). It used to default
+                             to visible, so a story with no linked parts showed a
+                             bare heading with nothing under it. -->
                         <LinearLayout
                             android:id="@+id/storiesInsideparagraph"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:paddingVertical="8dp">
+                            android:paddingVertical="8dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -215,12 +220,14 @@
                             app:iconSize="15dp"
                             app:iconTint="@color/ink_faint" />
 
+                        <!-- Same as above: only revealed once a related story is added. -->
                         <LinearLayout
                             android:id="@+id/relatedStoriesLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:paddingVertical="8dp">
+                            android:paddingVertical="8dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"

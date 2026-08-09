@@ -140,9 +140,7 @@ public class OfflineAudioStory extends AppCompatActivity {
 
         ImageView VipMembership = findViewById(R.id.VipLottie);
 
-        if (SplashScreen.App_updating.equals("active")) {
-            VipMembership.setVisibility(View.GONE);
-        }
+        // Visible during update mode as well - see Collection_GridView.
         VipMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
