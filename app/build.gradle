@@ -22,8 +22,8 @@ android {
         applicationId "com.bhola.desiKahaniya"
         minSdkVersion 23
         targetSdkVersion 36
-        versionCode 39
-        versionName "39"
+        versionCode 42
+        versionName "42"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -83,7 +83,9 @@ dependencies {
     // usage anywhere in the app, and upstream is near-dormant.
 
     implementation 'com.google.android.play:review:2.0.2'
-    implementation 'com.google.android.play:asset-delivery:2.3.0'
+    // asset-delivery removed: no AssetPack/SplitInstall usage anywhere in the app,
+    // and its AssetPackExtractionService was the source of the FOREGROUND_SERVICE /
+    // FOREGROUND_SERVICE_DATA_SYNC permissions merged into the manifest.
     implementation 'com.google.android.play:app-update:2.1.0'
     implementation 'com.google.android.gms:play-services-tasks:18.4.1'
 

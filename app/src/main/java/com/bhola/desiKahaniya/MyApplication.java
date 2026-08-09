@@ -37,8 +37,6 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
-import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -63,16 +61,15 @@ public class MyApplication extends Application
     public void onCreate() {
         super.onCreate();
 
-        // Must run before any FirebaseDatabase reference is created anywhere in the
-        // app (SplashScreen's remote-config read, admin_panel's toggle state, etc.).
-        // Without this, the RTDB connection is torn down whenever nothing is actively
-        // listening, so every screen that reads it - most visibly the admin panel,
-        // opened and closed repeatedly in one session - pays a fresh ~2s WebSocket
-        // handshake on every read even though the config node itself is tiny.
-        // keepSynced() keeps that node's local cache warm so later reads return
-        // instantly while syncing with the server in the background.
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        FirebaseDatabase.getInstance().getReference("Sexy_Desi_Kahani").keepSynced(true);
+        // NOTE: RTDB disk persistence (setPersistenceEnabled + keepSynced) was
+        // deliberately removed. It sped the admin panel's config read up from ~2s
+        // to ~40ms, but it also changes what addListenerForSingleValueEvent does:
+        // with persistence on, that read can be served straight from a COLD, EMPTY
+        // local cache before the server ever answers. SplashScreen's config read
+        // then saw an empty snapshot on first launch, which is how v41 shipped a
+        // crash-on-open. Startup correctness outranks a faster admin screen -
+        // especially now that day-to-day config editing happens in the web control
+        // panel rather than in-app.
 
         // Runs on EVERY process start, including when Android restores a task after
         // killing the process. SplashScreen may not run on that path, so the gating

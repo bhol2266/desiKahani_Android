@@ -9,8 +9,10 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <!-- FOREGROUND_SERVICE / FOREGROUND_SERVICE_MEDIA_PLAYBACK removed: background
+         audio playback (AudioPlayerService) is disabled for now pending the Play
+         Console foreground-service-permissions declaration. AudioPlayerService.java
+         is left in place, unregistered below, to re-enable later. -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -105,12 +107,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".AudioPlayerService"
-            android:foregroundServiceType="mediaPlayback"
-            android:exported="false" />
-
-        <receiver android:name=".NotificationDismissedReceiver" android:exported="false" />
+        <!-- AudioPlayerService / NotificationDismissedReceiver unregistered for now:
+             background/foreground playback is disabled until the Play Console
+             foreground-service-permissions declaration is filed. Java classes are
+             left in place to re-enable later - just restore these entries and the
+             two uses-permission lines above. -->
 
         <service
             android:name=".TimerService"

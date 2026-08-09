@@ -38,9 +38,9 @@ public class admin_panel extends AppCompatActivity {
 
     DatabaseReference mref, notificationMref;  TextView Users_Counters;
     Button   Refer_App_url_BTN, databaseBtn;
-    // MaterialSwitch extends SwitchCompat, NOT android.widget.Switch, so these
-    // fields must be MaterialSwitch or findViewById would ClassCastException.
-    MaterialSwitch switch_Exit_Nav, switch_Activate_Ads, switch_App_Updating;
+    // MaterialSwitch extends SwitchCompat, NOT android.widget.Switch, so this
+    // field must be MaterialSwitch or findViewById would ClassCastException.
+    MaterialSwitch switch_Activate_Ads;
     Button Ad_Network;
     static String uncensored_title = "";
     FirebaseFirestore firestore;
@@ -68,8 +68,6 @@ public class admin_panel extends AppCompatActivity {
         notificationMref = FirebaseDatabase.getInstance().getReference();
         Ad_Network = findViewById(R.id.Ad_Network);
         switch_Activate_Ads = findViewById(R.id.Activate_Ads);
-        switch_App_Updating = findViewById(R.id.App_updating_Switch);
-        switch_Exit_Nav = findViewById(R.id.switch_Exit_Nav);
         Refer_App_url_BTN = findViewById(R.id.Refer_App_url_BTN);
         databaseBtn = findViewById(R.id.databaseBtn);
 
@@ -243,20 +241,6 @@ public class admin_panel extends AppCompatActivity {
 
         });
 
-        switch_Exit_Nav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
-                if (isChecked) {
-                    mref.child("switch_Exit_Nav").setValue("active");
-                } else {
-                    mref.child("switch_Exit_Nav").setValue("inactive");
-                }
-
-            }
-        });
-
         switch_Activate_Ads.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -265,23 +249,6 @@ public class admin_panel extends AppCompatActivity {
 
                 } else {
                     mref.child("Ads").setValue("inactive");
-                }
-
-            }
-        });
-
-        switch_App_Updating.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked) {
-                    mref.child("updatingApp_on_PLatStore").setValue("active");
-                    mref.child("Send_Notification").setValue("inactive");
-
-                } else {
-                    mref.child("updatingApp_on_PLatStore").setValue("inactive");
-                    mref.child("Send_Notification").setValue("active");
-
                 }
 
             }
@@ -299,16 +266,6 @@ public class admin_panel extends AppCompatActivity {
         mref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String match = (String) snapshot.child("switch_Exit_Nav").getValue().toString().trim();
-
-                if (match.equals("active")) {
-                    switch_Exit_Nav.setChecked(true);
-
-                } else {
-
-                    switch_Exit_Nav.setChecked(false);
-                }
-
                 String Ads = (String) snapshot.child("Ads").getValue().toString().trim();
 
                 if (Ads.equals("active")) {
@@ -316,12 +273,6 @@ public class admin_panel extends AppCompatActivity {
 
                 } else {
                     switch_Activate_Ads.setChecked(false);
-                }
-
-                if (snapshot.child("updatingApp_on_PLatStore").getValue().toString().trim().equals("active")) {
-                    switch_App_Updating.setChecked(true);
-                } else {
-                    switch_App_Updating.setChecked(false);
                 }
 
                 String Ad_Network_name = (String) snapshot.child("Ad_Network").getValue().toString().trim();

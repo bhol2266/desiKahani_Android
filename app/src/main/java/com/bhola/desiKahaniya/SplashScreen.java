@@ -256,23 +256,42 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                // Every field is read defensively, falling back to the value already
+                // restored from the local cache. A partially-populated - or entirely
+                // empty - snapshot must never stop the app from opening.
+                //
+                // This used to unbox version_code/update_Mandatory straight out of
+                // getValue(), so an empty snapshot threw NullPointerException here,
+                // on the main thread, while the splash screen was still showing: the
+                // app died before it ever opened. Google Play rejected v41 for exactly
+                // that ("Broken Functionality: your app doesn't open or load").
+                try {
+                    Refer_App_url2 = cfgString(snapshot, "Refer_App_url2", Refer_App_url2);
+                    exit_Refer_appNavigation =
+                            cfgString(snapshot, "switch_Exit_Nav", exit_Refer_appNavigation);
+                    Ads_State = cfgString(snapshot, "Ads", Ads_State);
+                    App_updating =
+                            cfgString(snapshot, "updatingApp_on_PLatStore", App_updating);
+                    Notification_ImageURL =
+                            cfgString(snapshot, "Notification_ImageURL", Notification_ImageURL);
+                    Ad_Network_Name = cfgString(snapshot, "Ad_Network", Ad_Network_Name);
 
-                Refer_App_url2 = (String) snapshot.child("Refer_App_url2").getValue();
-                exit_Refer_appNavigation = (String) snapshot.child("switch_Exit_Nav").getValue();
-                Ads_State = (String) snapshot.child("Ads").getValue();
-                App_updating = (String) snapshot.child("updatingApp_on_PLatStore").getValue();
-                Notification_ImageURL = (String) snapshot.child("Notification_ImageURL").getValue();
-                Ad_Network_Name = (String) snapshot.child("Ad_Network").getValue();
+                    Firebase_Version_Code =
+                            cfgInt(snapshot, "version_code", Firebase_Version_Code);
+                    apk_Downloadlink =
+                            cfgString(snapshot, "apk_Downloadlink", apk_Downloadlink);
+                    update_Mandatory =
+                            cfgBool(snapshot, "update_Mandatory", update_Mandatory);
+                    databaseURL = cfgString(snapshot, "databaseURL", databaseURL);
+                    API_URL = cfgString(snapshot, "API_URL", API_URL);
 
-                Firebase_Version_Code = snapshot.child("version_code").getValue(Integer.class);
-                apk_Downloadlink = (String) snapshot.child("apk_Downloadlink").getValue();
-                update_Mandatory = (boolean) snapshot.child("update_Mandatory").getValue();
-                databaseURL = (String) snapshot.child("databaseURL").getValue();
-                API_URL = (String) snapshot.child("API_URL").getValue();
-
-                // Keep a local copy so these survive the process being killed.
-                cacheRemoteConfig(SplashScreen.this);
-
+                    // Keep a local copy so these survive the process being killed.
+                    cacheRemoteConfig(SplashScreen.this);
+                } catch (Exception e) {
+                    // Last-resort net: whatever happens while parsing config, the app
+                    // still has to open. Cached/default values stay in effect.
+                    Log.d(TAG, "onDataChange config parse failed: " + e.getMessage());
+                }
 
                 Handler handler2 = new Handler();
                 handler2.postDelayed(new Runnable() {
@@ -299,6 +318,27 @@ public class SplashScreen extends AppCompatActivity {
 
     }
 
+
+    /* ---- Null-safe remote-config readers -------------------------------
+       Firebase hands back null for any key that is missing, and can deliver a
+       completely empty snapshot from a cold disk cache before the server has
+       answered. Each of these returns the caller's existing value in that case
+       rather than null (or an NPE on unboxing).                             */
+
+    private static String cfgString(DataSnapshot snapshot, String key, String fallback) {
+        Object value = snapshot.child(key).getValue();
+        return value == null ? fallback : String.valueOf(value);
+    }
+
+    private static int cfgInt(DataSnapshot snapshot, String key, int fallback) {
+        Integer value = snapshot.child(key).getValue(Integer.class);
+        return value == null ? fallback : value;
+    }
+
+    private static boolean cfgBool(DataSnapshot snapshot, String key, boolean fallback) {
+        Boolean value = snapshot.child(key).getValue(Boolean.class);
+        return value == null ? fallback : value;
+    }
 
     private void generateNotification() {
 

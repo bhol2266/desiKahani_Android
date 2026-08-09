@@ -206,6 +206,12 @@ public class AudioPlayerService extends Service {
         mediaSession.setPlaybackState(playbackState);
     }
 
+    // This service is currently unregistered in AndroidManifest.xml (background
+    // playback disabled pending the Play Console foreground-service-permissions
+    // declaration - see AudioPlayer.java), so lint can no longer see a
+    // foregroundServiceType for it. Suppressed rather than reworked, since the
+    // manifest entry (and this call) come back together when re-enabled.
+    @android.annotation.SuppressLint("ForegroundServiceType")
     private void showNotification(boolean isPlaying) {
 
         Intent notifIntent = new Intent(this, SplashScreen.class);
