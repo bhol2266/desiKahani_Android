@@ -266,19 +266,19 @@ public class admin_panel extends AppCompatActivity {
         mref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String Ads = (String) snapshot.child("Ads").getValue().toString().trim();
+                // getValue() is null for any key the node doesn't have, so calling
+                // .toString() on it straight away threw NPE and killed this screen -
+                // the same mistake that crashed SplashScreen on launch.
+                Object adsValue = snapshot.child("Ads").getValue();
+                switch_Activate_Ads.setChecked(
+                        adsValue != null && "active".equals(adsValue.toString().trim()));
 
-                if (Ads.equals("active")) {
-                    switch_Activate_Ads.setChecked(true);
-
-                } else {
-                    switch_Activate_Ads.setChecked(false);
-                }
-
-                String Ad_Network_name = (String) snapshot.child("Ad_Network").getValue().toString().trim();
+                Object networkValue = snapshot.child("Ad_Network").getValue();
+                String Ad_Network_name =
+                        networkValue == null ? "admob" : networkValue.toString().trim();
 
                 Ad_Network.setText(Ad_Network_name);
-                if (snapshot.child("Ad_Network").getValue().toString().trim().equals("admob")) {
+                if (Ad_Network_name.equals("admob")) {
                     Ad_Network.setBackgroundColor(Color.parseColor("#D11A1A"));
                 } else {
                     Ad_Network.setBackgroundColor(Color.parseColor("#4267B2"));

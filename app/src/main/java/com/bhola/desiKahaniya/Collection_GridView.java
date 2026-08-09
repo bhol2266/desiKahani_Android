@@ -614,9 +614,17 @@ Collection_GridView extends AppCompatActivity {
                     case R.id.menu_rating:
 
 
+                        // Needs a handler for http/market URLs; a device without a
+                        // browser or Play Store would otherwise throw
+                        // ActivityNotFoundException and take the app down.
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(SplashScreen.Main_App_url1));
-                        startActivity(i);
+                        try {
+                            startActivity(i);
+                        } catch (Exception e) {
+                            Toast.makeText(Collection_GridView.this,
+                                    "Couldn't open the Play Store", Toast.LENGTH_SHORT).show();
+                        }
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.menu_notificaton:
@@ -645,8 +653,13 @@ Collection_GridView extends AppCompatActivity {
 
                             Intent j = new Intent(Intent.ACTION_VIEW);
                             j.setData(Uri.parse(SplashScreen.Refer_App_url2));
-                            Log.d("dghsdfghs", "Refer_App_url2: " + SplashScreen.Refer_App_url2);
-                            startActivity(j);
+                            // Refer_App_url2 is operator-supplied and has held
+                            // non-URL values, which ACTION_VIEW cannot resolve.
+                            try {
+                                startActivity(j);
+                            } catch (Exception e) {
+                                Log.d(TAG, "menu_second_app: " + e.getMessage());
+                            }
                             drawerLayout.closeDrawer(GravityCompat.START);
                         }
                         break;

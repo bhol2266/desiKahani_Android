@@ -120,7 +120,12 @@ public class VipMembership extends AppCompatActivity implements DrawsUnderStatus
                     public void run() {
 
                         // Same mapping the restore path uses, so the two cannot drift.
-                        int Validity_period = validityDaysFor(purchase.getProducts().get(0));
+                        // Guarded: an empty product list would throw here, and this
+                        // runs *after* the user has already paid - a crash on this
+                        // line would take payment without ever recording membership.
+                        String productId = purchase.getProducts().isEmpty()
+                                ? null : purchase.getProducts().get(0);
+                        int Validity_period = validityDaysFor(productId);
 
                         savePurchaseDetails_inSharedPreference(purchase.getPurchaseToken(), Validity_period, purchase.getPurchaseTime());
 
