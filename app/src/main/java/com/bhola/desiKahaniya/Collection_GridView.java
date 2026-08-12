@@ -737,8 +737,17 @@ Collection_GridView extends AppCompatActivity {
                     // matter the result, we continue our app flow.
                 });
             } else {
-                // There was some problem, log or handle the error code.
-                @ReviewErrorCode int reviewErrorCode = ((ReviewException) task.getException()).getErrorCode();
+                // The request fails routinely - no Play Store on the device, no
+                // network, or the review quota is spent - and the failure is not
+                // always a ReviewException. Casting it blind crashed the app on
+                // exit; there is nothing to do here but note it and move on.
+                Exception cause = task.getException();
+                if (cause instanceof ReviewException) {
+                    @ReviewErrorCode int reviewErrorCode = ((ReviewException) cause).getErrorCode();
+                    Log.w(SplashScreen.TAG, "in-app review unavailable, code " + reviewErrorCode);
+                } else {
+                    Log.w(SplashScreen.TAG, "in-app review unavailable", cause);
+                }
             }
         });
 
