@@ -14,8 +14,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,7 +56,6 @@ import java.util.Map;
 
 public class SplashScreen extends AppCompatActivity {
 
-    Animation topAnim, bottomAnim;
     TextView textView;
     LottieAnimationView lottie;
     public static String TAG = "TAGA";
@@ -83,14 +80,14 @@ public class SplashScreen extends AppCompatActivity {
     public static int DB_VERSION = 1;//manual set
     public static int currentApp_Version = 2;//manual set
     public static int Firebase_Version_Code = 1;//manual set
-    public static int DB_VERSION_INSIDE_TABLE = 2; //manual set
+    public static int DB_VERSION_INSIDE_TABLE = 6; //manual set
     Handler handlerr;
 
     public static String apk_Downloadlink = "";
     public static String countryLocation = "";
     public static String countryCode = "";
     public static boolean update_Mandatory = false;
-    public static String DB_TABLE_NAME = "";  //This is a table name "StoryItems or FakeStory"
+    public static String DB_TABLE_NAME = "";  //This is a table name "StoryItems or LoveStory"
     public static String API_URL = "https://clownfish-app-jn7w9.ondigitalocean.app/";
     private FirebaseAnalytics mFirebaseAnalytics;
     public static boolean Vip_Member = false;
@@ -103,10 +100,17 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.splash_screen);
 
 
-        topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
-        bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
-        textView = findViewById(R.id.textView_splashscreen);
+        textView = findViewById(R.id.textView_splashscreenn);
         lottie = findViewById(R.id.lottie);
+
+        // The title is drawn where it sits, with no entrance animation.
+        //
+        // It used to slide up from +600% via setAnimation(). That never ran cleanly:
+        // setAnimation() only attaches the animation for some later draw, so the text
+        // was painted once at its resting position and then jumped back down to start
+        // the slide, and the startup work on this screen held the main thread through
+        // the frames the slide needed. Removing it is what actually makes the title
+        // appear cleanly - there is no animation left to drop frames.
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -127,7 +131,6 @@ public class SplashScreen extends AppCompatActivity {
         }, 1500);
 
 
-        textView.setAnimation(bottomAnim);
         lottie.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -150,8 +153,20 @@ public class SplashScreen extends AppCompatActivity {
             }
         });
 
-        generateNotification();
+        // Stays inline: it only reads intent extras, and it sets the flag the
+        // navigation below branches on. Deferring it would send a notification tap to
+        // the home grid instead of the story it was opened for.
         generateFCMToken();
+
+        // The topic subscription is a Firebase Messaging call on the main thread and
+        // nothing on this screen depends on it, so it is kept off the frames that draw
+        // the splash.
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                generateNotification();
+            }
+        }, 1600);
 
     }
 
@@ -207,14 +222,17 @@ public class SplashScreen extends AppCompatActivity {
         mapObj.put("views", "6541");
         mapObj.put("description", "");
         mapObj.put("audiolink",audiolink);
-        mapObj.put("category", "Audio_Story");
+        mapObj.put("category", DatabaseHelper.TABLE_AUDIO_ADULT);
         mapObj.put("tags", "");
         mapObj.put("completeDate", "20230204");
         mapObj.put("storiesInsideParagraph", "");
         mapObj.put("relatedStories", "");
 
 
-        String res = new DatabaseHelper(SplashScreen.this, DB_NAME, DB_VERSION, "FakeStory").addstories((HashMap<String, String>) mapObj);
+        // Dev-only importer (the caller is commented out); writes into the adult
+        // narration table now that audio no longer lives in LoveStory.
+        String res = new DatabaseHelper(SplashScreen.this, DB_NAME, DB_VERSION,
+                DatabaseHelper.TABLE_AUDIO_ADULT).addstories((HashMap<String, String>) mapObj);
         Log.d(TAG, "onSuccess: " + res);
 
     }
@@ -530,8 +548,46 @@ public class SplashScreen extends AppCompatActivity {
      * so ftab1 and the process-restore path below cannot drift apart.
      */
     public static String resolveContentTable() {
-        if ("active".equals(App_updating)) return "FakeStory";   // update mode wins
-        return (Login_Times >= 6) ? "StoryItems" : "FakeStory";
+        if ("active".equals(App_updating)) return "LoveStory";   // update mode wins
+        return (Login_Times >= 6) ? "StoryItems" : "LoveStory";
+    }
+
+    /**
+     * Relaunches the app from the splash screen and kills the current process.
+     *
+     * Membership state is read once into statics and then baked into screens that are
+     * already built - the home grid, the tabs, every adapter. Flipping Vip_Member on
+     * its own therefore leaves a restored member looking at the locked, censored
+     * version of the app until they happen to kill it themselves. A clean restart is
+     * the only way to re-derive all of it at once.
+     */
+    public static void relaunchApp(Context ctx) {
+        Intent intent = ctx.getPackageManager().getLaunchIntentForPackage(ctx.getPackageName());
+        if (intent == null) return;
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        ctx.startActivity(intent);
+        Runtime.getRuntime().exit(0);
+    }
+
+    /** How many stories at the top of each category are readable without a membership. */
+    public static final int FREE_STORIES_PER_CATEGORY = 2;
+
+    /**
+     * The per-story membership gate: the first two stories of a category are open,
+     * the rest need a membership.
+     *
+     * Applies in update mode only. The Mixed (1-3 logins) and Censored (4-5) tiers are
+     * deliberately left completely unlocked so new users get an unrestricted run at the
+     * app, and the Full tier monetises through the per-category locks in ftab1 instead,
+     * so a second lock on top of those would be redundant.
+     *
+     * positionInCategory is 0-based and must be the story's index in the same order
+     * the list is built in; both callers derive it that way.
+     */
+    public static boolean isStoryLocked(int positionInCategory) {
+        if (Vip_Member) return false;
+        if (!"active".equals(App_updating)) return false;
+        return positionInCategory >= FREE_STORIES_PER_CATEGORY;
     }
 
     /** Persists the remote config so it survives the process being killed. */
@@ -738,15 +794,16 @@ public class SplashScreen extends AppCompatActivity {
     public static String decryption(String encryptedText) {
 
         int key = 5;
-        String decryptedText = "";
 
-        //Decryption
-        char[] chars2 = encryptedText.toCharArray();
-        for (char c : chars2) {
-            c -= key;
-            decryptedText = decryptedText + c;
+        // Shifts in place over a char[]. The previous version rebuilt the whole
+        // string on every character, which is quadratic - a 20k-character story
+        // cost ~200 million char copies, and a list page of them blocked the main
+        // thread long enough to ANR. Output is byte-for-byte identical.
+        char[] chars = encryptedText.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            chars[i] -= key;
         }
-        return decryptedText;
+        return new String(chars);
     }
 
     private void fullscreenMode() {

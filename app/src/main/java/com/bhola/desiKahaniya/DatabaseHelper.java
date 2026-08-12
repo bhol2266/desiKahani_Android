@@ -173,8 +173,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /** Tame narrations, split out of LoveStory so the two are never mixed up. */
+    public static final String TABLE_AUDIO_TAME = "Audio_Lovestory";
+    /** Adult narrations. */
+    public static final String TABLE_AUDIO_ADULT = "Audio_Desikahani";
+
     public Cursor readLoveStory(String category) {
-        return safeQuery("LoveStory", null, "category=?", new String[]{category}, null, "10");
+        // category is stored encrypted like every other text column, so the
+        // value being matched has to be encrypted too - never the plain name.
+        return safeQuery("LoveStory", null, "category=?",
+                new String[]{encryption(category)}, null, "10");
     }
 
     /**
@@ -240,10 +248,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public Cursor readAudioStories(String category) {
-        //"AdultContent" means the full adult set from the StoryItems table
-        String orderBy = category.equals("AdultContent") ? "completeDate DESC" : null;
-        return safeQuery(Database_tableNo, null, "audio=?", new String[]{"1"}, orderBy, null);
+    /**
+     * Every narration in the table this helper was built for, newest first.
+     *
+     * Tame and adult narrations now live in their own tables
+     * (Audio_Lovestory / Audio_Desikahani) rather than sharing LoveStory
+     * behind a category value, so picking the audience is a matter of which
+     * table the caller asks for. The old category argument was ignored
+     * anyway, which is how adult rows ended up on screen during update mode.
+     */
+    public Cursor readAudioStories() {
+        return safeQuery(Database_tableNo, null, "audio=?", new String[]{"1"},
+                "completeDate DESC", null);
     }
 
 
@@ -258,8 +274,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String limit = page + ",15";
         if (category.equals("Latest Stories"))
             return safeQuery(Database_tableNo, null, null, null, "completeDate DESC", limit);
+        // Stored encrypted, so match on the encrypted form.
         return safeQuery(Database_tableNo, null, "category=?",
-                new String[]{category}, "completeDate DESC", limit);
+                new String[]{encryption(category)}, "completeDate DESC", limit);
     }
 
 

@@ -56,7 +56,8 @@ public class ftab2 extends Fragment {
     RecyclerView recyclerView;
     FirebaseAuth mAuth;
     String TAG = "TAGA";
-    boolean storyLocked = false;
+    /** How many narrations at the top of the list play without a membership. */
+    int freeAudioCount = Integer.MAX_VALUE;
 
     public ftab2() {
         // Required empty public constructor
@@ -78,10 +79,10 @@ public class ftab2 extends Fragment {
 
         loadAudioDatabase(view);
 
-        if (!isInternetAvailable(getContext())) {
-            Toast.makeText(getContext(), "Check Internet Connection!", Toast.LENGTH_SHORT).show();
-        } else {
-        }
+        // No connectivity toast here. The list below is built entirely from the
+        // bundled SQLite database, so it is just as complete offline - warning about
+        // the internet made an app named "(Offline)" look broken when it was not.
+        // Playback itself still checks for a connection at the point it needs one.
         return view;
     }
 
@@ -90,43 +91,70 @@ public class ftab2 extends Fragment {
 
 
         ArrayList<Object> collectionData = new ArrayList<Object>();
-        Cursor cursor;
-        if (SplashScreen.App_updating.equals("active")) {
-            //fake content while upadting app
-            cursor = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME).readAudioStories("Audio_Story_Fake");
 
+        // Which narrations this user sees, and how many of them are free:
+        //
+        //   update mode, any login   tame only,            first 3 free
+        //   update off, logins 1-3   tame + adult mixed,   all free
+        //   update off, logins 4+    the full adult set,   first 2 free
+        //
+        // Update mode is checked first because it outranks the login staging.
+        boolean updating = "active".equals(SplashScreen.App_updating);
+        boolean mixedTier = !updating && SplashScreen.Login_Times < 4;
+
+        if (updating) {
+            freeAudioCount = 3;
+        } else if (mixedTier) {
+            freeAudioCount = Integer.MAX_VALUE;   // nothing locked for new users
         } else {
+            freeAudioCount = 2;
+        }
 
-            if (SplashScreen.Login_Times < 4) {
-                //Mixed content
-                cursor = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "FakeStory").readAudioStories("mix");
-
-            }  else {
-                // full Content
-                cursor = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems").readAudioStories("AdultContent");
-                storyLocked = true;
-
+        // Guarded because this screen is where a bad database state actually killed
+        // the app: on the task-restore path the table could be missing entirely and
+        // the SQLiteException propagated straight out of onCreateView. An empty audio
+        // list is a far better failure than the app disappearing.
+        try {
+            if (updating) {
+                readAudioInto(collectionData, DatabaseHelper.TABLE_AUDIO_TAME);
+            } else if (mixedTier) {
+                readAudioInto(collectionData, DatabaseHelper.TABLE_AUDIO_TAME);
+                readAudioInto(collectionData, DatabaseHelper.TABLE_AUDIO_ADULT);
+            } else {
+                readAudioInto(collectionData, "StoryItems");
             }
+        } catch (Exception e) {
+            Log.e(SplashScreen.TAG, "audio list could not be read", e);
         }
 
-        while (cursor.moveToNext()) {
-            StoryItemModel storyItemModel = new StoryItemModel(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getInt(9), "cursor.getString(10)", cursor.getInt(11), cursor.getInt(12), cursor.getString(13), cursor.getInt(14));
-            collectionData.add(storyItemModel);
-        }
-
-        cursor.close();
-        if (SplashScreen.Login_Times < 4) {
+        // Only the mixed tier is shuffled, so the two sources are interleaved
+        // rather than arriving as one clean block after the other.
+        if (mixedTier) {
             Collections.shuffle(collectionData);
         }
-        if (SplashScreen.App_updating.equals("active")) {
-            collectionData.clear();
-
-        }
-        adapter2 = new AudioStory_Details_Adapter(collectionData, getActivity(), storyLocked);
+        adapter2 = new AudioStory_Details_Adapter(collectionData, getActivity(), freeAudioCount);
         recyclerView.setAdapter(adapter2);
         progressBar2.setVisibility(View.GONE);
         adapter2.notifyDataSetChanged();
 
+    }
+
+    /** Appends every narration in one table to the list being built. */
+    private void readAudioInto(ArrayList<Object> into, String table) {
+        Cursor cursor = new DatabaseHelper(getActivity(), SplashScreen.DB_NAME,
+                SplashScreen.DB_VERSION, table).readAudioStories();
+        try {
+            while (cursor.moveToNext()) {
+                into.add(new StoryItemModel(cursor.getString(0), cursor.getString(1),
+                        cursor.getString(2), cursor.getString(3), cursor.getString(4),
+                        cursor.getString(5), cursor.getString(6), cursor.getString(7),
+                        cursor.getString(8), cursor.getInt(9), "cursor.getString(10)",
+                        cursor.getInt(11), cursor.getInt(12), cursor.getString(13),
+                        cursor.getInt(14)));
+            }
+        } finally {
+            cursor.close();
+        }
     }
 
 
@@ -172,16 +200,17 @@ public class ftab2 extends Fragment {
 class AudioStory_Details_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
-    boolean storyLocked;
+    /** Rows at this index and beyond need a membership. */
+    int freeCount;
     RewardedInterstitialAd mRewardedVideoAd;
     com.facebook.ads.InterstitialAd facebook_IntertitialAds;
     ArrayList<Object> collectionData = new ArrayList<Object>();
 
 
-    public AudioStory_Details_Adapter(ArrayList<Object> data, FragmentActivity activity, boolean storyLocked) {
+    public AudioStory_Details_Adapter(ArrayList<Object> data, FragmentActivity activity, int freeCount) {
         this.context = activity;
         this.collectionData = data;
-        this.storyLocked = storyLocked;
+        this.freeCount = freeCount;
 
     }
 
@@ -209,19 +238,18 @@ class AudioStory_Details_Adapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((Story_ROW_viewHolder) holder).views.setText(storyItemModel.getViews());
 
         if (storyItemModel.getRead() == 1) {
-            ((Story_ROW_viewHolder) holder).title.setTextColor(Color.parseColor("#9A3412"));
+            ((Story_ROW_viewHolder) holder).title.setTextColor(
+                    holder.itemView.getContext().getColor(R.color.gold));
         } else {
-            ((Story_ROW_viewHolder) holder).title.setTextColor(Color.parseColor("#374151"));
+            ((Story_ROW_viewHolder) holder).title.setTextColor(
+                    holder.itemView.getContext().getColor(R.color.ink));
         }
 
-        if (!SplashScreen.Vip_Member && storyLocked) {
-            if (holder.getAbsoluteAdapterPosition() > 1) {
-                ((Story_ROW_viewHolder) holder).lock.setVisibility(View.VISIBLE);
-            } else {
-                ((Story_ROW_viewHolder) holder).lock.setVisibility(View.GONE);
-
-            }
-        }
+        // Visibility is set on every path: leaving the else off lets a recycled
+        // row carry a stale lock icon onto a free narration.
+        boolean locked = !SplashScreen.Vip_Member
+                && holder.getAbsoluteAdapterPosition() >= freeCount;
+        ((Story_ROW_viewHolder) holder).lock.setVisibility(locked ? View.VISIBLE : View.GONE);
 
 
         ((Story_ROW_viewHolder) holder).recyclerview.setOnClickListener(new View.OnClickListener() {
@@ -229,7 +257,8 @@ class AudioStory_Details_Adapter extends RecyclerView.Adapter<RecyclerView.ViewH
             public void onClick(View v) {
 
                 if (((Story_ROW_viewHolder) holder).lock.getVisibility() == View.VISIBLE) {
-                    Toast.makeText(context, "Become DesiKahani Member to listen this story", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Become " + context.getString(R.string.app_name)
+                            + " Member to listen this story", Toast.LENGTH_SHORT).show();
                     context.startActivity(new Intent(context, VipMembership.class));
                 } else {
 
