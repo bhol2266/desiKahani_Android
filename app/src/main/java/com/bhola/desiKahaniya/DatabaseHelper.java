@@ -3,6 +3,7 @@ package com.bhola.desiKahaniya;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -117,28 +118,118 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public Cursor readsingleRow(String title) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query(Database_tableNo, null, "Title=?", new String[]{encryption(title)}, null, null, null, null);
-        return cursor;
-
+    /**
+     * Runs a query that must never crash the app.
+     *
+     * Live crash reports show two ways these reads blow up on real devices: a
+     * SQLiteDiskIOException when the device's storage is failing or full, and
+     * "no such table" when the bundled copy did not complete. Neither is
+     * recoverable here, and neither is worth killing the screen over - callers
+     * all iterate the cursor, so an empty one degrades to "nothing found".
+     */
+    private Cursor safeQuery(String table, String[] columns, String selection,
+                             String[] selectionArgs, String orderBy, String limit) {
+        try {
+            return getWritableDatabase().query(
+                    table, columns, selection, selectionArgs, null, null, orderBy, limit);
+        } catch (Exception e) {
+            Log.e(TAG, "query on " + table + " failed", e);
+            return new MatrixCursor(columns != null ? columns : new String[0]);
+        }
     }
 
-    public Cursor readFakeStory(String category) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query("FakeStory", null, "category=?", new String[]{category}, null, null, null, "10");
-        return cursor;
+    public Cursor readsingleRow(String title) {
+        return safeQuery(Database_tableNo, null, "Title=?",
+                new String[]{encryption(title)}, null, null);
+    }
 
+    /**
+     * Whether a story with this title exists in the current table.
+     *
+     * Roughly 38% of the relatedStories / storiesInsideParagraph entries in the
+     * shipped data name a story that is not in the database. Those links used to be
+     * drawn anyway and did nothing at all when tapped, because the click handler
+     * silently returns on a failed lookup - a dead control on screen, which is
+     * exactly what a store reviewer flags as broken.
+     *
+     * Projection is a single column with LIMIT 1 so this stays cheap enough to call
+     * while laying the links out; it never reads the story body.
+     */
+    public boolean titleExists(String title) {
+        if (title == null || title.trim().length() == 0) return false;
+
+        Cursor cursor = null;
+        try {
+            cursor = this.getWritableDatabase().query(
+                    Database_tableNo, new String[]{"Title"}, "Title=?",
+                    new String[]{encryption(title.trim())}, null, null, null, "1");
+            return cursor.getCount() > 0;
+        } catch (Exception e) {
+            // If the check itself fails, keep the link: the click handler is still
+            // guarded, so the worst case is the old behaviour rather than a crash.
+            return true;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+    }
+
+    public Cursor readLoveStory(String category) {
+        return safeQuery("LoveStory", null, "category=?", new String[]{category}, null, "10");
+    }
+
+    /**
+     * Index of a story within its own category, 0-based, or -1 if it is not in the
+     * LoveStory collection at all.
+     *
+     * The category is looked up from the row rather than taken from the caller: the
+     * "category" intent extra is carried by a field that is never assigned, so it
+     * arrives null everywhere.
+     *
+     * The listing query below mirrors readLoveStory() - same table, filter, ordering
+     * and limit - so the membership gate can never disagree with the position the user
+     * actually sees. If one changes, so must the other.
+     */
+    public int loveStoryPositionOf(String title) {
+        if (title == null) return -1;
+
+        String target = encryption(title);
+
+        Cursor row = safeQuery("LoveStory", new String[]{"category"}, "Title=?",
+                new String[]{target}, null, "1");
+        String category = row.moveToFirst() ? row.getString(0) : null;
+        row.close();
+        if (category == null) return -1;
+
+        Cursor list = safeQuery("LoveStory", new String[]{"Title"}, "category=?",
+                new String[]{category}, null, "10");
+        int position = -1;
+        int index = 0;
+        while (list.moveToNext()) {
+            if (target.equals(list.getString(0))) {
+                position = index;
+                break;
+            }
+            index++;
+        }
+        list.close();
+        return position;
     }
 
     public int readLatestStoryDate() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query("StoryItems", null, null, null, null, null, "completeDate DESC", "1");
-        cursor.moveToFirst();
-        int completeDate = cursor.getInt(9);
-        cursor.close();
+        // moveToFirst() can legitimately return false (empty or unreadable table);
+        // reading column 9 regardless threw rather than returning "no stories yet".
+        Cursor cursor = safeQuery("StoryItems", null, null, null, "completeDate DESC", "1");
+        int completeDate = 0;
+        try {
+            if (cursor.moveToFirst() && cursor.getColumnCount() > 9) {
+                completeDate = cursor.getInt(9);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "latest story date could not be read", e);
+        } finally {
+            cursor.close();
+        }
         return completeDate;
-
     }
 
     public Cursor readalldata() {
@@ -150,35 +241,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor readAudioStories(String category) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor;
-
-        if (category.equals("AdultContent")) {
-            //all means full adult contents from StoryItems table
-
-            cursor = db.query(Database_tableNo, null, "audio=?", new String[]{"1"}, null, null, "completeDate DESC", null);
-        } else {
-
-            cursor = db.query(Database_tableNo, null, "audio=?", new String[]{"1"}, null, null, null, null);
-
-        }
-
-        return cursor;
-
+        //"AdultContent" means the full adult set from the StoryItems table
+        String orderBy = category.equals("AdultContent") ? "completeDate DESC" : null;
+        return safeQuery(Database_tableNo, null, "audio=?", new String[]{"1"}, orderBy, null);
     }
 
 
     public Cursor readLikedStories() {
-        return getWritableDatabase().query(Database_tableNo, null, "like=?", new String[]{String.valueOf(1)}, null, null, "completeDate DESC", null);
+        return safeQuery(Database_tableNo, null, "like=?",
+                new String[]{String.valueOf(1)}, "completeDate DESC", null);
     }
 
 
     public Cursor readaDataByCategory(String category, int page) {
         page = (page - 1) * 15;
-        SQLiteDatabase sQLiteDatabase = getWritableDatabase();
+        String limit = page + ",15";
         if (category.equals("Latest Stories"))
-            return sQLiteDatabase.query(Database_tableNo, null, null, null, null, null, "completeDate DESC", String.valueOf(page) + ",15");
-        return sQLiteDatabase.query(Database_tableNo, null, "category=?", new String[]{category}, null, null, "completeDate DESC", String.valueOf(page) + ",15");
+            return safeQuery(Database_tableNo, null, null, null, "completeDate DESC", limit);
+        return safeQuery(Database_tableNo, null, "category=?",
+                new String[]{category}, "completeDate DESC", limit);
     }
 
 
@@ -225,21 +306,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("href", encryption(m_li.get("href")));
         values.put("date", m_li.get("date"));
         values.put("views", m_li.get("views"));
-        values.put("description", m_li.get("description"));
+        values.put("description", encryption(m_li.get("description")));
         values.put("audiolink", encryption(m_li.get("audiolink")));
         values.put("category", m_li.get("category"));
-        values.put("tags", m_li.get("tags"));
-        values.put("relatedStories", m_li.get("relatedStories"));
+        values.put("tags", encryption(m_li.get("tags")));
+        values.put("relatedStories", encryption(m_li.get("relatedStories")));
         values.put("completeDate", Integer.parseInt(m_li.get("completeDate")));
         values.put("like", 0);
-        values.put("story", m_li.get("story"));
+        values.put("story", encryption(m_li.get("story")));
 
         if (m_li.get("audiolink").trim().length() != 0) {
             values.put("audio", 1);
         } else {
             values.put("audio", 0);
         }
-        values.put("storiesInsideParagraph", m_li.get("storiesInsideParagraph"));
+        values.put("storiesInsideParagraph", encryption(m_li.get("storiesInsideParagraph")));
 
         float res = db.insert(Database_tableNo, null, values);
         if (res == -1)
@@ -252,23 +333,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String encryption(String text) {
 
         int key = 5;
+
+        // Shifts in place. The old version built the string one character at a time
+        // (quadratic) and then decrypted it again into a variable it never used.
+        // Same output, without either cost.
         char[] chars = text.toCharArray();
-        String encryptedText = "";
-        String decryptedText = "";
-
-        //Encryption
-        for (char c : chars) {
-            c += key;
-            encryptedText = encryptedText + c;
+        for (int i = 0; i < chars.length; i++) {
+            chars[i] += key;
         }
-
-        //Decryption
-        char[] chars2 = encryptedText.toCharArray();
-        for (char c : chars2) {
-            c -= key;
-            decryptedText = decryptedText + c;
-        }
-        return encryptedText;
+        return new String(chars);
     }
 
     public String updateTitle(String title, String translatedTitle) {
