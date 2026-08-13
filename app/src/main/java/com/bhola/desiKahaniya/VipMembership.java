@@ -368,7 +368,10 @@ public class VipMembership extends AppCompatActivity implements DrawsUnderStatus
         if (productId == null) return 0;
         // "Lifetime" runs 18 months, set deliberately.
         if (productId.contains("vip_lifetime")) return 548;
-        if (productId.contains("vip_12")) return 365;
+        // Sold as the 9-month plan despite the id - "vip_12" was named for its
+        // position in the list, not its length, and the store listing and the
+        // "VIP 9 Months" label in Vip_CustomAdapter are the ones that are right.
+        if (productId.contains("vip_12")) return 270;
         if (productId.contains("vip_3")) return 90;
         if (productId.contains("vip_1")) return 30;
         return 0; // unknown product: grants nothing rather than a decade
