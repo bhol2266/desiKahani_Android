@@ -492,8 +492,17 @@ public class SplashScreen extends AppCompatActivity {
     static long expiryMillis(SharedPreferences sp) {
         if (!hasPurchaseRecord(sp)) return -1;
 
-        String purchase_date = sp.getString("purchase_date", "not set");
         int validity_period = sp.getInt("validity_period", 0);
+
+        // Preferred: the exact purchase timestamp from Google Play, so expiry
+        // keeps the time of day it was bought. Records written before this key
+        // existed fall back to the date string below, which lands at midnight.
+        long purchaseMillis = sp.getLong("purchase_time_millis", 0L);
+        if (purchaseMillis > 0L) {
+            return purchaseMillis + (validity_period * 86400000L);
+        }
+
+        String purchase_date = sp.getString("purchase_date", "not set");
         if ("not set".equals(purchase_date)) return -1;
 
         try {

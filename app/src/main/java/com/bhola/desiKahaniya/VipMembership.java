@@ -14,6 +14,7 @@ import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -343,19 +344,33 @@ public class VipMembership extends AppCompatActivity implements DrawsUnderStatus
         // silently reset the validity clock and handed out free extra days.
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         myEdit.putString("purchase_date", dateFormat.format(new Date(purchaseTime)));
+
+        // The date string above is kept for older installs to read, but it loses
+        // the time of day: a purchase at 23:50 used to expire at 00:00 on the
+        // final day, hours before the reminder that was scheduled off the exact
+        // timestamp. The precise value is stored alongside it and preferred.
+        myEdit.putLong("purchase_time_millis", purchaseTime);
         myEdit.commit();
 
         long expiryMillis = purchaseTime + (validity_period * 86400000L);
         MembershipReminderScheduler.schedule(getApplicationContext(), expiryMillis);
     }
 
-    /** Membership length implied by a product id. */
+    /**
+     * Membership length implied by a product id.
+     *
+     * Matched longest-first, and lifetime is named rather than assumed. The
+     * previous order tested "vip_1" before "vip_12", and since "vip_12"
+     * contains "vip_1" every twelve-month purchase was granted 30 days. The
+     * final fallback also meant any unrecognised id silently became lifetime.
+     */
     private static int validityDaysFor(String productId) {
         if (productId == null) return 0;
-        if (productId.contains("vip_1")) return 30;
-        if (productId.contains("vip_3")) return 90;
+        if (productId.contains("vip_lifetime")) return 3650;
         if (productId.contains("vip_12")) return 365;
-        return 3650; // lifetime
+        if (productId.contains("vip_3")) return 90;
+        if (productId.contains("vip_1")) return 30;
+        return 0; // unknown product: grants nothing rather than a decade
     }
 
     /**
@@ -422,8 +437,15 @@ public class VipMembership extends AppCompatActivity implements DrawsUnderStatus
                     SplashScreen.restoreSessionState(getApplicationContext());
 
                     if (wasMissing) {
-                        runOnUiThread(() -> Toast.makeText(VipMembership.this,
-                                "Membership restored", Toast.LENGTH_LONG).show());
+                        // Restart rather than just flipping the flag: the home grid and
+                        // tabs were already built for a non-member and would keep showing
+                        // locked, censored content until the app was killed by hand.
+                        runOnUiThread(() -> {
+                            Toast.makeText(VipMembership.this,
+                                    "Membership restored", Toast.LENGTH_LONG).show();
+                            new Handler(Looper.getMainLooper()).postDelayed(
+                                    () -> SplashScreen.relaunchApp(VipMembership.this), 1200);
+                        });
                     }
                 });
     }
