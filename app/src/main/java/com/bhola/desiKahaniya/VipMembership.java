@@ -366,8 +366,8 @@ public class VipMembership extends AppCompatActivity implements DrawsUnderStatus
      */
     private static int validityDaysFor(String productId) {
         if (productId == null) return 0;
-        // Lifetime grants 365 days, set deliberately.
-        if (productId.contains("vip_lifetime")) return 365;
+        // "Lifetime" runs 18 months, set deliberately.
+        if (productId.contains("vip_lifetime")) return 548;
         if (productId.contains("vip_12")) return 365;
         if (productId.contains("vip_3")) return 90;
         if (productId.contains("vip_1")) return 30;
