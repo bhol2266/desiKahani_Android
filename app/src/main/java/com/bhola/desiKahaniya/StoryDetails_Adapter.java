@@ -73,9 +73,25 @@ public class StoryDetails_Adapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
 
+        // Membership gate. Visibility is set on both branches - leaving the else off
+        // would let a recycled row carry a stale lock icon onto a free story.
+        final boolean locked = SplashScreen.isStoryLocked(position);
+        storyRowViewHolder.lock.setVisibility(locked ? View.VISIBLE : View.GONE);
+
         storyRowViewHolder.recyclerview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (locked) {
+                    Toast.makeText(v.getContext(),
+                            "Become a " + v.getContext().getString(R.string.app_name)
+                            + " member to read this story",
+                            Toast.LENGTH_SHORT).show();
+                    Intent vip = new Intent(v.getContext(), VipMembership.class);
+                    vip.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    v.getContext().startActivity(vip);
+                    return;
+                }
+
                 Intent intent = new Intent(v.getContext(), StoryPage.class);
                 intent.putExtra("category", title_category);
                 intent.putExtra("title", SplashScreen.decryption(storyItemModel.getTitle()));
@@ -199,6 +215,7 @@ public class StoryDetails_Adapter extends RecyclerView.Adapter<RecyclerView.View
         TemplateView template;
         LinearLayout facebook_BannerAd_layout;
         ImageView delete;
+        ImageView lock;
 
         public Story_ROW_viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -209,6 +226,7 @@ public class StoryDetails_Adapter extends RecyclerView.Adapter<RecyclerView.View
             views = itemView.findViewById(R.id.views);
             facebook_BannerAd_layout = itemView.findViewById(R.id.banner_container);
             delete = itemView.findViewById(R.id.delete);
+            lock = itemView.findViewById(R.id.lock);
 
 
         }

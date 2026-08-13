@@ -1,12 +1,13 @@
 package com.bhola.desiKahaniya;
 
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 
@@ -23,10 +25,14 @@ import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 public class AudioPlayerOffline extends AppCompatActivity {
     ImageView playBtn;
     LinearLayout playBtn_and_SeekbarLayout;
-    MediaPlayer mediaPlayer;
     int pausePosition = -1;
     String storyURL, storyName;
     int temp = 0;
+    /** Downloaded stories play through AudioPlayerService too, so leaving this
+     *  screen does not stop them - same behaviour as the streaming player. */
+    private boolean playbackReady = false;
+    private boolean isPlaying = false;
+    private BroadcastReceiver playbackReceiver;
     SeekBar seekbar;
     Runnable runnable;
     Handler handler;
@@ -62,25 +68,9 @@ public class AudioPlayerOffline extends AppCompatActivity {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mediaPlayer != null && !mediaPlayer.isPlaying()) {  //  PLAY
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    mediaPlayer.seekTo(pausePosition - 500);
-                    mediaPlayer.start();
-                    playBtn.setBackgroundResource(R.drawable.pause);
-                    Toast.makeText(AudioPlayerOffline.this, "Resumed", Toast.LENGTH_SHORT).show();
-                    lottie.setVisibility(View.VISIBLE);
-
-                } else if (mediaPlayer.isPlaying()) { //   PAUSE
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    mediaPlayer.pause();
-                    playBtn.setBackgroundResource(R.drawable.play);
-                    pausePosition = mediaPlayer.getCurrentPosition();
-                    playBtn.setBackgroundResource(R.drawable.play);
-                    Toast.makeText(AudioPlayerOffline.this, "Paused", Toast.LENGTH_SHORT).show();
-                    lottie.setVisibility(View.INVISIBLE);
-
-                }
-
+                if (!playbackReady) return;
+                setPlayingUi(!isPlaying);
+                sendToService("TOGGLE", null);
             }
         });
 
@@ -88,10 +78,8 @@ public class AudioPlayerOffline extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                if (fromUser) {
-                    seekBar.setProgress(progress);
-                    mediaPlayer.seekTo(progress);
-                    setCurrentTime();
+                if (fromUser && playbackReady) {
+                    sendToService("SEEK", progress);
                 }
             }
 
@@ -105,56 +93,80 @@ public class AudioPlayerOffline extends AppCompatActivity {
 
             }
         });
+    }
 
+    private void startPlayingAudio() {
+        registerPlaybackReceiver();
+        handler = new Handler();
 
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        Intent service = new Intent(this, AudioPlayerService.class);
+        if (AudioPlayerService.isServiceRunning
+                && storyURL != null
+                && storyURL.equals(AudioPlayerService.CURRENT_AUDIO_URL)) {
+            service.setAction("SYNC");
+        } else {
+            service.putExtra("storyURL", storyURL);
+            service.putExtra("storyName", storyName);
+            service.putExtra("title", storyName);
+            service.putExtra("audioHref", "");
+            service.putExtra("AudioDownloadState", "downloaded");
+        }
+        ContextCompat.startForegroundService(this, service);
+        temp = 1;
+    }
+
+    private void sendToService(String action, Integer seekTo) {
+        Intent intent = new Intent(this, AudioPlayerService.class);
+        intent.setAction(action);
+        if (seekTo != null) intent.putExtra("seekTo", seekTo.intValue());
+        ContextCompat.startForegroundService(this, intent);
+    }
+
+    private void registerPlaybackReceiver() {
+        if (playbackReceiver != null) return;
+
+        playbackReceiver = new BroadcastReceiver() {
             @Override
-            public void onCompletion(MediaPlayer mp) {
-                playBtn.setBackgroundResource(R.drawable.play);
-                Toast.makeText(AudioPlayerOffline.this, "Finished", Toast.LENGTH_SHORT).show();
-                try {
-                    onBackPressed();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action == null) return;
+
+                if ("PROGRESS_UPDATE".equals(action)) {
+                    int current = intent.getIntExtra("current", 0);
+                    onPlaybackReady(intent.getIntExtra("duration", 0));
+                    pausePosition = current;
+                    seekbar.setProgress(current);
+                    setCurrentTime(current, seekbar.getMax());
+                    setPlayingUi(intent.getBooleanExtra("isPlaying", false));
+                } else if ("PAUSE_PLAY_BTN_UPDATE".equals(action)) {
+                    onPlaybackReady(intent.getIntExtra("duration", 0));
+                    setPlayingUi("PLAY".equals(intent.getStringExtra("PAUSE_PLAY_BTN_UPDATE")));
+                } else if (AudioPlayerService.ACTION_COMPLETED.equals(action)) {
+                    setPlayingUi(false);
+                    Toast.makeText(AudioPlayerOffline.this, "Finished", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        };
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("PROGRESS_UPDATE");
+        filter.addAction("PAUSE_PLAY_BTN_UPDATE");
+        filter.addAction(AudioPlayerService.ACTION_COMPLETED);
 
+        ContextCompat.registerReceiver(this, playbackReceiver, filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED);
     }
-    private void startPlayingAudio() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        try {
-            if (mediaPlayer == null) {
-                mediaPlayer = new MediaPlayer();
-                handler = new Handler();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mediaPlayer.reset();
-                mediaPlayer.setDataSource(storyURL);
-                mediaPlayer.prepareAsync();
-                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        try {
-                            seekbar.setMax(mediaPlayer.getDuration());
-                            updateSeekbar();
-                            setCurrentTime();
-                            mp.start();
-                            lottie.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
 
+    private void onPlaybackReady(int duration) {
+        if (playbackReady || duration <= 0) return;
+        playbackReady = true;
+        seekbar.setMax(duration);
+    }
 
-                Toast.makeText(AudioPlayerOffline.this, "Playing", Toast.LENGTH_SHORT).show();
-                playBtn.setBackgroundResource(R.drawable.pause);
-            }
-            temp = 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void setPlayingUi(boolean playing) {
+        isPlaying = playing;
+        playBtn.setBackgroundResource(playing ? R.drawable.pause : R.drawable.play);
+        lottie.setVisibility(playing ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void loadAds() {
@@ -163,9 +175,10 @@ public class AudioPlayerOffline extends AppCompatActivity {
         }
     }
 
-    private void setCurrentTime() {
-        int currentProgressinSeconds = mediaPlayer.getCurrentPosition() / 1000;
-        int totalTimeInSecond = mediaPlayer.getDuration() / 1000 - currentProgressinSeconds;
+    /** Shows time remaining, as before - now fed by the service's progress ticks. */
+    private void setCurrentTime(int currentMs, int durationMs) {
+        int currentProgressinSeconds = currentMs / 1000;
+        int totalTimeInSecond = durationMs / 1000 - currentProgressinSeconds;
         int minutes = totalTimeInSecond / 60;
         int seconds = totalTimeInSecond - (minutes * 60);
 
@@ -183,20 +196,6 @@ public class AudioPlayerOffline extends AppCompatActivity {
 
 
     }
-
-    private void updateSeekbar() {
-        pausePosition = mediaPlayer.getCurrentPosition();
-        seekbar.setProgress(pausePosition);
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                updateSeekbar();
-                setCurrentTime();
-            }
-        };
-        handler.postDelayed(runnable, 1000);
-    }
-
 
     public void backBtn(View view) {
         onBackPressed();
@@ -233,44 +232,28 @@ public class AudioPlayerOffline extends AppCompatActivity {
         }
 
 
-        try {
-            handler.removeCallbacks(runnable);
-            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                Toast.makeText(AudioPlayerOffline.this, "Stopped", Toast.LENGTH_SHORT).show();
-            }
-            if (mediaPlayer != null) {
-                mediaPlayer.stop();
-                mediaPlayer = null;
-            }
-        } catch (Exception e) {
-            Log.d("TAGA", "onBackPressed: " + e.getMessage());
-        }
-
+        // Playback deliberately continues after leaving this screen; the
+        // notification is the control from here on.
     }
 
-
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            playBtn.performClick();
-        }
+    protected void onResume() {
+        super.onResume();
+        if (AudioPlayerService.isServiceRunning) sendToService("SYNC", null);
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (handler != null) {
+        if (handler != null && runnable != null) {
             handler.removeCallbacks(runnable);
         }
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            Toast.makeText(AudioPlayerOffline.this, "Stopped", Toast.LENGTH_SHORT).show();
+        if (playbackReceiver != null) {
+            unregisterReceiver(playbackReceiver);
+            playbackReceiver = null;
         }
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer = null;
-        }
+        // The service keeps playing on purpose - see onBackPressed().
     }
 
 }

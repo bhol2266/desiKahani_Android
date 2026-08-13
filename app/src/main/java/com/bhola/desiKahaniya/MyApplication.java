@@ -71,6 +71,28 @@ public class MyApplication extends Application
         // especially now that day-to-day config editing happens in the web control
         // panel rather than in-app.
 
+        // The bundled database must be checked - and migrated if its version moved -
+        // on EVERY process start, for the same reason the statics are restored below:
+        // when Android kills the process and later restores the task, it recreates the
+        // top activity WITHOUT running SplashScreen, which is the only other place
+        // CheckDatabases() is called.
+        //
+        // Skipping it there was a crash: restoreSessionState() would set
+        // DB_TABLE_NAME to "LoveStory" while the copy on disk was still the previous
+        // release's, whose table is named "FakeStory". The first query then died with
+        //     no such table: LoveStory (code 1 SQLITE_ERROR)
+        // in DatabaseHelper.readAudioStories, taking the app down on open for anyone
+        // updating from the old version.
+        //
+        // Normally this is a cheap version read; the 10 MB copy only happens on the
+        // one launch after an upgrade.
+        try {
+            new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "StoryItems")
+                    .CheckDatabases();
+        } catch (Exception e) {
+            Log.e(TAG, "database check on process start failed", e);
+        }
+
         // Runs on EVERY process start, including when Android restores a task after
         // killing the process. SplashScreen may not run on that path, so the gating
         // statics (DB_TABLE_NAME / Vip_Member / App_updating / Login_Times) are

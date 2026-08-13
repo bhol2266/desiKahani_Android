@@ -31,6 +31,22 @@ public class StoryItemModel {
         this.read = read;
     }
 
+    // description/tags/relatedStories/story/storiesInsideParagraph are held exactly
+    // as they come out of the database (encrypted with the same shift-5 scheme as
+    // Title/href/audiolink) and decoded on first read instead of in the constructor.
+    //
+    // Decrypting eagerly meant building a list decoded every story body in it, none
+    // of which the list displays - one page of ten stories was ~84k characters of
+    // needless work on the main thread, which was enough to ANR.
+    private String descriptionPlain, tagsPlain, relatedStoriesPlain, storyPlain, storiesInsideParagraphPlain;
+
+    private static String decryptOrKeep(String value) {
+        if (value == null || value.isEmpty()) {
+            return value;
+        }
+        return SplashScreen.decryption(value);
+    }
+
     public String getTitle() {
         return Title;
     }
@@ -64,11 +80,13 @@ public class StoryItemModel {
     }
 
     public String getDescription() {
-        return description;
+        if (descriptionPlain == null) descriptionPlain = decryptOrKeep(description);
+        return descriptionPlain;
     }
 
     public void setDescription(String description) {
         this.description = description;
+        this.descriptionPlain = null; // drop the decoded copy
     }
 
     public String getAudiolink() {
@@ -88,19 +106,23 @@ public class StoryItemModel {
     }
 
     public String getTags() {
-        return tags;
+        if (tagsPlain == null) tagsPlain = decryptOrKeep(tags);
+        return tagsPlain;
     }
 
     public void setTags(String tags) {
         this.tags = tags;
+        this.tagsPlain = null; // drop the decoded copy
     }
 
     public String getRelatedStories() {
-        return relatedStories;
+        if (relatedStoriesPlain == null) relatedStoriesPlain = decryptOrKeep(relatedStories);
+        return relatedStoriesPlain;
     }
 
     public void setRelatedStories(String relatedStories) {
         this.relatedStories = relatedStories;
+        this.relatedStoriesPlain = null; // drop the decoded copy
     }
 
     public int getCompleteDate() {
@@ -112,11 +134,13 @@ public class StoryItemModel {
     }
 
     public String getStory() {
-        return story;
+        if (storyPlain == null) storyPlain = decryptOrKeep(story);
+        return storyPlain;
     }
 
     public void setStory(String story) {
         this.story = story;
+        this.storyPlain = null; // drop the decoded copy
     }
 
     public int getLike() {
@@ -136,11 +160,13 @@ public class StoryItemModel {
     }
 
     public String getStoriesInsideParagraph() {
-        return storiesInsideParagraph;
+        if (storiesInsideParagraphPlain == null) storiesInsideParagraphPlain = decryptOrKeep(storiesInsideParagraph);
+        return storiesInsideParagraphPlain;
     }
 
     public void setStoriesInsideParagraph(String storiesInsideParagraph) {
         this.storiesInsideParagraph = storiesInsideParagraph;
+        this.storiesInsideParagraphPlain = null; // drop the decoded copy
     }
 
     public int getRead() {

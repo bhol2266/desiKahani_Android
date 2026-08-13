@@ -1,5 +1,8 @@
 package com.bhola.desiKahaniya;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -8,6 +11,20 @@ import java.util.List;
 import java.util.Map;
 
 public class Utils {
+
+    /**
+     * Clears the window background behind a dialog's own layout.
+     *
+     * Every dialog in the app supplies a rounded card as its content, but the
+     * window underneath still paints the theme's square dialog background, which
+     * shows through at each corner as four dark tabs. Called right after
+     * create(), before show().
+     */
+    public static void useOwnBackground(Dialog dialog) {
+        if (dialog != null && dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+    }
 
     public static HashMap<String, String> FirebaseObject_TO_HashMap(Map<String, Object> data) {
 

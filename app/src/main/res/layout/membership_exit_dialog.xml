@@ -1,214 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Last-chance offer, shown when the user backs out of the membership screen.
+
+  Ids are load-bearing: VipMembership.exit_dialog() binds lottie, exitMSG,
+  clickForPayment, productName, price, buyNowTimer and closeDialog, and
+  closeDialog must stay a TextView.
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center">
 
-    <FrameLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="30dp">
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/surface_ivory"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/divider_warm"
+        app:strokeWidth="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Banner strip: the discount is the whole point of the sheet, so it
+                 leads rather than sitting inline as one more chip. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/offer_banner_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="14dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:letterSpacing="0.2"
+                        android:text="ONE TIME OFFER"
+                        android:textColor="#FBF4E4"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/exitMSG"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/kalam_regular"
+                        android:text="20% off, just for you"
+                        android:textColor="@color/white"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/closeDialog"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/cross"
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="Close" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
-                android:background="@drawable/offer_sheet_bg"
                 android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="18dp"
+                android:paddingBottom="20dp">
 
-                >
-
-
-                <TextView
-                    android:id="@+id/exitMSG"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/kalam_regular"
-                    android:gravity="center"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="120dp"
-                    android:paddingRight="5dp"
-                    android:text="You are the luckiest! Get 20% off"
-                    android:textColor="@color/ink"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-                <FrameLayout
+                <!-- Selected plan. Name and price sit on separate lines so a long
+                     product name has the full width and never has to ellipsise. -->
+                <LinearLayout
+                    android:id="@+id/clickForPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp">
+                    android:background="@drawable/offer_plan_row_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <androidx.cardview.widget.CardView
+                    <TextView
+                        android:id="@+id/productName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        app:cardElevation="0dp"
-                        android:elevation="0dp"
-                        app:cardCornerRadius="15dp">
+                        android:fontFamily="@font/robotoslab_regular"
+                        android:text="VIP 1 Month"
+                        android:textColor="@color/ink"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-                        <LinearLayout
-                            android:id="@+id/clickForPayment"
-                            android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/price"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@color/gold_wash"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="15dp">
+                            android:fontFamily="@font/robotoslab_regular"
+                            android:text="₹"
+                            android:textColor="#FBF4E4"
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
 
-
-                            <TextView
-                                android:id="@+id/productName"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/robotoslab_regular"
-                                android:maxLines="1"
-                                android:text="VIP 1 Month"
-                                android:textColor="@color/ink"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="right"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:fontFamily="@font/inter"
-                                    android:text="Only"
-                                    android:textColor="@color/ink_faint"
-                                    android:textSize="13sp" />
-
-
-                                <TextView
-                                    android:id="@+id/price"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="8dp"
-                                    android:fontFamily="@font/robotoslab_regular"
-                                    android:text="₹"
-                                    android:textColor="@color/gold_deep"
-                                    android:textSize="19sp"
-                                    android:textStyle="bold"
-
-                                    />
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
-
-                    </androidx.cardview.widget.CardView>
-
-
-                    <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="top|right"
-                        android:layout_marginBottom="35dp"
-                        android:elevation="10dp"
-                        android:src="@drawable/off" />
-
-
-                </FrameLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/inter"
+                            android:text="one time payment"
+                            android:textColor="@color/ink_faint"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/buyNowTimer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@drawable/buy_now_bg"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/offer_cta_bg"
                     android:fontFamily="@font/inter"
                     android:gravity="center"
-                    android:letterSpacing="0.04"
-                    android:padding="13dp"
+                    android:letterSpacing="0.06"
+                    android:padding="16dp"
                     android:text="BUY NOW 59:12"
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingBottom="10dp">
-
-                    <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/discount_offer_1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:text="5,915 User have used"
-                        android:textColor="#7C8085"
-                        android:textSize="13dp" />
-
-                </LinearLayout>
-
-
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="@font/inter"
+                    android:text="5,915 members took this offer"
+                    android:textColor="@color/ink_faint"
+                    android:textSize="12sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/closeDialog"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:visibility="invisible"
-                android:layout_gravity="center|bottom"
-                android:layout_marginTop="80dp"
-                android:background="@drawable/cross"
-                android:backgroundTint="@color/white"
-                android:drawableTint="@color/white" />
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/discount" />
-
-
-    </FrameLayout>
-
-
+    <!-- Celebration burst; VipMembership hides it once the animation ends. -->
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
         android:elevation="5dp"
         app:lottie_autoPlay="true"
         app:lottie_rawRes="@raw/celebration_anim" />
 
-
 </FrameLayout>
-

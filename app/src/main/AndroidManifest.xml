@@ -9,10 +9,11 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-    <!-- FOREGROUND_SERVICE / FOREGROUND_SERVICE_MEDIA_PLAYBACK removed: background
-         audio playback (AudioPlayerService) is disabled for now pending the Play
-         Console foreground-service-permissions declaration. AudioPlayerService.java
-         is left in place, unregistered below, to re-enable later. -->
+    <!-- Background audio playback. FOREGROUND_SERVICE_MEDIA_PLAYBACK also needs a
+         matching foreground-service-permissions declaration in the Play Console
+         before a release using it can be published. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -107,11 +108,20 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!-- AudioPlayerService / NotificationDismissedReceiver unregistered for now:
-             background/foreground playback is disabled until the Play Console
-             foreground-service-permissions declaration is filed. Java classes are
-             left in place to re-enable later - just restore these entries and the
-             two uses-permission lines above. -->
+        <!-- Keeps narration playing when the user leaves the screen, with transport
+             controls in the notification shade. The mediaPlayback type is what
+             Android 14+ enforces against the permission declared above. -->
+        <service
+            android:name=".AudioPlayerService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <!-- Fires when the playback notification is swiped away. -->
+        <receiver
+            android:name=".NotificationDismissedReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
         <service
             android:name=".TimerService"

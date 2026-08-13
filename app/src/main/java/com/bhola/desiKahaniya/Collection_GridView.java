@@ -258,14 +258,10 @@ Collection_GridView extends AppCompatActivity {
         viewPager = findViewById(R.id.vpager);
         bottomNav = findViewById(R.id.bottomNav);
 
-        // While the app is in "updating" mode the audio section is hidden entirely,
-        // mirroring the previous tabLayout.removeTabAt(1) behaviour.
-        boolean audioAvailable = !SplashScreen.App_updating.equals("active");
-        if (!audioAvailable) {
-            bottomNav.getMenu().removeItem(R.id.nav_audio);
-        }
-
-        pageAdapter = new PageAdapter(getSupportFragmentManager(), audioAvailable ? 2 : 1);
+        // The audio section stays available in update mode too - ftab2 serves the
+        // love-story narrations there, so the tab leads somewhere real rather than
+        // vanishing from the nav.
+        pageAdapter = new PageAdapter(getSupportFragmentManager(), 2);
         viewPager.setAdapter(pageAdapter);
 
         bottomNav.setOnItemSelectedListener(item -> {
@@ -342,6 +338,7 @@ Collection_GridView extends AppCompatActivity {
 
 
             AlertDialog dialog2 = builder.create();
+            Utils.useOwnBackground(dialog2);
             dialog2.show();
         }
     }
@@ -522,6 +519,7 @@ Collection_GridView extends AppCompatActivity {
 
 
         dialog = builder.create();
+        Utils.useOwnBackground(dialog);
         dialog.show();
 
     }
@@ -538,11 +536,8 @@ Collection_GridView extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer);
         // The drawer is opened from the bottom bar's "More" item, so no hamburger toggle.
 
-        // Mirrors tabview()'s removal of the bottom-nav audio tab: while update
-        // mode is active there's no real audio content behind it either.
-        if ("active".equals(SplashScreen.App_updating)) {
-            nav.getMenu().removeItem(R.id.menu_audio);
-        }
+        // The offline-audio entry stays in the drawer during update mode, matching
+        // the bottom-nav audio tab in tabview().
 
         // "App 1" is the cross-promo link to the other app. Its handler already
         // does nothing unless exit_Refer_appNavigation is active AND
@@ -606,6 +601,7 @@ Collection_GridView extends AppCompatActivity {
 
 
                         dialog = builder.create();
+                        Utils.useOwnBackground(dialog);
                         dialog.show();
                         drawerLayout.closeDrawer(GravityCompat.START);
 
@@ -697,6 +693,7 @@ Collection_GridView extends AppCompatActivity {
                                 });
 
                         dialog = builder2.create();
+                        Utils.useOwnBackground(dialog);
                         dialog.show();
 
                         break;

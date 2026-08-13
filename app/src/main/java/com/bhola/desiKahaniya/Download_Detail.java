@@ -92,7 +92,7 @@ public class Download_Detail extends AppCompatActivity {
         }
         cursor.close();
 
-        Cursor cursor2 = (new DatabaseHelper((Context) this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "FakeStory")).readLikedStories();
+        Cursor cursor2 = (new DatabaseHelper((Context) this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "LoveStory")).readLikedStories();
         while (cursor2.moveToNext()) {
             StoryItemModel storyItemModel = new StoryItemModel(cursor2.getString(0), cursor2.getString(1), cursor2.getString(2), cursor2.getString(3), cursor2.getString(4), cursor2.getString(5), cursor2.getString(6), cursor2.getString(7), cursor2.getString(8), cursor2.getInt(9), "cursor2.getString(10)", cursor2.getInt(11), cursor2.getInt(12), cursor2.getString(13), cursor2.getInt(14));
             collectonData.add(storyItemModel);

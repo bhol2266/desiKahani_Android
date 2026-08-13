@@ -191,30 +191,24 @@ public class Collection_detail extends AppCompatActivity {
             return;
         }
 
+        // Deliberately says nothing about connectivity. These stories come from the
+        // bundled database, so being offline is never the reason the list is empty -
+        // blaming the connection sent users to fix something that was not broken.
         check_Internet_Connection.setVisibility(View.VISIBLE);
-        check_Internet_Connection.setText(
-                isInternetAvailable(Collection_detail.this)
-                        ? "No stories found"
-                        : "No Internet Connection");
+        check_Internet_Connection.setText("No stories found");
         retryBtn.setVisibility(View.VISIBLE);
     }
 
 
     private void getfakeStories() {
         String category = getIntent().getStringExtra("category");
-        Cursor cursor = (new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "FakeStory")).readFakeStory(category);
+        Cursor cursor = (new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION, "LoveStory")).readLoveStory(category);
 
+        // Every story in the category is listed. The ones past the free allowance
+        // are shown locked rather than hidden - see SplashScreen.isStoryLocked().
         while (cursor.moveToNext()) {
-
-            if (SplashScreen.App_updating.equals("active")) {
-                if (cursor.getPosition() < 3) {
-                    StoryItemModel storyItemModel = new StoryItemModel(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getInt(9), cursor.getString(10), cursor.getInt(11), cursor.getInt(12), cursor.getString(13), cursor.getInt(14));
-                    collectonData.add(storyItemModel);
-                }
-            } else {
-                StoryItemModel storyItemModel = new StoryItemModel(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getInt(9), cursor.getString(10), cursor.getInt(11), cursor.getInt(12), cursor.getString(13), cursor.getInt(14));
-                collectonData.add(storyItemModel);
-            }
+            StoryItemModel storyItemModel = new StoryItemModel(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getInt(9), cursor.getString(10), cursor.getInt(11), cursor.getInt(12), cursor.getString(13), cursor.getInt(14));
+            collectonData.add(storyItemModel);
         }
         cursor.close();
         adapter.notifyDataSetChanged();
@@ -320,6 +314,7 @@ public class Collection_detail extends AppCompatActivity {
 
 
                 dialog = builder.create();
+                Utils.useOwnBackground(dialog);
                 dialog.show();
                 return false;
             }

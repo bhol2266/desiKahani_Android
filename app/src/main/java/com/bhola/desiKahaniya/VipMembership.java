@@ -457,6 +457,13 @@ public class VipMembership extends AppCompatActivity implements DrawsUnderStatus
 
 
 
+    /** Product title without Play's trailing "(App Name)" suffix. */
+    static String planTitle(String rawTitle) {
+        if (rawTitle == null) return "";
+        int bracket = rawTitle.indexOf('(');
+        return (bracket > 0 ? rawTitle.substring(0, bracket) : rawTitle).trim();
+    }
+
     private void exit_dialog() {
 
         if (mlist_offer == null || mlist_offer.size() == 0) {
@@ -525,7 +532,10 @@ public class VipMembership extends AppCompatActivity implements DrawsUnderStatus
         TextView price = promptView.findViewById(R.id.price);
         TextView productName = promptView.findViewById(R.id.productName);
 
-        productName.setText(productDetails.getTitle());
+        // Play returns titles as "VIP 1 Month membership (Desi Kahaniya)". The
+        // bracketed app name is the same on every row and only pushed the useful
+        // part out of the field, so it is dropped here.
+        productName.setText(planTitle(productDetails.getTitle()));
         price.setText(productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice().replace(".00", ""));
         buyNowTimer.setOnClickListener(new View.OnClickListener() {
             @Override

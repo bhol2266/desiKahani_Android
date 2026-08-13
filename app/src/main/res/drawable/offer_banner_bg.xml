@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Header strip of the offer sheet. Rounded only at the top so it meets the
+     card's own corners. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="315"
+        android:startColor="@color/gold_deep"
+        android:centerColor="@color/gold"
+        android:endColor="#D9BE7A"
+        android:type="linear" />
+    <corners
+        android:topLeftRadius="27dp"
+        android:topRightRadius="27dp" />
+</shape>

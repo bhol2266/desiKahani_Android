@@ -1,11 +1,11 @@
 package com.bhola.desiKahaniya;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +22,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,10 +52,12 @@ public class AudioPlayer extends AppCompatActivity {
 
     Handler handler;
     Runnable runnable;
-    MediaPlayer mediaPlayer;
 
     String storyURL, storyName, title, audioHref;
     boolean isPlaying = true;
+    /** Set once the service reports a real duration - controls stay hidden until then. */
+    private boolean playbackReady = false;
+    private BroadcastReceiver playbackReceiver;
 
 
     // Ads
@@ -128,25 +131,17 @@ public class AudioPlayer extends AppCompatActivity {
         }
 
         playBtn.setOnClickListener(v -> {
-            if (mediaPlayer == null) return;
-
-            if (isPlaying) {
-                mediaPlayer.pause();
-            } else {
-                mediaPlayer.start();
-                startProgressUpdates();
-            }
-            isPlaying = !isPlaying;
-
-            playBtn.setImageResource(isPlaying ? R.drawable.pause : R.drawable.play);
-            lottie.setVisibility(isPlaying ? View.VISIBLE : View.INVISIBLE);
+            if (!playbackReady) return;
+            // Optimistic flip, corrected a moment later by the service's broadcast.
+            setPlayingUi(!isPlaying);
+            sendToService("TOGGLE", null);
         });
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser && mediaPlayer != null) {
-                    mediaPlayer.seekTo(progress);
+                if (fromUser && playbackReady) {
+                    sendToService("SEEK", progress);
                 }
             }
 
@@ -160,111 +155,130 @@ public class AudioPlayer extends AppCompatActivity {
         });
     }
 
-    // Plays directly in this Activity - no background/foreground service, so
-    // playback stops as soon as the screen is left (see onPause()). Background
-    // playback (AudioPlayerService) is disabled for now; see AndroidManifest.xml.
+    // Playback lives in AudioPlayerService, not here, so it survives leaving this
+    // screen - Home, another app, or the screen going off. This activity only sends
+    // actions in and renders the broadcasts that come back.
     private void startPlayingAudio() {
-        mediaPlayer = new MediaPlayer();
-        try {
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(storyURL);
-            mediaPlayer.prepareAsync();
+        registerPlaybackReceiver();
 
-            mediaPlayer.setOnPreparedListener(mp -> {
-                mp.start();
-                isPlaying = true;
-                seekbar.setMax(mp.getDuration());
-                progressbarUnit.setVisibility(View.INVISIBLE);
-                progressbar.setVisibility(View.INVISIBLE);
-                playBtn_and_SeekbarLayout.setVisibility(View.VISIBLE);
-                lottie.setVisibility(View.VISIBLE);
-                playBtn.setImageResource(R.drawable.pause);
-                startProgressUpdates();
-            });
+        Intent service = new Intent(this, AudioPlayerService.class);
 
-            mediaPlayer.setOnBufferingUpdateListener((mp, percent) -> {
-                progressbarUnit.setVisibility(View.VISIBLE);
-                progressbar.setVisibility(View.VISIBLE);
-                progressbarUnit.setProgress(percent);
-                loadingMessage.setText(percent + " % bufferring");
-            });
-
-            mediaPlayer.setOnCompletionListener(mp -> {
-                isPlaying = false;
-                playBtn.setImageResource(R.drawable.play);
-                lottie.setVisibility(View.INVISIBLE);
-            });
-
-            // Fallback: if the primary URL fails, retry with the URL built from audioHref.
-            mediaPlayer.setOnErrorListener((mp, what, extra) -> {
-                try {
-                    mp.reset();
-                    mp.setDataSource(SplashScreen.databaseURL + "Sexstory_Audiofiles/" + audioHref + ".mp3");
-                    mp.setOnPreparedListener(mp2 -> {
-                        mp2.start();
-                        isPlaying = true;
-                        seekbar.setMax(mp2.getDuration());
-                        progressbarUnit.setVisibility(View.INVISIBLE);
-                        progressbar.setVisibility(View.INVISIBLE);
-                        playBtn_and_SeekbarLayout.setVisibility(View.VISIBLE);
-                        lottie.setVisibility(View.VISIBLE);
-                        playBtn.setImageResource(R.drawable.pause);
-                        startProgressUpdates();
-                    });
-                    mp.prepareAsync();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return true;
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Reopening the player for the track already playing (typically by tapping
+        // the notification) must not restart it from zero - just ask for the current
+        // state. A different track replaces whatever is playing.
+        if (AudioPlayerService.isServiceRunning
+                && storyURL != null
+                && storyURL.equals(AudioPlayerService.CURRENT_AUDIO_URL)) {
+            service.setAction("SYNC");
+        } else {
+            service.putExtra("storyURL", storyURL);
+            service.putExtra("storyName", storyName);
+            service.putExtra("title", title);
+            service.putExtra("audioHref", audioHref);
+            service.putExtra("AudioDownloadState", AudioDownloadState);
         }
+
+        ContextCompat.startForegroundService(this, service);
     }
 
-    // Ticks the seekbar/currentTime once a second while playing.
-    private void startProgressUpdates() {
-        if (handler == null) handler = new Handler();
-        handler.removeCallbacks(runnable);
-        runnable = new Runnable() {
+    /** Actions the service understands: PLAY, PAUSE, TOGGLE, SEEK, SYNC, STOP. */
+    private void sendToService(String action, Integer seekTo) {
+        Intent intent = new Intent(this, AudioPlayerService.class);
+        intent.setAction(action);
+        if (seekTo != null) intent.putExtra("seekTo", seekTo.intValue());
+        ContextCompat.startForegroundService(this, intent);
+    }
+
+    private void registerPlaybackReceiver() {
+        if (playbackReceiver != null) return;
+
+        playbackReceiver = new BroadcastReceiver() {
             @Override
-            public void run() {
-                if (mediaPlayer != null && isPlaying) {
-                    int current = mediaPlayer.getCurrentPosition();
-                    seekbar.setProgress(current);
-                    currentTime.setText(format(current));
-                    currentTime.setVisibility(View.VISIBLE);
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action == null) return;
+
+                switch (action) {
+                    case "PROGRESS_UPDATE": {
+                        int current = intent.getIntExtra("current", 0);
+                        int duration = intent.getIntExtra("duration", 0);
+                        onPlaybackReady(duration);
+                        seekbar.setProgress(current);
+                        currentTime.setText(format(current));
+                        currentTime.setVisibility(View.VISIBLE);
+                        setPlayingUi(intent.getBooleanExtra("isPlaying", false));
+                        break;
+                    }
+                    case "PAUSE_PLAY_BTN_UPDATE": {
+                        onPlaybackReady(intent.getIntExtra("duration", 0));
+                        setPlayingUi("PLAY".equals(intent.getStringExtra("PAUSE_PLAY_BTN_UPDATE")));
+                        break;
+                    }
+                    case "BUFFER_UPDATE": {
+                        if (playbackReady) break;
+                        int percent = intent.getIntExtra("percent", 0);
+                        progressbarUnit.setVisibility(View.VISIBLE);
+                        progressbar.setVisibility(View.VISIBLE);
+                        progressbarUnit.setProgress(percent);
+                        loadingMessage.setText(percent + " % bufferring");
+                        break;
+                    }
+                    case AudioPlayerService.ACTION_COMPLETED: {
+                        setPlayingUi(false);
+                        break;
+                    }
                 }
-                handler.postDelayed(this, 1000);
             }
         };
-        handler.post(runnable);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("PROGRESS_UPDATE");
+        filter.addAction("PAUSE_PLAY_BTN_UPDATE");
+        filter.addAction("BUFFER_UPDATE");
+        filter.addAction(AudioPlayerService.ACTION_COMPLETED);
+
+        // NOT_EXPORTED: these are our own service's broadcasts, and the flag is
+        // mandatory from Android 13 for a non-system receiver registered at runtime.
+        ContextCompat.registerReceiver(this, playbackReceiver, filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED);
+    }
+
+    /** First real duration means the stream is playing - swap the loader for the controls. */
+    private void onPlaybackReady(int duration) {
+        if (playbackReady || duration <= 0) return;
+
+        playbackReady = true;
+        seekbar.setMax(duration);
+        progressbarUnit.setVisibility(View.INVISIBLE);
+        progressbar.setVisibility(View.INVISIBLE);
+        playBtn_and_SeekbarLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void setPlayingUi(boolean playing) {
+        isPlaying = playing;
+        playBtn.setImageResource(playing ? R.drawable.pause : R.drawable.play);
+        lottie.setVisibility(playing ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        // Leaving the screen stops playback - there's no background service to
-        // keep it going, by design (see startPlayingAudio()). The activity isn't
-        // destroyed by Home/backgrounding, so playBtn/lottie must be resynced here
-        // too, or they're left showing "playing" when the user comes back.
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-            isPlaying = false;
-            playBtn.setImageResource(R.drawable.play);
-            lottie.setVisibility(View.INVISIBLE);
-        }
-        if (handler != null) handler.removeCallbacks(runnable);
+    protected void onResume() {
+        super.onResume();
+        // Coming back from the background: the notification's play/pause may have
+        // been used while away, so re-read the state rather than trusting our own.
+        if (AudioPlayerService.isServiceRunning) sendToService("SYNC", null);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (handler != null) handler.removeCallbacks(runnable);
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
+        if (handler != null && runnable != null) handler.removeCallbacks(runnable);
+        if (playbackReceiver != null) {
+            unregisterReceiver(playbackReceiver);
+            playbackReceiver = null;
         }
+        // The service is deliberately left running - that is the whole point of
+        // background playback. It stops from the notification, or when the track
+        // ends and the user swipes the notification away.
     }
 
 
@@ -388,6 +402,7 @@ public class AudioPlayer extends AppCompatActivity {
 
         progressbarDownload = promptView.findViewById(R.id.seekbar);
         dialog = builder.create();
+        Utils.useOwnBackground(dialog);
     }
 
     private void updateStoryread() {

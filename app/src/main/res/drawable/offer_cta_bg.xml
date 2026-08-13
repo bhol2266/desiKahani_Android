@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Offer sheet CTA. Ink fill with a warm edge, matching the primary buttons
+     used elsewhere in this app. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <solid android:color="@color/ink" />
-    <corners android:radius="18dp" />
+    <corners android:radius="16dp" />
 </shape>

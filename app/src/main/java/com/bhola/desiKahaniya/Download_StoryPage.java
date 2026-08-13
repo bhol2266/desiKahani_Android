@@ -315,6 +315,7 @@ public class Download_StoryPage extends AppCompatActivity {
         builder.setCancelable(false);
         textsize = promptView.findViewById(R.id.textSize);
         dialog = builder.create();
+        Utils.useOwnBackground(dialog);
         dialog.show();
         seekBar = promptView.findViewById(R.id.your_dialog_seekbar);
         button = promptView.findViewById(R.id.your_dialog_button);

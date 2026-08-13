@@ -13,7 +13,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="36dp"
-        app:layout_constraintBottom_toTopOf="@id/textView_splashscreen"
+        app:layout_constraintBottom_toTopOf="@id/textView_splashscreenn"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,16 +24,16 @@
         app:lottie_speed="1" />
 
     <TextView
-        android:id="@+id/textView_splashscreen"
+        android:id="@+id/textView_splashscreenn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="200dp"
         android:fontFamily="@font/kalam_regular"
         android:text="देसी हिंदी कहानियां"
         android:textColor="@color/ink"
         android:textSize="33sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/goldRule"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

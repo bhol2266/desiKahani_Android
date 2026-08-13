@@ -89,6 +89,21 @@ public class StoryPage extends AppCompatActivity {
         }
 
         Intents_and_InitViews();
+
+        // Second line of defence for the membership gate. The list already refuses to
+        // open a locked story, but StoryPage is also reachable from related-story links
+        // and saved items, so the check is repeated here against the database rather
+        // than trusting whatever the caller put in the intent.
+        if (isLockedForThisMember()) {
+            Toast.makeText(this,
+                    "Become a " + getString(R.string.app_name)
+                            + " member to read this story",
+                    Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(StoryPage.this, VipMembership.class));
+            finish();
+            return;
+        }
+
         actionBar();
         reportButton();
         hideExtrasDuringUpdateMode();
@@ -286,10 +301,12 @@ public class StoryPage extends AppCompatActivity {
                     fetchStoryAPI();
                     return;
                 }
+                story = SplashScreen.decryption(story);
                 storyText.setText(story.toString().trim().replaceAll("\\/", ""));
-                if (SplashScreen.App_updating.equals("active")) {
-                    storyText.setText(getString(R.string.FakeStory));
-                }
+                // The body used to be replaced with R.string.FakeStory whenever update
+                // mode was on. That dated from when this table held filler rows; now it
+                // holds real stories, so the override just printed the same paragraph
+                // under all 36 different titles.
             }
             cursor.close();
 
@@ -337,6 +354,30 @@ public class StoryPage extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * Re-derives the membership gate from the database instead of trusting the caller.
+     * A story not found in the LoveStory collection (-1) is treated as unlocked, so
+     * saved/downloaded items and anything served from StoryItems keep working.
+     */
+    private boolean isLockedForThisMember() {
+        if (SplashScreen.Vip_Member) return false;
+        // Same condition the list uses - see SplashScreen.isStoryLocked(). Update mode
+        // is the only state that locks stories, and it always serves LoveStory, which
+        // is the table the position lookup below reads.
+        if (!"active".equals(SplashScreen.App_updating)) return false;
+
+        try {
+            int position = new DatabaseHelper(this, SplashScreen.DB_NAME, SplashScreen.DB_VERSION,
+                    SplashScreen.DB_TABLE_NAME)
+                    .loveStoryPositionOf(title);
+            if (position < 0) return false;
+            return SplashScreen.isStoryLocked(position);
+        } catch (Exception e) {
+            // Never let the gate itself break the screen.
+            return false;
+        }
+    }
 
     private void Intents_and_InitViews() {
 
@@ -568,6 +609,7 @@ public class StoryPage extends AppCompatActivity {
         textsize = promptView.findViewById(R.id.textSize);
 
         dialog = builder.create();
+        Utils.useOwnBackground(dialog);
         dialog.show();
         seekBar = promptView.findViewById(R.id.your_dialog_seekbar);
 
@@ -657,6 +699,9 @@ public class StoryPage extends AppCompatActivity {
 
         List<String> storiesInsideParagraphList = new ArrayList<String>(Arrays.asList(storiesInsideParagraph.split(",")));
         LinearLayout storiesInsideparagraphLayout = findViewById(R.id.storiesInsideparagraph);
+        DatabaseHelper linkLookup = new DatabaseHelper(this, SplashScreen.DB_NAME,
+                SplashScreen.DB_VERSION, SplashScreen.DB_TABLE_NAME);
+        int shown = 0;
         for (int i = 0; i < storiesInsideParagraphList.size(); i++) {
             String tagKey = storiesInsideParagraphList.get(i).trim();
 
@@ -664,9 +709,15 @@ public class StoryPage extends AppCompatActivity {
                 return;
             }
 
+            // Skip anything the database cannot actually open - see titleExists().
+            if (!linkLookup.titleExists(tagKey)) {
+                continue;
+            }
+            shown++;
+
             View view = getLayoutInflater().inflate(R.layout.tag, null);
             TextView tag = view.findViewById(R.id.tag);
-            tag.setText(i + 1 + ". " + tagKey + "   ->");
+            tag.setText(shown + ". " + tagKey + "   ->");
             tag.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -699,6 +750,7 @@ public class StoryPage extends AppCompatActivity {
 
         List<String> myList = new ArrayList<String>(Arrays.asList(relatedStories.split(",")));
         LinearLayout relatedStoriesLayout = findViewById(R.id.relatedStoriesLayout);
+        int shownRelated = 0;
         for (int i = 0; i < myList.size(); i++) {
 
             String tagKey = myList.get(i).trim();
@@ -707,9 +759,15 @@ public class StoryPage extends AppCompatActivity {
                 return;
             }
 
+            // Same reason as above: never draw a link that leads nowhere.
+            if (!linkLookup.titleExists(tagKey)) {
+                continue;
+            }
+            shownRelated++;
+
             View view = getLayoutInflater().inflate(R.layout.tag, null);
             TextView relatedStoryText = view.findViewById(R.id.tag);
-            relatedStoryText.setText(i + 1 + ". " + tagKey + "   ->");
+            relatedStoryText.setText(shownRelated + ". " + tagKey + "   ->");
 
             relatedStoryText.setOnClickListener(new View.OnClickListener() {
                 @Override
